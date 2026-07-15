@@ -1,0 +1,19 @@
+# Конфигурация TLS для Traefik
+# Файл: app/docker/development/traefik/dynamic/tls.yaml
+
+tls:
+  certificates:
+    - certFile: /certs/local.crt
+      keyFile: /certs/local.key
+
+  # Используем этот сертификат по умолчанию для всех HTTPS соединений
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /certs/local.crt
+        keyFile: /certs/local.key
+
+  options:
+    default:
+      minVersion: VersionTLS12
+      sniStrict: false  # Разрешаем подключения без SNI (для старых клиентов)

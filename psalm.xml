@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
+  -->
+
+<psalm
+  totallyTyped="true"
+  resolveFromConfigFile="true"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="https://getpsalm.org/schema/config"
+  xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+>
+
+  <!-- DOCKER!!! -->
+  <!-- @see https://psalm.dev/docs/running_psalm/installation/ -->
+  <!-- DOCKER!!! -->
+
+  <projectFiles>
+    <!--        <directory name="backend" />-->
+    <!--        <directory name="common" />-->
+    <directory name="console"/>
+    <!--        <directory name="frontend" />-->
+    <!--        <directory name="modules" />-->
+    <ignoreFiles>
+      <directory name="vendor"/>
+    </ignoreFiles>
+  </projectFiles>
+
+  <issueHandlers>
+    <LessSpecificReturnType errorLevel="info"/>
+  </issueHandlers>
+</psalm>

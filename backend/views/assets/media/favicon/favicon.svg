@@ -1,0 +1,23 @@
+<!--
+  - Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
+  -->
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="16px" height="16px"><svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="16px" height="16px" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd" viewBox="0 0 16 16" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xodm="http://www.corel.com/coreldraw/odm/2003">
+ <defs>
+  <style type="text/css">
+
+    .fil0 {fill:url(#id0)}
+
+  </style>
+  <radialGradient id="SvgjsRadialGradient1009" gradientUnits="objectBoundingBox" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+   <stop offset="0" style="stop-opacity:1; stop-color:white"></stop>
+   <stop offset="1" style="stop-opacity:0.498039; stop-color:black"></stop>
+  </radialGradient>
+ </defs>
+ <g id="SvgjsG1008">
+  <metadata id="SvgjsMetadata1007"></metadata>
+  <circle class="fil0" cx="8" cy="8" r="8"></circle>
+ </g>
+</svg><style>@media (prefers-color-scheme: light) { :root { filter: none; } }
+@media (prefers-color-scheme: dark) { :root { filter: none; } }
+</style></svg>

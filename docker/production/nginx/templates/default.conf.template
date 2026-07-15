@@ -1,0 +1,256 @@
+server {
+   listen 80;
+   charset utf-8;
+   # This should match the `post_max_size` and/or `upload_max_filesize` settings
+   # in your php.ini.
+   client_max_body_size 1024M;
+   sendfile off;
+   server_tokens off; # отключить отображение номера версии в сообщениях об ошибках и заголовке ответа
+
+   server_name ${MAIN_HOST} www.${MAIN_HOST};
+   root /app/frontend/pub/;
+   index index.php;
+
+   # не загружать, если источник не совпадает (запретить загружать в Iframe)
+   add_header X-Frame-Options "SAMEORIGIN";
+   # запрещает браузерам "нюхать" (sniff) MIME-тип содержимого.
+   add_header X-Content-Type-Options "nosniff";
+
+   add_header Content-Security-Policy-Report-Only "
+   default-src 'self';
+   script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com;
+   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+   img-src 'self' ${FILES_HOST} data: https:;
+   font-src 'self' data: https://fonts.gstatic.com;
+   connect-src 'self' https://www.google.com;
+   media-src 'self' ${FILES_HOST};
+   object-src 'none';
+   frame-src https://www.google.com ${MAIN_HOST};
+   frame-ancestors 'self';
+   base-uri 'self';
+   form-action 'self';
+   upgrade-insecure-requests;
+   report-uri https://${MAIN_HOST}/csp-report
+   ";
+
+   access_log /var/log/nginx/access-${MAIN_HOST}.log;
+   error_log /var/log/nginx/error-${MAIN_HOST}.log;
+
+   location ~ /\.(ht|svn|git|env|json|lock|yml) {
+       deny all;
+   }
+
+   location / {
+       # Redirect everything that isn't a real file to index.php
+       try_files $uri $uri/ /index.php$is_args$args; # Этот вариант хуже - "try_files $uri $uri/ /index.php?$query_string;" /// $is_args добавляет ? только если запрос содержит аргументы (например, ?key=value). Это предотвращает лишний символ ? в URL, если аргументов нет. /// $query_string — это полная строка запроса, включая ?. Использование $query_string может привести к двойному ? в некоторых случаях. /// Рекомендуется использовать $is_args$args, как в вашем шаблоне, для большей надёжности и чистоты URL.
+   }
+
+    # Определяет блок обработки запросов, соответствующих файлам с расширением .php. Модификатор ~ указывает на регистронезависимое регулярное выражение, а \.php$ означает, что обрабатываются запросы, заканчивающиеся на .php.
+    location ~ \.php$ {
+        # Защита от подмены path_info (Путь к файлу index.php?)
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass php-fpm:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        try_files $uri =404;
+    }
+
+}
+
+server {
+   listen 80;
+   charset utf-8;
+   client_max_body_size 1024M;
+   sendfile off;
+   server_tokens off; # отключить отображение версии в сообщениях об ошибках и заголовке ответа
+
+   server_name ${ADM_HOST} www.${ADM_HOST};
+   root /app/backend/pub/;
+   index index.php;
+
+   # не загружать, если источник не совпадает (запретить загружать в Iframe)
+   add_header X-Frame-Options "SAMEORIGIN";
+   # запрещает браузерам "нюхать" (sniff) MIME-тип содержимого.
+   add_header X-Content-Type-Options "nosniff";
+
+   add_header Content-Security-Policy-Report-Only "
+   default-src 'self';
+   script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com;
+   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+   img-src 'self' data: https:;
+   font-src 'self' data: https://fonts.gstatic.com;
+   connect-src 'self' https://www.google.com;
+   media-src 'self';
+   object-src 'none';
+   frame-src https://www.google.com ${ADM_HOST};
+   frame-ancestors 'self';
+   base-uri 'self';
+   form-action 'self';
+   upgrade-insecure-requests;
+   report-uri https://${MAIN_HOST}/csp-report
+   ";
+
+   access_log /var/log/nginx/access-${ADM_HOST}.log;
+   error_log /var/log/nginx/error-${ADM_HOST}.log;
+
+   location ~ /\.(ht|svn|git|env|json|lock|yml) {
+       deny all;
+   }
+
+   location / {
+       # Redirect everything that isn't a real file to index.php
+       try_files $uri $uri/ /index.php$is_args$args;
+   }
+
+    location ~ \.php$ {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass php-fpm:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        try_files $uri =404;
+    }
+
+}
+
+server {
+   listen 80;
+   charset utf-8;
+   client_max_body_size 1024M;
+   sendfile on;
+   server_tokens off; # отключить отображение версии в сообщениях об ошибках и заголовке ответа
+
+   server_name ${FILES_HOST} www.${FILES_HOST};
+   root /app/static/;
+
+   # не загружать, если источник не совпадает (запретить загружать в Iframe)
+   add_header X-Frame-Options "SAMEORIGIN";
+   # запрещает браузерам "нюхать" (sniff) MIME-тип содержимого.
+   add_header X-Content-Type-Options "nosniff";
+
+   error_log /var/log/nginx/error-${FILES_HOST}.log;
+
+   location ~ /\.(ht|svn|git|env|json|lock|yml) {
+       deny all;
+   }
+
+    # =============================================
+    # Кеширование статики (Только для production!)
+    # В nginx директива `add_header` внутри `location` перезатирает заголовки из родительского блока. Поэтому `X-Frame-Options` и `X-Content-Type-Options` нужно повторить в каждом `location`, иначе они пропадут.
+    # Если cache busting через версии в именах файлов (app.abc123.js), смело ставь expires 1y + immutable для CSS/JS.
+    # =============================================
+
+    # Изображения — долгое кеширование
+    location ~* \.(jpg|jpeg|png|gif|webp|svg|ico|bmp|tiff)$ {
+        expires 30d;
+        add_header Cache-Control "public";
+        add_header X-Frame-Options "SAMEORIGIN";
+        add_header X-Content-Type-Options "nosniff";
+        access_log off;
+    }
+
+    # CSS/JS — если используешь версионирование (style.v2.css), можно 1y
+    location ~* \.(css|js)$ {
+        expires 7d;
+        add_header Cache-Control "public";
+        add_header X-Frame-Options "SAMEORIGIN";
+        add_header X-Content-Type-Options "nosniff";
+        access_log off;
+    }
+
+    # Шрифты
+    location ~* \.(woff2|woff|ttf|eot|otf)$ {
+        expires 90d;
+        add_header Cache-Control "public";
+        add_header X-Frame-Options "SAMEORIGIN";
+        add_header X-Content-Type-Options "nosniff";
+        access_log off;
+    }
+
+    # Видео/аудио
+    location ~* \.(mp4|webm|ogg|mp3|wav)$ {
+        expires 30d;
+        add_header Cache-Control "public";
+        add_header X-Frame-Options "SAMEORIGIN";
+        add_header X-Content-Type-Options "nosniff";
+    }
+
+    # PDF и документы
+    location ~* \.(pdf|doc|docx|xls|xlsx)$ {
+        expires 7d;
+        add_header Cache-Control "public";
+        add_header X-Frame-Options "SAMEORIGIN";
+        add_header X-Content-Type-Options "nosniff";
+    }
+
+}
+
+
+server {
+   listen 80;
+   charset utf-8;
+   client_max_body_size 1024M;
+   sendfile off;
+   server_tokens off;
+
+   server_name ${REST_HOST} www.${REST_HOST};
+   root /app/rest/pub/;
+   index index.php;
+
+   # не загружать, если источник не совпадает (запретить загружать в Iframe)
+   add_header X-Frame-Options "SAMEORIGIN";
+   # запрещает браузерам "нюхать" (sniff) MIME-тип содержимого.
+   add_header X-Content-Type-Options "nosniff";
+
+   # CORS заголовки (если фронт на другом домене)
+   add_header Access-Control-Allow-Origin "${MAIN_HOST}";
+   add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS";
+   add_header Access-Control-Allow-Headers "Content-Type, Authorization";
+
+   # Обработка preflight OPTIONS запросов
+   if ($request_method = OPTIONS) {
+       return 204;
+   }
+
+   add_header Content-Security-Policy-Report-Only "
+   default-src 'self';
+   script-src 'none';
+   style-src 'none';
+   img-src 'none';
+   font-src 'none';
+   connect-src 'self';
+   media-src 'none';
+   object-src 'none';
+   frame-src 'none';
+   frame-ancestors 'none';
+   base-uri 'self';
+   form-action 'self';
+   upgrade-insecure-requests;
+   report-uri https://${MAIN_HOST}/csp-report
+   ";
+
+   access_log /var/log/nginx/access-${REST_HOST}.log;
+   error_log /var/log/nginx/error-${REST_HOST}.log;
+
+   location ~ /\.(ht|svn|git|env|json|lock|yml) {
+       deny all;
+   }
+
+   location / {
+       try_files $uri $uri/ /index.php$is_args$args;
+   }
+
+   location ~ \.php$ {
+       fastcgi_split_path_info ^(.+\.php)(/.+)$;
+       fastcgi_pass php-fpm:9000;
+       fastcgi_index index.php;
+       include fastcgi_params;
+       fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+       fastcgi_param PATH_INFO $fastcgi_path_info;
+       try_files $uri =404;
+   }
+
+}

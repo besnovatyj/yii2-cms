@@ -1,0 +1,105 @@
+# Динамическая конфигурация общих middleware Traefik.
+http:
+  middlewares:
+    # =========================================================================
+    # ГЛОБАЛЬНЫЕ MIDDLEWARES (определяем здесь, используем везде)
+    # =========================================================================
+
+    # --- Сжатие (Gzip/Brotli) ---
+    compress:
+      compress: {}
+
+    # --- Security Headers (базовые заголовки безопасности) ---
+    security-headers:
+      headers:
+        # X-Frame-Options: разрешение встраивания в iframe только на этом же домене (защита от clickjacking)
+        customFrameOptionsValue: SAMEORIGIN
+        # X-Content-Type-Options: запрет MIME-sniffing
+        contentTypeNosniff: true
+        # X-XSS-Protection: встроенная защита браузера от XSS
+        browserXssFilter: true
+        # Referrer-Policy: контроль передачи referrer
+        referrerPolicy: strict-origin-when-cross-origin
+        # Permissions-Policy: ограничение API браузера
+        permissionsPolicy: "geolocation=(), microphone=(), camera=()"
+        # Убираем заголовок Server (меньше инфы для атакующих)
+        customResponseHeaders:
+          Server: ""
+        # HSTS (Strict-Transport-Security) - только для прода, на локалке может мешать
+        # - "traefik.http.middlewares.security-headers.headers.stsSeconds=31536000"
+        # - "traefik.http.middlewares.security-headers.headers.stsIncludeSubdomains=true"
+
+    # --- Rate Limit (общий, мягкий) ---
+    # 100 запросов в секунду в среднем, с возможностью burst до 200
+    rate-limit-soft:
+      rateLimit:
+        average: 100
+        burst: 200
+        period: 1s
+
+    # --- Rate Limit (жёсткий, для логина/API) ---
+    # 10 запросов в секунду, burst 20 — защита от брутфорса.
+    # Пригодится когда надо будет защитить конкретные эндпоинты типа `/site/login`.
+    rate-limit-hard:
+      rateLimit:
+        average: 10
+        burst: 20
+        period: 1s
+
+    # --- Rate Limit (для админки — средний) ---
+    # 50 запросов в секунду, burst 100 — достаточно для загрузки страницы
+    rate-limit-admin:
+      rateLimit:
+        average: 50
+        burst: 100
+        period: 1s
+
+    # --- Basic Auth для админки ---
+    admin-auth:
+      basicAuth:
+        # Логин: admin, Пароль: admin (для разработки!)
+        # Сгенерировать новый: htpasswd -nb admin yourpassword > secrets/traefik_admin_auth.txt
+        # Читаем из Docker Secret файла
+        usersFile: /run/secrets/traefik_admin_auth
+        realm: Admin Area
+        removeHeader: true
+
+    # --- Retry (повтор при ошибках бэкенда) ---
+    retry:
+      retry:
+        attempts: 3
+        initialInterval: 100ms
+
+    # --- Цепочки middlewares (комбинации для удобства) ---
+    # Стандартный набор для публичных страниц
+    chain-public:
+      chain:
+        middlewares:
+          - compress
+          - security-headers
+          - rate-limit-soft
+
+    # Набор для админки (auth + остальное) (Любые лимиты кроме мягкого режут запросы при первой загрузке)
+    chain-admin:
+      chain:
+        middlewares:
+          - admin-auth
+          - compress
+          - security-headers
+          - rate-limit-soft
+
+    # Набор для статики (только сжатие и заголовки, без лимитов)
+    chain-static:
+      chain:
+        middlewares:
+          - compress
+          - security-headers
+
+    # --- Цепочка для dashboard (auth + мягкий лимит) ---
+    chain-dashboard:
+      chain:
+        middlewares:
+          - admin-auth
+          - compress
+          - security-headers
+          - rate-limit-soft

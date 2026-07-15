@@ -1,0 +1,26 @@
+{
+    "name": "backend-adm-assets",
+    "version": "1.0.0",
+    "description": "Backend admin assets for Yii2-cms",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "node esbuild.config.js",
+        "watch": "node esbuild.config.js --watch",
+        "install": "npm install htmx.org@2.0.8",
+        "clean": "rm -rf dist"
+    },
+    "license": "UNLICENSED",
+    "dependencies": {
+        "@popperjs/core": "^2.11.8",
+        "bootstrap": "^5.3.3",
+        "bootstrap-icons": "^1.11.3",
+        "htmx.org": "^2.0.8"
+    },
+    "devDependencies": {
+        "@types/bootstrap": "^5.2.10",
+        "esbuild": "^0.25.4",
+        "sass": "^1.83.4",
+        "typescript": "^5.7.3"
+    }
+}

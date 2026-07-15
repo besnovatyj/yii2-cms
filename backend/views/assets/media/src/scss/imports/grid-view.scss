@@ -1,0 +1,90 @@
+/*!
+ * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
+ */
+
+/* Позволяем popup DateTimeRangePicker выходить за пределы тела оффканваса.
+   Для типичных фильтр-панелей (4-5 полей) прокрутка не нужна. */
+#offcanvasFilters .offcanvas-body {
+  overflow: visible;
+}
+
+/* Прелоадер применения фильтров (управляется через JS, без медиазапроса) */
+.grid-filter-preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 1055; /* Выше offcanvas (1050), но ниже модальных окон (1060) */
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Форматируем гриды для мобилки  */
+
+@media (max-width: 767.98px) {
+  /* Скрываем классическую шапку таблицы */
+  .table-mobile-cards thead {
+    display: none;
+  }
+
+  /* Скрываем строку фильтров в самой таблице (правило выше скрывает всю шапку таблицы) */
+  .table-mobile-cards thead tr.filters {
+    display: none !important;
+  }
+
+  /* Превращаем каждую строку в отдельную карточку */
+  .table-mobile-cards tbody tr {
+    display: block;
+    margin-bottom: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    padding: 10px;
+  }
+
+  /* Оформляем каждую ячейку как строку внутри карточки */
+  .table-mobile-cards tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: none;
+    border-bottom: 1px solid #f1f1f1;
+    padding: 8px 12px;
+    text-align: right; /* Текст данных прижимаем вправо */
+  }
+
+  /* Убираем нижнюю границу у последней ячейки в блоке */
+  .table-mobile-cards tbody td:last-child {
+    border-bottom: none;
+  }
+
+  /* Магия: выводим название колонки жирным шрифтом слева */
+  .table-mobile-cards tbody td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    text-align: left;
+    margin-right: 15px;
+    color: #495057;
+    flex-shrink: 0; /* Не дает названию сжиматься */
+  }
+
+  /* Фильтры GridView на мобилке обычно выглядят ужасно, их лучше скрыть */
+  .table-mobile-cards .filters {
+    display: none;
+  }
+
+  /* Корректируем ширину изображений на мобилке, чтобы не ломали флекс */
+  .table-mobile-cards tbody td img {
+    max-width: 80px;
+    height: auto;
+  }
+
+  /** Чтобы блоки смотрелись аккуратно, когда мы их клонируем в Offcanvas, добавьте небольшое правило, чтобы убрать лишние отступы у инпутов внутри панели */
+  #mobile-filters-placeholder select.form-control,
+  #mobile-filters-placeholder input.form-control {
+    width: 100%;
+    display: block;
+  }
+}

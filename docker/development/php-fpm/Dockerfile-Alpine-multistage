@@ -1,0 +1,278 @@
+# syntax=docker/dockerfile:1
+# ----------------------------------------------------------------------------------------------------------------------
+# Директива `syntax` включает современный фронтенд BuildKit — без неё не работают cache-mount'ы
+# (`RUN --mount=type=cache,...`), которые мы используем ниже для apk и ccache.
+# ----------------------------------------------------------------------------------------------------------------------
+
+# ======================================================================================================================
+# Multi-stage сборка PHP-FPM (Alpine) с ИЗОЛЯЦИЕЙ КЭША ПО РАСШИРЕНИЯМ
+# ======================================================================================================================
+#
+# Зачем этот файл (в дополнение к Dockerfile-Alpine-PRECOMPILED):
+#   В линейном (одностадийном) Dockerfile правка любого раннего слоя каскадно инвалидирует
+#   Docker-кэш всех слоёв ниже — и вся компиляция идёт заново. Здесь каждое значимое расширение
+#   собирается в собственном builder-stage из ОДНОГО И ТОГО ЖЕ базового образа. BuildKit кэширует
+#   stage'ы независимо и собирает их ПАРАЛЛЕЛЬНО. Бамп версии одного расширения пересобирает
+#   только его stage, остальные берутся из кэша.
+#
+# Принцип:
+#   - Каждый builder-stage компилирует своё расширение и кладёт готовый `.so` в /export.
+#   - build-зависимости (-dev, компиляторы) живут ТОЛЬКО в builder-stage'ах и в финальный образ
+#     НЕ попадают (никакого `apk del .build-deps` — stage целиком отбрасывается).
+#   - Финальный stage копирует готовые `.so` и ставит ТОЛЬКО runtime-библиотеки (один читаемый
+#     список с подписями, что чему нужно).
+#
+# Версии PECL-расширений (на 11.01.2026), полностью совместимы с PHP 8.4:
+#   imagick 3.8.1 | xdebug 3.5.0 | apcu 5.1.28 | redis 6.3.0 | memcached 3.4.0
+#   Источники: https://pecl.php.net/package/{imagick,xdebug,apcu,redis,memcached}
+#
+# Почему НЕ apk `php84-pecl-*` и НЕ mlocati:
+#   - `apk add php84-pecl-*` ставит `.so` для альпайновского PHP в /usr/bin, а официальный образ
+#     собирает PHP в /usr/local — расширения не подхватываются (ошибка вида
+#     "ApcCache requires PHP apcu extension to be loaded"). Это и есть «смешение репозиториев».
+#   - `mlocati/install-php-extensions` рабочий, но непрозрачный (нужно изучать сам скрипт).
+#   Здесь — ручная компиляция: видно каждую библиотеку и каждый флаг (например, GD с webp/avif).
+# ======================================================================================================================
+
+
+# ======================================================================================================================
+# Аргументы сборки образа
+# ======================================================================================================================
+
+ARG TIME_ZONE=UTC
+
+
+# ======================================================================================================================
+# base — общий базовый образ для ВСЕХ stage'ей (и builder'ов, и финального).
+# Все builder-stage'и собирают `.so` из этого же образа => одинаковый ABI и одинаковый
+# extension-dir => `.so` гарантированно подходят финальному образу.
+# ======================================================================================================================
+
+FROM php:8.4-fpm-alpine3.23 AS base
+
+# Включаем apk-кэш в /var/cache/apk, чтобы cache-mount'ы ниже переиспользовали скачанные .apk
+# между «холодными» пересборками. Симлинк наследуется всеми дочерними stage'ами.
+RUN mkdir -p /var/cache/apk \
+    && ln -sf /var/cache/apk /etc/apk/cache
+
+# community нужен для: imagemagick*, libavif, libheif, libmemcached, docker-cli.
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/v3.23/main"      >> /etc/apk/repositories \
+    && echo "http://dl-cdn.alpinelinux.org/alpine/v3.23/community" >> /etc/apk/repositories
+
+
+# ======================================================================================================================
+# builder-base — компиляторный toolchain, общий для всех builder-stage'ей (собирается ОДИН раз).
+# $PHPIZE_DEPS = autoconf file g++ gcc libc-dev make pkgconf re2c
+# linux-headers нужен apcu и memcached. ccache кэширует объектные файлы между пересборками.
+# ======================================================================================================================
+
+FROM base AS builder-base
+
+# ccache: оборачиваем компиляторы. CC/CXX наследуются всеми builder-stage'ами и подхватываются
+# как docker-php-ext-configure/install, так и pecl install (они зовут phpize + make).
+ENV CC="ccache gcc" \
+    CXX="ccache g++" \
+    CCACHE_DIR="/root/.ccache"
+
+RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
+    apk add $PHPIZE_DEPS linux-headers ccache
+
+
+# ======================================================================================================================
+# builder-stage'и: по одному на расширение. Каждый ставит ТОЛЬКО свои -dev зависимости,
+# компилирует и кладёт готовый `.so` в /export. apk и ccache идут через cache-mount.
+# ======================================================================================================================
+
+# --- GD (с freetype, jpeg, webp, avif) -------------------------------------------------------------------------------
+# Флаги --with-* задаём вручную: если завтра понадобится ещё формат — видно куда добавить.
+FROM builder-base AS ext-gd
+RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
+    --mount=type=cache,target=/root/.ccache,sharing=locked \
+    apk add freetype-dev libjpeg-turbo-dev libpng-dev libwebp-dev libavif-dev zlib-dev \
+    && docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp --with-avif \
+    && docker-php-ext-install -j"$(nproc)" gd \
+    && mkdir -p /export \
+    && cp "$(php-config --extension-dir)/gd.so" /export/
+
+# --- intl ------------------------------------------------------------------------------------------------------------
+FROM builder-base AS ext-intl
+RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
+    --mount=type=cache,target=/root/.ccache,sharing=locked \
+    apk add icu-dev \
+    && docker-php-ext-install -j"$(nproc)" intl \
+    && mkdir -p /export \
+    && cp "$(php-config --extension-dir)/intl.so" /export/
+
+# --- zip -------------------------------------------------------------------------------------------------------------
+FROM builder-base AS ext-zip
+RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
+    --mount=type=cache,target=/root/.ccache,sharing=locked \
+    apk add libzip-dev \
+    && docker-php-ext-install -j"$(nproc)" zip \
+    && mkdir -p /export \
+    && cp "$(php-config --extension-dir)/zip.so" /export/
+
+# --- imagick (PECL) --------------------------------------------------------------------------------------------------
+FROM builder-base AS ext-imagick
+RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
+    --mount=type=cache,target=/root/.ccache,sharing=locked \
+    apk add imagemagick-dev libpng-dev libjpeg-turbo-dev libwebp-dev libavif-dev libheif-dev \
+    && pecl channel-update pecl.php.net \
+    && pecl install imagick-3.8.1 \
+    && mkdir -p /export \
+    && cp "$(php-config --extension-dir)/imagick.so" /export/
+
+# --- xdebug (PECL) ---------------------------------------------------------------------------------------------------
+FROM builder-base AS ext-xdebug
+RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
+    --mount=type=cache,target=/root/.ccache,sharing=locked \
+    pecl channel-update pecl.php.net \
+    && pecl install xdebug-3.5.0 \
+    && mkdir -p /export \
+    && cp "$(php-config --extension-dir)/xdebug.so" /export/
+
+# --- apcu (PECL) -----------------------------------------------------------------------------------------------------
+FROM builder-base AS ext-apcu
+RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
+    --mount=type=cache,target=/root/.ccache,sharing=locked \
+    pecl channel-update pecl.php.net \
+    && pecl install apcu-5.1.28 \
+    && mkdir -p /export \
+    && cp "$(php-config --extension-dir)/apcu.so" /export/
+
+# --- redis (PECL) ----------------------------------------------------------------------------------------------------
+FROM builder-base AS ext-redis
+RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
+    --mount=type=cache,target=/root/.ccache,sharing=locked \
+    pecl channel-update pecl.php.net \
+    && pecl install redis-6.3.0 \
+    && mkdir -p /export \
+    && cp "$(php-config --extension-dir)/redis.so" /export/
+
+# --- memcached (PECL) ------------------------------------------------------------------------------------------------
+FROM builder-base AS ext-memcached
+RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
+    --mount=type=cache,target=/root/.ccache,sharing=locked \
+    apk add libmemcached-dev zlib-dev \
+    && pecl channel-update pecl.php.net \
+    && pecl install memcached-3.4.0 \
+    && mkdir -p /export \
+    && cp "$(php-config --extension-dir)/memcached.so" /export/
+
+# --- core: бандловые расширения без версий и без внешних либ (кроме libxml2 для dom) ----------------------------------
+# Дробить их по отдельности смысла нет: версий у них нет => кэшу нечего изолировать, а PHPIZE_DEPS
+# общий через builder-base. Если понадобится — любое тривиально вынести в свой stage.
+FROM builder-base AS ext-core
+RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
+    --mount=type=cache,target=/root/.ccache,sharing=locked \
+    apk add libxml2-dev \
+    && docker-php-ext-install -j"$(nproc)" bcmath fileinfo pdo dom pcntl opcache pdo_mysql calendar exif \
+    && mkdir -p /export \
+    && EXT_DIR="$(php-config --extension-dir)" \
+    && cp "$EXT_DIR"/bcmath.so "$EXT_DIR"/fileinfo.so "$EXT_DIR"/pdo.so "$EXT_DIR"/dom.so \
+          "$EXT_DIR"/pcntl.so "$EXT_DIR"/opcache.so "$EXT_DIR"/pdo_mysql.so "$EXT_DIR"/calendar.so \
+          "$EXT_DIR"/exif.so /export/
+
+
+# ======================================================================================================================
+# final — собираем готовый образ: runtime-библиотеки + готовые `.so` из builder-stage'ей.
+# ======================================================================================================================
+
+FROM base AS final
+
+# ARG объявляется заново: его область видимости — внутри одного stage.
+ARG TIME_ZONE=UTC
+
+# ----------------------------------------------------------------------------------------------------------------------
+# RUNTIME-библиотеки (без -dev). Один список с подписями, что чему нужно.
+# ----------------------------------------------------------------------------------------------------------------------
+RUN --mount=type=cache,target=/var/cache/apk,sharing=locked \
+    apk add \
+        libzip \
+        icu-libs icu-data-full \
+        freetype libjpeg-turbo libpng libwebp libavif \
+        libxml2 \
+        imagemagick imagemagick-libs imagemagick-jpeg libheif \
+        libmemcached zlib \
+        docker-cli \
+        supervisor \
+        git
+#   libzip                                    -> zip
+#   icu-libs icu-data-full                    -> intl (полные данные ICU)
+#   freetype libjpeg-turbo libpng libwebp libavif -> gd
+#   libxml2                                   -> dom
+#   imagemagick* libheif                      -> imagick (community)
+#   libmemcached zlib                         -> memcached (community)
+#   docker-cli                                -> метрики модуля yii2-cms-info (community)
+#   supervisor                                -> менеджер процессов php-fpm/queue/cron
+#   git                                       -> composer --prefer-source (git clone пакетов из GitHub)
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Готовые `.so` из builder-stage'ей. Каждое COPY тянет только артефакт своего stage,
+# поэтому BuildKit инвалидирует здесь лишь то расширение, которое реально пересобралось.
+# ----------------------------------------------------------------------------------------------------------------------
+COPY --from=ext-gd        /export/ /tmp/exts/
+COPY --from=ext-intl      /export/ /tmp/exts/
+COPY --from=ext-zip       /export/ /tmp/exts/
+COPY --from=ext-imagick   /export/ /tmp/exts/
+COPY --from=ext-xdebug    /export/ /tmp/exts/
+COPY --from=ext-apcu      /export/ /tmp/exts/
+COPY --from=ext-redis     /export/ /tmp/exts/
+COPY --from=ext-memcached /export/ /tmp/exts/
+COPY --from=ext-core      /export/ /tmp/exts/
+
+# Раскладываем `.so` в extension-dir и включаем их. docker-php-ext-enable сам генерирует
+# conf.d/docker-php-ext-*.ini и сам ставит zend_extension= для opcache/xdebug (порядок верный).
+RUN cp /tmp/exts/*.so "$(php-config --extension-dir)/" \
+    && docker-php-ext-enable \
+        gd intl zip imagick xdebug apcu redis memcached \
+        bcmath fileinfo pdo dom pcntl opcache pdo_mysql calendar exif \
+    && rm -rf /tmp/exts
+
+# ======================================================================================================================
+# Supervisor
+# ======================================================================================================================
+
+RUN mkdir -p /etc/supervisor.d/ /var/log/supervisor /run/supervisor \
+    && chown -R www-data:www-data /var/log/supervisor /run/supervisor \
+    && chmod -R 775 /var/log/supervisor /run/supervisor
+
+# Копируем конфигурацию
+COPY ./common/supervisor/supervisord.ini /etc/supervisord.conf
+
+# Запускаем Supervisor
+CMD ["supervisord", "-c", "/etc/supervisord.conf"]
+
+# ======================================================================================================================
+# Composer
+# ======================================================================================================================
+
+COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
+
+# Composer из-под root работает с git-репозиториями на bind-mount (vcs-кэш и сам vendor при
+# --prefer-source), владелец которых — uid хоста. Без этого git ругается «detected dubious ownership»,
+# а composer МОЛЧА откатывается с source на dist (и потом --prefer-source не может клонировать в уже
+# непустую dist-папку). `--system` пишет в /etc/gitconfig — он в слое образа и переживает пересоздание
+# контейнера, в отличие от `--global` (~/.gitconfig, эфемерный слой, теряется при рестарте).
+RUN git config --system --add safe.directory '*'
+
+# ======================================================================================================================
+# Конфигурация PHP ($PHP_INI_DIR === '/usr/local/etc/php/')
+# ======================================================================================================================
+
+# Устанавливаем конфиг доступный по умолчанию в исходном образе (версия development)
+RUN ln -sf "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+
+# Копируем свои конфиги
+COPY ./common/php/conf.d $PHP_INI_DIR/conf.d
+COPY ./development/php/conf.d $PHP_INI_DIR/conf.d
+
+RUN echo "date.timezone = ${TIME_ZONE}" > "$PHP_INI_DIR/conf.d/timezone.ini"
+
+# ======================================================================================================================
+# Прочее
+# ======================================================================================================================
+
+WORKDIR /app
+
+# ======================================================================================================================

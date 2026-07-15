@@ -1,0 +1,243 @@
+server {
+   listen 80;
+   charset utf-8;
+   # Должно совпадать с настройками `post_max_size` и/или `upload_max_filesize` в вашем php.ini
+   client_max_body_size 1024M;
+   sendfile off;
+   # отключить отображение номера версии в сообщениях об ошибках и заголовке ответа
+   server_tokens off;
+
+   server_name ${MAIN_HOST} www.${MAIN_HOST};
+   root /app/frontend/pub/;
+   index index.php;
+
+   # не загружать, если источник не совпадает (запретить загружать в Iframe)
+   add_header X-Frame-Options "SAMEORIGIN";
+   # запрещает браузерам "нюхать" (sniff) MIME-тип содержимого.
+   add_header X-Content-Type-Options "nosniff";
+
+   add_header Content-Security-Policy-Report-Only "
+   default-src 'self';
+   script-src 'self' 'unsafe-inline'
+              https://www.google.com
+              https://www.gstatic.com
+              https://api-maps.yandex.ru
+              https://*.api-maps.yandex.ru
+              https://yastatic.net
+              https://suggest-maps.yandex.ru;
+   style-src 'self' 'unsafe-inline'
+             https://fonts.googleapis.com
+             https://api-maps.yandex.ru
+             https://*.api-maps.yandex.ru
+             https://yastatic.net;
+   img-src 'self' ${FILES_HOST} data: https:
+           https://api-maps.yandex.ru
+           https://*.api-maps.yandex.ru
+           https://*.maps.yandex.net
+           https://yastatic.net;
+   font-src 'self' data: https://fonts.gstatic.com;
+   connect-src 'self'
+               https://www.google.com
+               https://api-maps.yandex.ru
+               https://*.api-maps.yandex.ru
+               https://*.maps.yandex.net
+               https://suggest-maps.yandex.ru
+               https://search-maps.yandex.ru
+               https://api.routing.yandex.net;
+   media-src 'self' ${FILES_HOST};
+   object-src 'none';
+   worker-src 'self' blob:
+              data:
+              https://api-maps.yandex.ru
+              https://*.api-maps.yandex.ru
+              https://yastatic.net;
+   frame-src https://www.google.com
+             https://www.youtube.com
+             https://rutube.ru
+             https://vk.com
+             https://player.vimeo.com
+             ${MAIN_HOST};
+   frame-ancestors 'self';
+   base-uri 'self';
+   form-action 'self';
+   upgrade-insecure-requests;
+   report-uri https://${MAIN_HOST}/csp-report
+   ";
+
+   access_log /var/log/nginx/access-${MAIN_HOST}.log;
+   error_log /var/log/nginx/error-${MAIN_HOST}.log;
+
+   location ~ /\.(ht|svn|git|env|json|lock|yml) {
+       deny all;
+   }
+
+   location / {
+       # Redirect everything that isn't a real file to index.php
+       try_files $uri $uri/ /index.php$is_args$args; # Этот вариант хуже - "try_files $uri $uri/ /index.php?$query_string;" /// $is_args добавляет ? только если запрос содержит аргументы (например, ?key=value). Это предотвращает лишний символ ? в URL, если аргументов нет. /// $query_string — это полная строка запроса, включая ?. Использование $query_string может привести к двойному ? в некоторых случаях. /// Рекомендуется использовать $is_args$args, как в вашем шаблоне, для большей надёжности и чистоты URL.
+   }
+
+    # Определяет блок обработки запросов, соответствующих файлам с расширением .php. Модификатор ~ указывает на регистронезависимое регулярное выражение, а \.php$ означает, что обрабатываются запросы, заканчивающиеся на .php.
+    location ~ \.php$ {
+        # Защита от подмены path_info (Путь к файлу index.php?)
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass php-fpm:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        try_files $uri =404;
+    }
+
+}
+
+server {
+   listen 80;
+   charset utf-8;
+   client_max_body_size 1024M;
+   sendfile off;
+   server_tokens off; # отключить отображение версии в сообщениях об ошибках и заголовке ответа
+
+   server_name ${ADM_HOST} www.${ADM_HOST};
+   root /app/backend/pub/;
+   index index.php;
+
+   # не загружать, если источник не совпадает (запретить загружать в Iframe)
+   add_header X-Frame-Options "SAMEORIGIN";
+   # запрещает браузерам "нюхать" (sniff) MIME-тип содержимого.
+   add_header X-Content-Type-Options "nosniff";
+
+   add_header Content-Security-Policy-Report-Only "
+   default-src 'self';
+   script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com;
+   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+   img-src 'self' ${FILES_HOST} data: https: blob:;
+   font-src 'self' data: https://fonts.gstatic.com;
+   connect-src 'self' https://www.google.com;
+   media-src 'self' ${FILES_HOST};
+   object-src 'none';
+   worker-src 'self' blob:;
+   frame-src https://www.google.com
+             https://www.youtube.com
+             https://rutube.ru
+             https://vk.com
+             https://player.vimeo.com
+             ${ADM_HOST};
+   frame-ancestors 'self';
+   base-uri 'self';
+   form-action 'self';
+   upgrade-insecure-requests;
+   report-uri https://${MAIN_HOST}/csp-report
+   ";
+
+   access_log /var/log/nginx/access-${ADM_HOST}.log;
+   error_log /var/log/nginx/error-${ADM_HOST}.log;
+
+   location ~ /\.(ht|svn|git|env|json|lock|yml) {
+       deny all;
+   }
+
+   location / {
+       # Redirect everything that isn't a real file to index.php
+       try_files $uri $uri/ /index.php$is_args$args;
+   }
+
+    location ~ \.php$ {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass php-fpm:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        try_files $uri =404;
+    }
+
+}
+
+server {
+   listen 80;
+   charset utf-8;
+   client_max_body_size 1024M;
+   sendfile on;
+   server_tokens off; # отключить отображение версии в сообщениях об ошибках и заголовке ответа
+
+   server_name ${FILES_HOST} www.${FILES_HOST};
+   root /app/static/;
+
+   # не загружать, если источник не совпадает (запретить загружать в Iframe)
+   add_header X-Frame-Options "SAMEORIGIN";
+   # запрещает браузерам "нюхать" (sniff) MIME-тип содержимого.
+   add_header X-Content-Type-Options "nosniff";
+
+   error_log /var/log/nginx/error-${FILES_HOST}.log;
+
+   location ~ /\.(ht|svn|git|env|json|lock|yml) {
+       deny all;
+   }
+
+}
+
+server {
+   listen 80;
+   charset utf-8;
+   client_max_body_size 1024M;
+   sendfile off;
+   server_tokens off;
+
+   server_name ${REST_HOST} www.${REST_HOST};
+   root /app/rest/pub/;
+   index index.php;
+
+   # не загружать, если источник не совпадает (запретить загружать в Iframe)
+   add_header X-Frame-Options "SAMEORIGIN";
+   # запрещает браузерам "нюхать" (sniff) MIME-тип содержимого.
+   add_header X-Content-Type-Options "nosniff";
+
+   # CORS заголовки (если фронт на другом домене)
+   add_header Access-Control-Allow-Origin "${ADM_HOST}";
+   add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS";
+   add_header Access-Control-Allow-Headers "Content-Type, Authorization";
+
+   # Обработка preflight OPTIONS запросов
+   if ($request_method = OPTIONS) {
+       return 204;
+   }
+
+   add_header Content-Security-Policy-Report-Only "
+   default-src 'self';
+   script-src 'self';
+   style-src 'self';
+   img-src 'self';
+   font-src 'self';
+   connect-src 'self';
+   media-src 'self';
+   object-src 'none';
+   frame-src 'none';
+   frame-ancestors 'none';
+   base-uri 'self';
+   form-action 'self';
+   upgrade-insecure-requests;
+   report-uri https://${MAIN_HOST}/csp-report
+   ";
+
+   access_log /var/log/nginx/access-${REST_HOST}.log;
+   error_log /var/log/nginx/error-${REST_HOST}.log;
+
+   location ~ /\.(ht|svn|git|env|json|lock|yml) {
+       deny all;
+   }
+
+   location / {
+       try_files $uri $uri/ /index.php$is_args$args;
+   }
+
+   location ~ \.php$ {
+       fastcgi_split_path_info ^(.+\.php)(/.+)$;
+       fastcgi_pass php-fpm:9000;
+       fastcgi_index index.php;
+       include fastcgi_params;
+       fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+       fastcgi_param PATH_INFO $fastcgi_path_info;
+       try_files $uri =404;
+   }
+
+}

@@ -1,0 +1,38 @@
+/*!
+ * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
+ */
+
+#rightSidebarMenu {
+    .sidebar-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .sidebar-buttons .btn {
+        background-color: var(--adm-sidebar-btn-bg);
+        color: var(--adm-sidebar-btn-color);
+        border: 1px solid rgba(0, 0, 0, .08);
+        border-radius: var(--adm-sidebar-btn-radius);
+        padding: 12px 8px;
+        flex: 1 1 90px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.15s ease, box-shadow 0.15s ease;
+        font-size: .8rem;
+        line-height: 1.3;
+
+        &:hover {
+            background-color: var(--adm-sidebar-btn-hover-bg);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .12);
+        }
+
+        .bi {
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+        }
+    }
+}

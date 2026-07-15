@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
+  -->
+
+<phpdocumentor
+    configVersion="3"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="https://www.phpdoc.org"
+    xsi:noNamespaceSchemaLocation="https://docs.phpdoc.org/latest/phpdoc.xsd"
+>
+    <title>API Documentation</title>
+
+    <paths>
+        <output>docs/api</output>
+        <cache>.phpdoc/cache</cache>
+    </paths>
+
+    <version number="1.0.0">
+        <api>
+            <source dsn=".">
+                <!-- Директории для сканирования -->
+                <path>backend</path>
+                <path>common</path>
+                <path>console</path>
+                <path>environments</path>
+                <path>frontend</path>
+                <path>modules</path>
+                <path>rest</path>
+            </source>
+
+            <!-- Исключения -->
+            <ignore hidden="true" symlinks="true">
+                <path>*/tests/*</path>
+                <path>*/vendor/*</path>
+                <path>*/runtime/*</path>
+                <path>*/views/*</path>
+                <path>*/pub/*</path>
+                <path>*/config/*</path>
+                <path>*/migrations/*</path>
+                <path>*/assets/media/*</path>
+            </ignore>
+
+            <!-- Расширения файлов -->
+            <extensions>
+                <extension>php</extension>
+            </extensions>
+
+            <!-- Видимость элементов -->
+            <visibility>public</visibility>
+            <visibility>protected</visibility>
+
+            <!-- Маркеры TODO -->
+            <markers>
+                <marker>TODO</marker>
+                <marker>FIXME</marker>
+                <marker>@todo</marker>
+            </markers>
+        </api>
+    </version>
+
+    <setting name="graphs.enabled" value="false"/>
+
+    <template name="default"/>
+</phpdocumentor>

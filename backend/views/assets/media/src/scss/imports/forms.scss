@@ -1,0 +1,13 @@
+/*!
+ * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
+ */
+
+// Required field asterisk
+div.required label.form-label {
+    &::after {
+        content: var(--adm-required-symbol);
+        color: var(--adm-required-color);
+        font-size: .85em;
+        margin-left: .1em;
+    }
+}

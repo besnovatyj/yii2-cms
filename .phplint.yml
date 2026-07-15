@@ -1,0 +1,13 @@
+path: ./
+jobs: 10
+cache: var/cache/.phplint.json
+extensions:
+    - php
+exclude:
+    - bin
+    - docker
+    - static
+    - tmp
+    - var/db
+    - var/runtime
+    - vendor

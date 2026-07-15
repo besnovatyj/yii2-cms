@@ -1,0 +1,21 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Yii console bootstrap file.
+ */
+
+defined('YII_DEBUG') or define('YII_DEBUG', false);
+defined('YII_ENV') or define('YII_ENV', 'prod');
+
+require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/vendor/yiisoft/yii2/Yii.php';
+require __DIR__ . '/common/config/bootstrap.php';
+require __DIR__ . '/console/config/bootstrap.php';
+
+// Конфиг собирается движком yiisoft/config (Yii3) по merge-plan, который генерит modman из реестра
+// активных модулей. Группа = приложение (app-console). Замыкания в файлах модулей require-ятся как есть.
+$config = (new \common\config\ConfigFactory())->app('app-console');
+
+$application = new yii\console\Application($config);
+$exitCode = $application->run();
+exit($exitCode);

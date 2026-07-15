@@ -1,0 +1,26 @@
+/*!
+ * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
+ */
+
+// Bootstrap 5
+@use "bootstrap/scss/bootstrap";
+
+// Bootstrap Icons (шрифты будут в dist/fonts/, ../fonts — путь относительно dist/css/adm.css)
+@use "bootstrap-icons/font/bootstrap-icons" with ($bootstrap-icons-font-dir: "../fonts");
+
+// Custom styles — переменные первыми, остальные стили могут их использовать
+@use "imports/variables";
+@use "imports/global";
+
+@use "imports/bootstrap_icons";
+@use "imports/buttons";
+@use "imports/card";
+@use "imports/dropdown";
+@use "imports/forms";
+@use "imports/grid-view.scss";
+@use "imports/navbar";
+@use "imports/pagination";
+@use "imports/sidebar";
+@use "imports/sidebar_right";
+@use "imports/sign-in";
+@use "imports/tables";

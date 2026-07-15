@@ -1,0 +1,14 @@
+/*!
+ * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
+ */
+
+@media (min-width: 768px) {
+    .sidebar {
+        min-height: 96vh;
+    }
+}
+
+.sidebar {
+    box-shadow: var(--adm-sidebar-shadow);
+}
+

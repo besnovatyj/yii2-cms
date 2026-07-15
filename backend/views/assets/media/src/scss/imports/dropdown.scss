@@ -1,0 +1,77 @@
+/*!
+ * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
+ */
+
+// DropDowns — меню левого и правого сайдбара
+#sidebarMenu, #rightSidebarMenu {
+
+    .btn-toggle { // Кнопка раздела
+        transition-property: background-color, color, border-radius;
+        transition-duration: 0.15s;
+        font-size: .88rem;
+        font-weight: 500;
+        width: 100%;
+        padding: .25rem .5rem;
+        margin-top: .125rem;
+        border-radius: var(--adm-menu-border-radius);
+        color: var(--adm-menu-item-color);
+        background-color: var(--adm-menu-item-bg);
+        cursor: pointer;
+        user-select: none;
+        border: 2px solid transparent; // резервируем место, нет "прыжка" при active
+
+        &:hover {
+            color: var(--adm-menu-item-hover-color);
+            background-color: var(--adm-menu-item-hover-bg);
+        }
+
+        i.bi-caret-right {
+            transition: transform .3s ease;
+            flex-shrink: 0;
+        }
+
+        &.active {
+            background-color: var(--adm-menu-item-active-bg);
+            color: var(--adm-menu-item-active-color) !important;
+            border-color: transparent;
+            font-weight: 600;
+        }
+
+        &[aria-expanded="true"] {
+            color: var(--adm-menu-item-active-color);
+            background-color: var(--adm-menu-item-active-bg);
+            font-weight: 600;
+            // скругление только сверху — визуальная связь с блоком подменю
+            border-radius: var(--adm-menu-border-radius) var(--adm-menu-border-radius) 0 0;
+
+            i.bi-caret-right {
+                transform: rotate(90deg);
+            }
+        }
+    }
+
+    .btn-toggle-nav { // Выпадающий блок с подпунктами
+        border-radius: 0 0 var(--adm-menu-border-radius) var(--adm-menu-border-radius);
+        overflow: hidden;
+
+        a {
+            margin-top: 1px;
+            padding: .25rem .5rem .25rem .9rem;
+            display: inline-block;
+            width: 100%;
+            background-color: var(--adm-menu-sub-bg);
+            border-left: 3px solid transparent; // резервируем место, нет прыжка при active
+
+            &:hover, &:focus {
+                background-color: var(--adm-menu-sub-hover-bg);
+            }
+
+            &.active {
+                background-color: var(--adm-menu-sub-active-bg);
+                color: var(--adm-menu-sub-active-color);
+                font-weight: 600;
+                border-left-color: var(--adm-menu-sub-active-border);
+            }
+        }
+    }
+}

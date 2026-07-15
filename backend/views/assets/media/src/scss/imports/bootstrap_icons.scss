@@ -1,0 +1,13 @@
+/*!
+ * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
+ */
+
+// Bootstrap icons
+
+.bi {
+    display: inline-block;
+
+    &::before {
+        font-size: 1rem;
+    }
+}

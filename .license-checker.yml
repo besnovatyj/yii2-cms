@@ -1,0 +1,9 @@
+# .license-checker.yml
+allowed:
+  - MIT
+  - BSD-2-Clause
+  - BSD-3-Clause
+  - Apache-2.0
+  - LGPL-2.1-or-later  # Для вашего htmlpurifier
+  - ISC                # Часто встречается в JS-пакетах
+  - 'http://opensource.org/licenses/mit-license.php'

@@ -1,0 +1,154 @@
+{
+  "name": "besnovatyj/yii2-cms",
+  "description": "BES-CMS - Yii2 Content Management System",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Besnovatyj"
+    }
+  ],
+  "minimum-stability": "stable",
+  "config": {
+    "sort-packages": true,
+    "optimize-autoloader": false,
+    "allow-plugins": {
+      "yiisoft/yii2-composer": true,
+      "php-http/discovery": true,
+      "yiisoft/config": false
+    },
+    "fxp-asset": {
+      "enabled": false
+    }
+  },
+  "extra": {
+    "config-plugin": {
+      "params": [
+        "common/config/params.php",
+        "?common/config/params-local.php"
+      ],
+      "common": [
+        "common/config/main.php",
+        "?common/config/main-local.php"
+      ],
+      "app-backend": [
+        "$common",
+        "backend/config/main.php",
+        "?backend/config/main-local.php"
+      ],
+      "app-frontend": [
+        "$common",
+        "frontend/config/main.php",
+        "?frontend/config/main-local.php"
+      ],
+      "app-rest": [
+        "$common",
+        "rest/config/main.php",
+        "?rest/config/main-local.php"
+      ],
+      "app-console": [
+        "$common",
+        "console/config/main.php",
+        "?console/config/main-local.php"
+      ]
+    }
+  },
+  "require": {
+    "php": ">=8.4",
+    "ext-mbstring": "*",
+    "besnovatyj/ckeditor5-codemirror": "^1.0",
+    "besnovatyj/ckeditor5-filemanager": "^1.0",
+    "besnovatyj/yii2-cms-actors": "^1.0",
+    "besnovatyj/yii2-cms-alert-widget": "^1.0",
+    "besnovatyj/yii2-cms-altcha-widget": "^1.0",
+    "besnovatyj/yii2-cms-backend-widgets": "^1.0",
+    "besnovatyj/yii2-cms-blog": "^1.0",
+    "besnovatyj/yii2-cms-blog-new": "^1.0",
+    "besnovatyj/yii2-cms-catalog": "^1.0",
+    "besnovatyj/yii2-cms-clear-manager": "^1.0",
+    "besnovatyj/yii2-cms-config": "^1.0",
+    "besnovatyj/yii2-cms-contact": "^1.0",
+    "besnovatyj/yii2-cms-contracts": "^1.0",
+    "besnovatyj/yii2-cms-datetime-widgets": "^1.0",
+    "besnovatyj/yii2-cms-dmarc": "^1.0",
+    "besnovatyj/yii2-cms-documents": "^1.0",
+    "besnovatyj/yii2-cms-editor": "^1.0",
+    "besnovatyj/yii2-cms-file": "^1.0",
+    "besnovatyj/yii2-cms-file-manager": "^1.0",
+    "besnovatyj/yii2-cms-forms": "^1.0",
+    "besnovatyj/yii2-cms-gallery": "^1.0",
+    "besnovatyj/yii2-cms-helpers": "^1.0",
+    "besnovatyj/yii2-cms-images": "^1.0",
+    "besnovatyj/yii2-cms-info": "^1.0",
+    "besnovatyj/yii2-cms-jodit": "^1.0",
+    "besnovatyj/yii2-cms-kernel": "^1.0",
+    "besnovatyj/yii2-cms-log-manager-db": "^1.0",
+    "besnovatyj/yii2-cms-logs": "^1.0",
+    "besnovatyj/yii2-cms-menu": "^1.0",
+    "besnovatyj/yii2-cms-meta": "^1.0",
+    "besnovatyj/yii2-cms-modman": "*",
+    "besnovatyj/yii2-cms-monolog": "^1.0",
+    "besnovatyj/yii2-cms-oauth2": "^1.0",
+    "besnovatyj/yii2-cms-page": "^1.0",
+    "besnovatyj/yii2-cms-performance": "^1.0",
+    "besnovatyj/yii2-cms-person": "^1.0",
+    "besnovatyj/yii2-cms-pessimistic-lock-behavior": "^1.0",
+    "besnovatyj/yii2-cms-run-shop": "^1.0",
+    "besnovatyj/yii2-cms-select2-widget": "^1.0",
+    "besnovatyj/yii2-cms-shop": "^1.0",
+    "besnovatyj/yii2-cms-shortcode": "^1.0",
+    "besnovatyj/yii2-cms-smart-domain-events": "^1.0",
+    "besnovatyj/yii2-cms-switcher-column": "^1.0",
+    "besnovatyj/yii2-cms-themes": "^1.0",
+    "besnovatyj/yii2-cms-tree-manager": "^1.0",
+    "besnovatyj/yii2-cms-upload": "^1.0",
+    "besnovatyj/yii2-cms-user": "^1.0",
+    "besnovatyj/yii2-cms-validators": "^1.0",
+    "besnovatyj/yii2-cms-videojs-10-widget": "^1.0",
+    "besnovatyj/yii2-cms-wage": "^1.0",
+    "besnovatyj/yii2-cms-yandex-map": "^1.0",
+    "league/oauth2-server": "^9.0",
+    "monolog/monolog": "^3.8",
+    "nyholm/psr7": "^1.8",
+    "nyholm/psr7-server": "^1.1",
+    "samdark/yii2-psr-log-target": "^1.1",
+    "yiisoft/config": "^1.6",
+    "yiisoft/yii2": "*",
+    "yiisoft/yii2-authclient": "*",
+    "yiisoft/yii2-bootstrap5": "*",
+    "yiisoft/yii2-imagine": "*",
+    "yiisoft/yii2-queue": "*",
+    "yiisoft/yii2-redis": "*",
+    "yiisoft/yii2-symfonymailer": "*"
+  },
+  "require-dev": {
+    "besnovatyj/debug-panel-modules": "^1.0",
+    "fakerphp/faker": "*",
+    "madewithlove/license-checker": "^3.1",
+    "overtrue/phplint": "*",
+    "phpstan/phpstan": "*",
+    "phpunit/phpunit": "*",
+    "roave/security-advisories": "dev-latest",
+    "yiisoft/yii2-debug": "*",
+    "yiisoft/yii2-faker": "*",
+    "yiisoft/yii2-gii": "*"
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "php yii Modman/modules/recompile"
+    ],
+    "post-update-cmd": [
+      "php yii Modman/modules/recompile"
+    ],
+    "lint": "phplint",
+    "cs-check": "php bin/phpcs.phar",
+    "cs-fix": "php bin/phpcbf.phar",
+    "psalm": "psalm"
+  },
+  "repositories": {
+    "EN": {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  }
+}
