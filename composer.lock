@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "30f7e70e1879321b07900673f41ce4de",
+    "content-hash": "b1daa64f8c6f6d30180ef5012ea79ebd",
     "packages": [
         {
             "name": "altcha-org/altcha",
@@ -434,16 +434,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-altcha-widget",
-            "version": "v1.1.4",
+            "version": "v1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-altcha-widget.git",
-                "reference": "2b630210afff511e55901e3f894f67e9af3a2003"
+                "reference": "4f00aec12a63d330b3d9e5f92a675dd91c090f05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-altcha-widget/zipball/2b630210afff511e55901e3f894f67e9af3a2003",
-                "reference": "2b630210afff511e55901e3f894f67e9af3a2003",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-altcha-widget/zipball/4f00aec12a63d330b3d9e5f92a675dd91c090f05",
+                "reference": "4f00aec12a63d330b3d9e5f92a675dd91c090f05",
                 "shasum": ""
             },
             "require": {
@@ -495,9 +495,9 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-altcha-widget/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-altcha-widget/tree/v1.1.4"
+                "source": "https://github.com/besnovatyj/yii2-cms-altcha-widget/tree/v1.1.5"
             },
-            "time": "2026-07-13T16:22:43+00:00"
+            "time": "2026-07-15T14:17:24+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-backend-widgets",
@@ -2917,16 +2917,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-themes",
-            "version": "v1.0.5",
+            "version": "v1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-themes.git",
-                "reference": "0e655b053afcb4698dfc7c6c06443c9d013e68bf"
+                "reference": "9b6361cf2c94602c3efce779acbc967449359f49"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-themes/zipball/0e655b053afcb4698dfc7c6c06443c9d013e68bf",
-                "reference": "0e655b053afcb4698dfc7c6c06443c9d013e68bf",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-themes/zipball/9b6361cf2c94602c3efce779acbc967449359f49",
+                "reference": "9b6361cf2c94602c3efce779acbc967449359f49",
                 "shasum": ""
             },
             "require": {
@@ -2976,9 +2976,9 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-themes/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-themes/tree/v1.0.5"
+                "source": "https://github.com/besnovatyj/yii2-cms-themes/tree/v1.0.6"
             },
-            "time": "2026-07-14T19:18:44+00:00"
+            "time": "2026-07-15T13:06:39+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-tree-manager",

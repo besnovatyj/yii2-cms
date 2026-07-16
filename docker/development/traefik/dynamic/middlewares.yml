@@ -58,9 +58,9 @@ http:
     admin-auth:
       basicAuth:
         # Логин: admin, Пароль: admin (для разработки!)
-        # Сгенерировать новый: htpasswd -nb admin yourpassword > secrets/traefik_admin_auth.txt
+        # Сгенерировать новый: htpasswd -nb admin yourpassword > secrets/TRAEFIK_ADMIN_AUTH.txt
         # Читаем из Docker Secret файла
-        usersFile: /run/secrets/traefik_admin_auth
+        usersFile: /run/secrets/TRAEFIK_ADMIN_AUTH
         realm: Admin Area
         removeHeader: true
 

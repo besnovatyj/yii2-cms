@@ -20,6 +20,7 @@ use yii\web\View;
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <?= Html::csrfMetaTags() ?>
+
     <!-- Viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -29,29 +30,24 @@ use yii\web\View;
     <!-- Identity -->
     <title><?= Html::encode($this->title) ?></title>
 
-    <!-- Favicon and Touch Icons (https://ru.rakko.tools/tools/69/) некоторых иконок нет в этих ссылках, но есть в директории, это для Android -->
-    <link rel="apple-touch-icon" sizes="57x57" href="/basic/favicon/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="/basic/favicon/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/basic/favicon/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="/basic/favicon/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/basic/favicon/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/basic/favicon/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/basic/favicon/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/basic/favicon/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/basic/favicon/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/basic/favicon/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/basic/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="/basic/favicon/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/basic/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/basic/favicon/manifest.json">
-    <link rel="shortcut icon" href="/basic/favicon/favicon.ico">
-    <link rel="mask-icon" href="/basic/favicon/safari-pinned-tab.svg" color="#ffffff">
-    <meta name="apple-mobile-web-app-title" content="BasicTheme">
-    <meta name="application-name" content="BasicTheme">
-    <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
-    <meta name="msapplication-config" content="/basic/favicon/browserconfig.xml">
-    <meta name="theme-color" content="#ffffff">
+    <!-- Favicon and Touch Icons -->
+    <?php
+    // Реальный минимум, покрывающий 100% живых потребителей (по evilmartians и профильным гайдам)
+    // порядок тегов важен, браузер берёт первый понятный.
+    //  - icon.svg — твой вектор, для современных браузеров (масштабируется как хочет потребитель, даже умеет light/dark через @media внутри SVG);
+    //  - favicon-32x32.png — фолбэк для Safari и старья;
+    //  - apple-touch-icon.png 180×180 — экран «Домой» на iOS, обязан быть PNG (SVG Apple тут не ест), рекомендуют ~20px паддинга и непрозрачный фон.
+    // ---
+    // Про остальное:
+    //  - .ico нужен по сути только тупым клиентам (RSS-читалки лезут строго в /favicon.ico) — тебе, по твоим словам, на них плевать, так что опционально;
+    //  - manifest + icon-192/512.png + maskable — только если делаешь PWA. Для обычного сайта — не нужно, всю твою легаси-простыню (android/ms-иконки,
+    //  manifest.json, browserconfig.xml) режем.
+    //
+    //  Итог по файлам: 3 штуки — icon.svg + favicon-32x32.png + apple-touch-icon.png. SVG как основной (твоё желание), два PNG закрывают Apple и старьё.
+    ?>
+    <link rel="icon" type="image/svg+xml" href="<?= $this->theme->getUrl('favicon/icon.svg') ?>">
+    <link rel="icon" type="image/png" sizes="32x32" href="<?= $this->theme->getUrl('favicon/favicon-32x32.png') ?>">
+    <link rel="apple-touch-icon" href="<?= $this->theme->getUrl('favicon/apple-touch-icon.png') ?>">
 
     <!-- Open Graph tags -->
     <meta property="og:title" content='<?= $this->params['og:title'] ?? '' ?>'>

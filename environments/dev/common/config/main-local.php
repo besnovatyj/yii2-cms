@@ -1,6 +1,5 @@
 <?php
 
-
 /*
  * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
  */
@@ -11,10 +10,10 @@ return [
     'components' => [
         'db' => [
             'class' => \yii\db\Connection::class,
-            // TODO На проде убедиться, что Yii2 ходит в БД через unix-socket!!!
-            'dsn' => 'mysql:host=mysql;dbname=' . SecretReader::get('MYSQL_DATABASE'), // TODO - на данном этапе на проде сделать через .env с обновлением после рестарта сервера
-            'username' => SecretReader::get('MYSQL_USER'), // TODO - на данном этапе на проде сделать через .env с обновлением после рестарта сервера
-            'password' => SecretReader::get('mysql_password'), // TODO - на данном этапе на проде сделать через .env с обновлением после рестарта сервера
+            // PROD: 'dsn' => 'mysql:unix_socket=/var/run/mysqld/mysqld.sock;dbname=' . SecretReader::get('MYSQL_DATABASE'),
+            'dsn' => 'mysql:host=mysql;dbname=' . SecretReader::get('MYSQL_DATABASE'),
+            'username' => SecretReader::get('MYSQL_USER'),
+            'password' => SecretReader::get('MYSQL_PASSWORD'),
             'charset' => 'utf8mb4',
             'enableSchemaCache' => !YII_DEBUG,
             'schemaCacheDuration' => 3600,
@@ -23,10 +22,10 @@ return [
         ],
         'redis' => [
             'class' => yii\redis\Connection::class,
-            'hostname' => 'redis',
+            'hostname' => 'redis', // PROD: 'hostname' => '127.0.0.1',
             'port' => 6379,
             'database' => 0,
-            'password' => SecretReader::get('redis_password'), // TODO - на данном этапе на проде сделать через .env с обновлением после рестарта сервера
+            'password' => SecretReader::get('REDIS_PASSWORD'),
         ],
         'mailer' => [
             'class' => \yii\symfonymailer\Mailer::class,
