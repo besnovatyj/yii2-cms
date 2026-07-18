@@ -36,6 +36,13 @@
     // --- Тень сайдбара ---
     --adm-sidebar-shadow:         6px 0 8px 0 rgba(34, 60, 80, 0.1);
 
+    // --- Свайп-подсказка (ручка сайдбара, следует за пальцем) ---
+    --adm-swipe-peek-width:       56px;
+    --adm-swipe-peek-height:      64px;
+    --adm-swipe-peek-bg:          var(--adm-brand-primary);
+    --adm-swipe-peek-color:       #fff;
+    --adm-swipe-peek-shadow:      0 4px 16px rgba(9, 76, 110, 0.45);
+
     // --- Формы ---
     --adm-required-color:         #dc3545;
     --adm-required-symbol:        " *";

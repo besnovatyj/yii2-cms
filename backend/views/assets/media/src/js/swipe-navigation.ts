@@ -9,7 +9,7 @@ import type * as Bootstrap from 'bootstrap';
 const bs = (window as any).bootstrap as typeof Bootstrap;
 
 /** Зона у края экрана (px), из которой начинается свайп-открытие. */
-const EDGE_ZONE = 32;
+const EDGE_ZONE = 100;
 /** Минимальная горизонтальная дистанция свайпа (px). */
 const THRESHOLD = 60;
 /** Во сколько раз горизонтальная составляющая должна превышать вертикальную. */
@@ -21,6 +21,8 @@ interface TouchPoint {
   x: number;
   y: number;
 }
+
+type PeekSide = 'left' | 'right';
 
 /**
  * Есть ли среди предков элемента горизонтально прокручиваемый контейнер
@@ -61,6 +63,59 @@ export default function initSwipeNavigation(): void {
   let start: TouchPoint | null = null;
   let blocked = false;
 
+  // --- Визуальная подсказка: «ручка», выезжающая от края за пальцем ---
+  const peeks: Record<PeekSide, HTMLElement | null> = { left: null, right: null };
+  let activeSide: PeekSide | null = null;
+
+  const getPeek = (side: PeekSide): HTMLElement => {
+    let el = peeks[side];
+    if (!el) {
+      el = document.createElement('div');
+      el.className = `swipe-peek swipe-peek--${side}`;
+      el.setAttribute('aria-hidden', 'true');
+      const icon = document.createElement('i');
+      icon.className = side === 'left' ? 'bi bi-chevron-right' : 'bi bi-chevron-left';
+      el.appendChild(icon);
+      document.body.appendChild(el);
+      peeks[side] = el;
+    }
+    return el;
+  };
+
+  // Показать/подвинуть «ручку»: progress 0..1 — насколько свайп близок к порогу.
+  const showPeek = (side: PeekSide, progress: number): void => {
+    if (activeSide && activeSide !== side) {
+      hidePeek();
+    }
+    const el = getPeek(side);
+    activeSide = side;
+    el.classList.remove('swipe-peek--resetting');
+    const fraction = Math.max(0, Math.min(1, progress));
+    const offset = side === 'left' ? (fraction - 1) * 100 : (1 - fraction) * 100;
+    el.style.transform = `translateX(${offset}%)`;
+    el.style.opacity = String(fraction);
+  };
+
+  // Убрать «ручку» с плавным возвратом к краю (инлайн-стили → CSS-дефолт).
+  function hidePeek(): void {
+    if (!activeSide) {
+      return;
+    }
+    const el = peeks[activeSide];
+    activeSide = null;
+    if (!el) {
+      return;
+    }
+    el.classList.add('swipe-peek--resetting');
+    el.style.transform = '';
+    el.style.opacity = '';
+    el.addEventListener(
+      'transitionend',
+      () => el.classList.remove('swipe-peek--resetting'),
+      { once: true },
+    );
+  }
+
   document.addEventListener('touchstart', (evt) => {
     if (evt.touches.length !== 1) {
       start = null;
@@ -71,9 +126,44 @@ export default function initSwipeNavigation(): void {
     blocked = isHorizontallyScrollable(evt.target);
   }, { passive: true });
 
+  document.addEventListener('touchmove', (evt) => {
+    if (!start || blocked || evt.touches.length !== 1) {
+      return;
+    }
+    const touch = evt.touches[0];
+    const dx = touch.clientX - start.x;
+    const dy = touch.clientY - start.y;
+
+    // Пока жест не стал выраженно горизонтальным — подсказку не показываем.
+    if (Math.abs(dx) <= Math.abs(dy) * HORIZONTAL_RATIO) {
+      hidePeek();
+      return;
+    }
+
+    const width = window.innerWidth;
+    const isMobile = width < MD_BREAKPOINT;
+    const leftOpen = left?.classList.contains('show') ?? false;
+    const rightOpen = right?.classList.contains('show') ?? false;
+
+    // Подсказка нужна только для жеста ОТКРЫТИЯ от соответствующего края.
+    if (dx > 0 && left && isMobile && !leftOpen && start.x <= EDGE_ZONE) {
+      showPeek('left', dx / THRESHOLD);
+    } else if (dx < 0 && right && !rightOpen && start.x >= width - EDGE_ZONE) {
+      showPeek('right', -dx / THRESHOLD);
+    } else {
+      hidePeek();
+    }
+  }, { passive: true });
+
+  document.addEventListener('touchcancel', () => {
+    start = null;
+    hidePeek();
+  }, { passive: true });
+
   document.addEventListener('touchend', (evt) => {
     const from = start;
     start = null;
+    hidePeek();
     if (!from || blocked) {
       return;
     }

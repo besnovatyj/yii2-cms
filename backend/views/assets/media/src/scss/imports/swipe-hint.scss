@@ -1,0 +1,44 @@
+/*!
+ * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
+ */
+
+// Визуальная подсказка при свайпе: «ручка» выезжает от края экрана и следует
+// за пальцем. Позиционирование/opacity задаёт swipe-navigation.ts инлайном,
+// здесь — только внешний вид и стартовое (скрытое) состояние у края.
+
+.swipe-peek {
+    position: fixed;
+    top: 50%;
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--adm-swipe-peek-width);
+    height: var(--adm-swipe-peek-height);
+    margin-top: calc(var(--adm-swipe-peek-height) / -2);
+    color: var(--adm-swipe-peek-color);
+    font-size: 1.5rem;
+    background-color: var(--adm-swipe-peek-bg);
+    box-shadow: var(--adm-swipe-peek-shadow);
+    opacity: 0;
+    pointer-events: none; // подсказка никогда не перехватывает касания
+    will-change: transform, opacity;
+}
+
+.swipe-peek--left {
+    left: 0;
+    border-radius: 0 var(--adm-swipe-peek-width) var(--adm-swipe-peek-width) 0;
+    transform: translateX(-100%);
+}
+
+.swipe-peek--right {
+    right: 0;
+    border-radius: var(--adm-swipe-peek-width) 0 0 var(--adm-swipe-peek-width);
+    transform: translateX(100%);
+}
+
+// Плавный возврат «ручки» к краю, когда свайп не завершён (порог не набран).
+// Во время активного перетаскивания класс снят, чтобы движение шло без лага.
+.swipe-peek--resetting {
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
