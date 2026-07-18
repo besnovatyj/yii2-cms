@@ -4,6 +4,7 @@
 
 import initMobileGridView from './grid-view';
 import initSidebarRightTabs from './sidebar-right';
+import initSwipeNavigation from './swipe-navigation';
 import 'htmx.org';
 
 
@@ -42,6 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Открытие правого сайдбара на нужной вкладке ---
   initSidebarRightTabs();
+
+  // --- Свайп-навигация по сайдбарам на тач-устройствах ---
+  initSwipeNavigation();
 
 });
 
