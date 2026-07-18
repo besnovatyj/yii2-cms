@@ -2,6 +2,13 @@
  * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
  */
 
+// Отключаем в Chrome for Android «overscroll history navigation»:
+// горизонтальный свайп от края экрана иначе перехватывается браузером как
+// «назад/вперёд» и не доходит до наших touch-обработчиков открытия сайдбаров.
+html, body {
+    overscroll-behavior-x: none;
+}
+
 // Сглаживание шрифтов
 body {
     -webkit-font-smoothing: antialiased;
