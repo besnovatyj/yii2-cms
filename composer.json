@@ -93,6 +93,7 @@
     "besnovatyj/yii2-cms-performance": "^1.0",
     "besnovatyj/yii2-cms-person": "^1.0",
     "besnovatyj/yii2-cms-pessimistic-lock-behavior": "^1.0",
+    "besnovatyj/yii2-cms-route-alias": "^1.0",
     "besnovatyj/yii2-cms-run-shop": "^1.0",
     "besnovatyj/yii2-cms-select2-widget": "^1.0",
     "besnovatyj/yii2-cms-shop": "^1.0",

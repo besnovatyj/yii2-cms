@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
  */
@@ -14,6 +16,7 @@ use yii\helpers\Url;
 use yii\web\View;
 
 ?>
+<?php ThemeAssets::register($this) ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE HTML>
 <html lang="<?= Yii::$app->language ?>" prefix="og: //ogp.me/ns#">
@@ -62,7 +65,6 @@ use yii\web\View;
         href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
         rel="stylesheet">
 
-    <?php ThemeAssets::register($this) ?>
     <?php $this->head() ?>
 </head>
 <body>

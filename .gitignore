@@ -24,12 +24,14 @@ keys/
 /var/db/*
 /var/config/*
 /static/zip/
+/static/optima/
 /tmp/
 node_modules/
 .npm/
 /themes/berdramashock/
 /themes/optimaExtended/
 /themes/starrain/
+/themes/optima/
 /frontend/pub/basic/
 /frontend/pub/static_assets_bd/
 
