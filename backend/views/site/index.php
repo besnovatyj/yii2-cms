@@ -12,6 +12,13 @@
 
 $this->title = 'Home';
 
+// Панель плиток установленных модулей. Через class_exists — чтобы главная не падала, когда модуль
+// дашборда не установлен (CMS модульная, набор модулей у каждой сборки свой).
+$dashboardWidget = \Besnovatyj\Dashboard\widgets\dashboard\DashboardWidget::class;
+if (class_exists($dashboardWidget)) {
+    echo $dashboardWidget::widget();
+}
+
 echo 'Версия фреймворка: ' . Yii::getVersion();
 
 ?>
