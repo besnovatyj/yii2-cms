@@ -434,16 +434,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-altcha-widget",
-            "version": "v1.1.6",
+            "version": "v1.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-altcha-widget.git",
-                "reference": "121fb82cee7264f1d19c804d5d351d4570a57393"
+                "reference": "f4fdc5998d3c13407a2930d74c0ef082cf80402b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-altcha-widget/zipball/121fb82cee7264f1d19c804d5d351d4570a57393",
-                "reference": "121fb82cee7264f1d19c804d5d351d4570a57393",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-altcha-widget/zipball/f4fdc5998d3c13407a2930d74c0ef082cf80402b",
+                "reference": "f4fdc5998d3c13407a2930d74c0ef082cf80402b",
                 "shasum": ""
             },
             "require": {
@@ -495,9 +495,9 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-altcha-widget/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-altcha-widget/tree/v1.1.6"
+                "source": "https://github.com/besnovatyj/yii2-cms-altcha-widget/tree/v1.1.8"
             },
-            "time": "2026-07-20T20:46:05+00:00"
+            "time": "2026-07-27T17:43:07+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-backend-widgets",
@@ -3229,16 +3229,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-user",
-            "version": "v1.1.4",
+            "version": "v1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-user.git",
-                "reference": "4678be67010db34be094bac7bf715f90dbff2e9f"
+                "reference": "be079c6ae73226cffd4973e834704803b9a1171c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-user/zipball/4678be67010db34be094bac7bf715f90dbff2e9f",
-                "reference": "4678be67010db34be094bac7bf715f90dbff2e9f",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-user/zipball/be079c6ae73226cffd4973e834704803b9a1171c",
+                "reference": "be079c6ae73226cffd4973e834704803b9a1171c",
                 "shasum": ""
             },
             "require": {
@@ -3301,9 +3301,9 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-user/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-user/tree/v1.1.4"
+                "source": "https://github.com/besnovatyj/yii2-cms-user/tree/v1.1.5"
             },
-            "time": "2026-07-17T14:01:51+00:00"
+            "time": "2026-07-27T17:44:50+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-validators",
