@@ -85,6 +85,7 @@
     "besnovatyj/yii2-cms-kernel": "^1.0",
     "besnovatyj/yii2-cms-log-manager-db": "^1.0",
     "besnovatyj/yii2-cms-logs": "^1.0",
+    "besnovatyj/yii2-cms-maillog": "^1.0",
     "besnovatyj/yii2-cms-menu": "^1.0",
     "besnovatyj/yii2-cms-meta": "^1.0",
     "besnovatyj/yii2-cms-modman": "^1.0",
