@@ -31,6 +31,12 @@ return [
             'viewPath' => '@common/mail',
             // send all mails to a file by default.
             'useFileTransport' => true,
+            'fileTransportCallback' => static function ($mailer, $message): string {
+                $dir = date('Y-m-d/H'); // 'Y-m-d/H' — шардирование по часам
+                $base = Yii::getAlias($mailer->fileTransportPath);
+                \yii\helpers\FileHelper::createDirectory($base . '/' . $dir); // ВАЖНО, см. ниже
+                return $dir . '/' . date('His') . '-' . uniqid() . '.eml';
+            },
             // Необходимо установить ('useFileTransport' => true) и настроить транспорт для реальной отправки писем.
             //
             // SMTP server example:
