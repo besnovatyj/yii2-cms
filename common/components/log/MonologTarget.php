@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace common\components\log;
 
 use Monolog\Logger;
+use Monolog\Processor\WebProcessor;
 use samdark\log\PsrTarget;
 
 /**
@@ -62,6 +63,20 @@ class MonologTarget extends PsrTarget
     public $logVars = [];
 
     /**
+     * Карта полей `$_SERVER`, добавляемых в `extra` КАЖДОЙ записи канала через
+     * {@see WebProcessor}: ключ — имя поля в `extra`, значение — имя ключа в
+     * `$_SERVER`. Пустой массив (по умолчанию) — процессор не подключается,
+     * поэтому служебные каналы (напр. `auth` → syslog для fail2ban) остаются
+     * с «чистой» строкой без лишних полей.
+     *
+     * Отсутствующие в `$_SERVER` ключи попадают в `extra` как `null`
+     * (например, SSL_CIPHER на plain HTTP или REDIRECT_STATUS вне php-fpm).
+     *
+     * @var array<string, string>
+     */
+    public array $webProcessorFields = [];
+
+    /**
      * Собирает Monolog-логгер из спека до инициализации базового таргета.
      *
      * @throws \yii\base\InvalidConfigException
@@ -72,6 +87,12 @@ class MonologTarget extends PsrTarget
             $logger = new Logger($this->channel);
             foreach ($this->handlers as $spec) {
                 $logger->pushHandler(HandlerFactory::create($spec));
+            }
+            // Обогащаем каждую запись полями текущего HTTP-запроса (IP, URL и т.д.).
+            // WebProcessor сам no-op'ит в CLI (нет $_SERVER['REQUEST_URI']), поэтому
+            // отдельная проверка SAPI не нужна.
+            if ($this->webProcessorFields !== []) {
+                $logger->pushProcessor(new WebProcessor(null, $this->webProcessorFields));
             }
             $this->setLogger($logger);
         }

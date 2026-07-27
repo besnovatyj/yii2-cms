@@ -94,6 +94,26 @@ $coreTargets = [
             ['type' => 'rotating_file', 'file' => '@runtime/logs/monolog.log', 'maxFiles' => 30, 'level' => 'notice'],
         ],
 
+        // Обогащение записей полями текущего HTTP-запроса (уходят в `extra`
+        // каждой строки, рендерятся блоком "Extra" во вьювере yii2-cms-monolog).
+        // Ключ — имя поля в extra, значение — ключ в $_SERVER. Отсутствующие
+        // ключи попадают как null (SSL_CIPHER на plain HTTP, REDIRECT_STATUS
+        // вне php-fpm и т.п.). IP тут = REMOTE_ADDR (прямой клиент, без прокси);
+        // при появлении прокси/CDN брать HTTP_X_FORWARDED_FOR + trustedHosts.
+        'webProcessorFields' => [
+            'ip'              => 'REMOTE_ADDR',
+            'http_method'     => 'REQUEST_METHOD',
+            'url'             => 'REQUEST_URI',
+            'query_string'    => 'QUERY_STRING',
+            'scheme'          => 'REQUEST_SCHEME',
+            'referrer'        => 'HTTP_REFERER',
+            'user_agent'      => 'HTTP_USER_AGENT',
+            'ssl_cipher'      => 'SSL_CIPHER',
+            'redirect_status' => 'REDIRECT_STATUS',
+            'remote_port'     => 'REMOTE_PORT',
+            'request_time'    => 'REQUEST_TIME',
+        ],
+
         // It is optional parameter. The message levels that this target is interested in.
         // The parameter can be an array.
         //'levels' => ['info', yii\log\Logger::LEVEL_WARNING, Psr\Log\LogLevel::CRITICAL],
