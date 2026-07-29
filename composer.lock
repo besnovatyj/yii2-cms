@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4b13f0147aa06a9ca49c73ef0864d29e",
+    "content-hash": "9b9faefe7ae7d9be80283fac6e071b05",
     "packages": [
         {
             "name": "altcha-org/altcha",
@@ -814,16 +814,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-clear-manager",
-            "version": "v1.0.9",
+            "version": "v1.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-clear-manager.git",
-                "reference": "ca0ba4b9efd35608008d56dee734aaaf60fa7c9d"
+                "reference": "06c5450fe33c2065496d0ff8cf6983ffa7290ad1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-clear-manager/zipball/ca0ba4b9efd35608008d56dee734aaaf60fa7c9d",
-                "reference": "ca0ba4b9efd35608008d56dee734aaaf60fa7c9d",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-clear-manager/zipball/06c5450fe33c2065496d0ff8cf6983ffa7290ad1",
+                "reference": "06c5450fe33c2065496d0ff8cf6983ffa7290ad1",
                 "shasum": ""
             },
             "require": {
@@ -872,9 +872,9 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-clear-manager/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-clear-manager/tree/v1.0.9"
+                "source": "https://github.com/besnovatyj/yii2-cms-clear-manager/tree/v1.0.10"
             },
-            "time": "2026-07-27T16:52:45+00:00"
+            "time": "2026-07-27T18:54:31+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-config",
@@ -1679,16 +1679,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-images",
-            "version": "v1.0.3",
+            "version": "v1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-images.git",
-                "reference": "8b196f34433bc113bfea9d28b89c4d2c1c2606f9"
+                "reference": "79c43b34df17be59d185771d0b97788bd9e69a90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-images/zipball/8b196f34433bc113bfea9d28b89c4d2c1c2606f9",
-                "reference": "8b196f34433bc113bfea9d28b89c4d2c1c2606f9",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-images/zipball/79c43b34df17be59d185771d0b97788bd9e69a90",
+                "reference": "79c43b34df17be59d185771d0b97788bd9e69a90",
                 "shasum": ""
             },
             "require": {
@@ -1727,9 +1727,9 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-images/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-images/tree/v1.0.3"
+                "source": "https://github.com/besnovatyj/yii2-cms-images/tree/v1.0.4"
             },
-            "time": "2026-07-21T12:51:03+00:00"
+            "time": "2026-07-29T13:17:54+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-info",
@@ -2549,16 +2549,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-person",
-            "version": "v1.0.8",
+            "version": "v1.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-person.git",
-                "reference": "e5874cc7b9c784018695ce60b9a44f64df0102d1"
+                "reference": "b0bad80f8ffa67acbff830945b666df9996eef97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-person/zipball/e5874cc7b9c784018695ce60b9a44f64df0102d1",
-                "reference": "e5874cc7b9c784018695ce60b9a44f64df0102d1",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-person/zipball/b0bad80f8ffa67acbff830945b666df9996eef97",
+                "reference": "b0bad80f8ffa67acbff830945b666df9996eef97",
                 "shasum": ""
             },
             "require": {
@@ -2614,9 +2614,9 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-person/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-person/tree/v1.0.8"
+                "source": "https://github.com/besnovatyj/yii2-cms-person/tree/v1.0.10"
             },
-            "time": "2026-07-27T16:54:29+00:00"
+            "time": "2026-07-29T13:47:03+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-pessimistic-lock-behavior",
@@ -3610,6 +3610,74 @@
                 "source": "https://github.com/besnovatyj/yii2-cms-yandex-map/tree/v1.0.9"
             },
             "time": "2026-07-21T14:51:02+00:00"
+        },
+        {
+            "name": "besnovatyj/yii2-cms-yandex-smart-captcha",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/besnovatyj/yii2-cms-yandex-smart-captcha.git",
+                "reference": "459261dc913a2f595d4eb4fb13866985cfed0b04"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-yandex-smart-captcha/zipball/459261dc913a2f595d4eb4fb13866985cfed0b04",
+                "reference": "459261dc913a2f595d4eb4fb13866985cfed0b04",
+                "shasum": ""
+            },
+            "require": {
+                "besnovatyj/yii2-cms-contracts": "^1.0",
+                "besnovatyj/yii2-cms-helpers": "^1.0",
+                "besnovatyj/yii2-cms-kernel": "^1.0",
+                "php": ">=8.4",
+                "yiisoft/yii2": "~2.0.0",
+                "yiisoft/yii2-httpclient": "^2.0"
+            },
+            "require-dev": {
+                "roave/security-advisories": "dev-latest"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "bescms": {
+                    "kind": "module"
+                },
+                "moduleId": "YandexSmartCaptcha",
+                "moduleClass": "Besnovatyj\\YandexSmartCaptcha\\Module",
+                "config-plugin": {
+                    "common": "src/config/common.php",
+                    "admin-menu": "src/config/adminMenu.php"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Besnovatyj\\YandexSmartCaptcha\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Besnovatyj",
+                    "email": "your-email@example.com"
+                }
+            ],
+            "description": "Yandex SmartCaptcha (расширенный метод) для Yii2 CMS: виджет, серверный верификатор и валидатор",
+            "keywords": [
+                "captcha",
+                "cms",
+                "smartcaptcha",
+                "validator",
+                "widget",
+                "yandex",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/besnovatyj/yii2-cms-yandex-smart-captcha/issues",
+                "source": "https://github.com/besnovatyj/yii2-cms-yandex-smart-captcha/tree/v1.0.0"
+            },
+            "time": "2026-07-29T18:59:50+00:00"
         },
         {
             "name": "besnovatyj/yii2-nested-sets",

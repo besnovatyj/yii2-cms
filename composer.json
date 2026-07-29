@@ -110,6 +110,7 @@
     "besnovatyj/yii2-cms-videojs-10-widget": "^1.0",
     "besnovatyj/yii2-cms-wage": "^1.0",
     "besnovatyj/yii2-cms-yandex-map": "^1.0",
+    "besnovatyj/yii2-cms-yandex-smart-captcha": "^1.0",
     "league/oauth2-server": "^9.0",
     "monolog/monolog": "^3.8",
     "nyholm/psr7": "^1.8",
