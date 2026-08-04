@@ -1,11 +1,10 @@
 <?php
 
-
 /*
  * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
  */
 
-use modules\menu\widgets\FrontendNav\FrontendNav;
+use Besnovatyj\Menu\widgets\FrontendNav\FrontendNav;
 
 ?>
 <div class="container bg-secondary">
