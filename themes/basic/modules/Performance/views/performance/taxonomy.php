@@ -1,12 +1,13 @@
 <?php
 
-
 /*
  * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
  */
 
-use modules\performance\entities\Taxonomy;
+use Besnovatyj\Performance\entities\Taxonomy;
+use Besnovatyj\TreeManager\Manager\TreeQueryScope;
 use yii\data\DataProviderInterface;
+use yii\helpers\Url;
 use yii\web\View;
 
 /* @var $this View */
@@ -15,18 +16,16 @@ use yii\web\View;
 
 $this->title = $taxonomy->name;
 $this->params['layoutTitle'] = $this->title;
-$this->context->layout = 'performance/main';
+$this->context->layout = 'main';
 
 $this->params['og:title'] = $this->title;
 $this->params['og:image'] = $this->theme->getUrl('img/logo.jpg');
 
 $this->params['breadcrumbs'][] = ['label' => 'Все спектакли', 'url' => ['index']];
-foreach ($taxonomy->parents as $parent) {
-    if (!$parent->isRoot()) {
-        $this->params['breadcrumbs'][] = ['label' => $parent->name, 'url' => ['taxonomy', 'slug' => $parent->slug]];
-    }
-}
-$this->params['breadcrumbs'][] = $taxonomy->name;
+
+$this->params['breadcrumbs'] = new TreeQueryScope(Taxonomy::class)->breadcrumbs($taxonomy, urlCallback: function ($item) {
+    return Url::to(['taxonomy', 'slug' => $item->slug]);
+});
 
 $this->registerMetaTag(['name' => 'keywords', 'content' => \Yii::$app->getModule('Config')->params['frontend']['app']['keywords']]);
 $this->registerMetaTag(['name' => 'description', 'content' => \Yii::$app->getModule('Config')->params['frontend']['app']['description']]);
