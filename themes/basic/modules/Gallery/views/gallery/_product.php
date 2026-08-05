@@ -19,6 +19,6 @@ $url = Url::to(['gallery', 'id' => $model->id]);
 
 <div class="item-gallery isotope-item bo-rad-10 hov-img-zoom">
     <a href="<?= Html::encode($url) ?>">
-        <img src="<?= Html::encode($model->mainPhoto->getThumbFileUrl('file', 'catalog_list')) ?>" alt="">
+        <img src="<?= Html::encode($model->mainPhoto->getThumbUrl('file', 'catalog_list')) ?>" alt="">
     </a>
 </div>

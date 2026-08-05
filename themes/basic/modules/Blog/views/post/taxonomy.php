@@ -1,12 +1,13 @@
 <?php
 
-
 /*
  * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
  */
 
-use modules\blog\entities\taxonomy\Taxonomy;
+use Besnovatyj\Blog\entities\taxonomy\Taxonomy;
+use Besnovatyj\TreeManager\Manager\TreeQueryScope;
 use yii\data\DataProviderInterface;
+use yii\helpers\Url;
 use yii\web\View;
 
 /* @var $this View */
@@ -15,18 +16,18 @@ use yii\web\View;
 
 $this->title = $taxonomy->name;
 $this->params['layoutTitle'] = $this->title;
-$this->context->layout = 'blog/main';
+$this->context->layout = 'main';
 
 $this->params['og:title'] = $this->title;
 $this->params['og:image'] = $this->theme->getUrl('img/logo.jpg');
 
-$this->params['breadcrumbs'][] = ['label' => 'Блог', 'url' => ['index']];
-foreach ($taxonomy->parents as $parent) {
-    if (!$parent->isRoot()) {
-        $this->params['breadcrumbs'][] = ['label' => $parent->name, 'url' => ['taxonomy', 'slug' => $parent->slug]];
+//$this->params['breadcrumbs'][] = ['label' => '1212', 'url' => ['index']];
+$this->params['breadcrumbs'] = new TreeQueryScope(Taxonomy::class)->breadcrumbs($taxonomy, urlCallback: function ($item) use ($taxonomy) {
+    if ($item->id !== $taxonomy->id) {
+        return Url::to(['taxonomy', 'slug' => $item->slug]);
     }
-}
-$this->params['breadcrumbs'][] = $taxonomy->name;
+    return false;
+});
 
 $this->registerMetaTag(['name' => 'title', 'content' => $taxonomy->getSeoTitle()]);
 $this->registerMetaTag(['name' => 'keywords', 'content' => $taxonomy->meta->keywords]);
@@ -36,7 +37,7 @@ $this->registerMetaTag(['name' => 'author', 'content' => Yii::$app->getModule('C
 $this->params['active_taxonomy'] = $taxonomy;
 ?>
 
-<section class="shock-section mt-3 mb-5">
+<section class="container mt-3 mb-5">
     <?php if ($taxonomy->description): ?>
         <div class="basic-intro mb-2 text-center">
             <h2 class="title gray-50 text-style-5">

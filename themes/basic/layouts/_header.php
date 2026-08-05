@@ -16,14 +16,14 @@ use yii\helpers\Url;
         </div>
         <div>
             <?= FrontendNav::widget([
-                'slug' => 'main', // Отображение меню с slug='main'
+                'slug' => 'menu-main', // Отображение меню с slug='main'
                 'options' => ['class' => 'navbar-nav ms-auto'],
             ]);
             ?>
         </div>
     </div>
 </div>
-<div class="container bg-secondary">
+<div class="container bg-light">
     <div class="breadcrumb">
         <?= Breadcrumbs::widget(
             [

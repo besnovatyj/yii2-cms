@@ -1,6 +1,5 @@
 <?php
 
-
 /*
  * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
  */
@@ -26,8 +25,4 @@ class SiteController extends \yii\web\Controller
         return $this->render('index');
     }
 
-    public function actionQuickTickets(): string
-    {
-        return $this->render('quickTickets');
-    }
 }

@@ -15,7 +15,7 @@ use yii\web\View;
 
 $url = Url::to(['view', 'uuid' => $model->uuid]);
 $emptyActorUrl = Url::to(['/static_assets_bd/images/actors/empty-actor.svg'], true);
-$imgUrl = isset($model->mainImage) ? $model->mainImage->getThumbFileUrl('file', 'frontend_list', $emptyActorUrl) : $emptyActorUrl;
+$imgUrl = isset($model->mainImage) ? $model->mainImage->getThumbUrl('file', 'frontend_list', $emptyActorUrl) : $emptyActorUrl;
 
 ?>
 

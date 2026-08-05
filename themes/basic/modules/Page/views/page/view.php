@@ -1,6 +1,5 @@
 <?php
 
-
 /*
  * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
  */
@@ -14,7 +13,7 @@ use yii\web\View;
 
 $this->title = $page->title;
 $this->params['layoutTitle'] = $this->title;
-$this->context->layout = 'page/main';
+$this->context->layout = 'main';
 
 $this->params['og:title'] = $this->title;
 $this->params['og:image'] = $this->theme->getUrl('img/logo.jpg');

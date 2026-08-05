@@ -1,11 +1,10 @@
 <?php
 
-
 /*
  * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
  */
 
-use modules\blog\entities\Tag;
+use Besnovatyj\Blog\entities\Tag;
 use yii\data\DataProviderInterface;
 use yii\web\View;
 
@@ -15,7 +14,7 @@ use yii\web\View;
 
 $this->title = '#' . $tag->name;
 $this->params['layoutTitle'] = $this->title;
-$this->context->layout = 'blog/main';
+$this->context->layout = 'main';
 
 $this->params['og:title'] = $this->title;
 $this->params['og:image'] = $this->theme->getUrl('img/logo.jpg');
@@ -29,7 +28,7 @@ $this->registerMetaTag(['name' => 'author', 'content' => \Yii::$app->getModule('
 
 ?>
 
-<section class="shock-section mt-3 mb-5">
+<section class="container mt-3 mb-5">
     <!-- Posts -->
     <div class="row g-4" data-masonry='{"percentPosition": true }'>
         <?php foreach ($dataProvider->getModels() as $model): ?>

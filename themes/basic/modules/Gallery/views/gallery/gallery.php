@@ -42,7 +42,7 @@ $this->params['active_category'] = $gallery->category; // Для виджета
                 <?php if ($i == 0): ?>
                     <div>
                         <a href="<?= $image->getImageFileUrl('file') ?>" data-lightbox="gallery-poster">
-                            <img src="<?= $image->getThumbFileUrl('file', 'frontend_list') ?>"
+                            <img src="<?= $image->getThumbUrl('file', 'frontend_list') ?>"
                                  alt="<?= Html::encode($gallery->name) ?>"/>
                         </a>
                     </div>
@@ -67,7 +67,7 @@ $this->params['active_category'] = $gallery->category; // Для виджета
                             <?php if ($i !== 0): ?>
                                 <a class="item-gallery-section wrap-pic-w" href="<?= $image->getImageFileUrl('file') ?>"
                                    data-lightbox="gallery-item">
-                                    <img src="<?= $image->getThumbFileUrl('file', 'gallery') ?>"
+                                    <img src="<?= $image->getThumbUrl('file', 'gallery') ?>"
                                          alt=""/>
                                 </a>
                             <?php endif; ?>

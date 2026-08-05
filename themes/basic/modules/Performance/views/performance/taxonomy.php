@@ -21,10 +21,11 @@ $this->context->layout = 'main';
 $this->params['og:title'] = $this->title;
 $this->params['og:image'] = $this->theme->getUrl('img/logo.jpg');
 
-$this->params['breadcrumbs'][] = ['label' => 'Все спектакли', 'url' => ['index']];
-
-$this->params['breadcrumbs'] = new TreeQueryScope(Taxonomy::class)->breadcrumbs($taxonomy, urlCallback: function ($item) {
-    return Url::to(['taxonomy', 'slug' => $item->slug]);
+$this->params['breadcrumbs'] = new TreeQueryScope(Taxonomy::class)->breadcrumbs($taxonomy, urlCallback: function ($item) use ($taxonomy) {
+    if ($item->id !== $taxonomy->id) {
+        return Url::to(['taxonomy', 'slug' => $item->slug]);
+    }
+    return false;
 });
 
 $this->registerMetaTag(['name' => 'keywords', 'content' => \Yii::$app->getModule('Config')->params['frontend']['app']['keywords']]);
@@ -35,12 +36,14 @@ $this->params['active_taxonomy'] = $taxonomy; // Для виджета
 
 ?>
 
-<section class="shock-section mt-3 mb-5">
+<section class="container">
     <div class="row g-3">
         <?php foreach ($dataProvider->getModels() as $model): ?>
+        <div class="col-12 col-md-2">
             <?= $this->render('_item', [
                 'model' => $model,
             ]) ?>
+        </div>
         <?php endforeach; ?>
     </div>
 
