@@ -67,12 +67,12 @@ use yii\web\View;
 
     <?php $this->head() ?>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 <?php $this->beginBody() ?>
 <!-- Header -->
 <?php echo $this->render("_header.php") ?>
 <!-- Main -->
-<main>
+<main class="flex-grow-1">
     <?= $content ?>
 </main>
 <!-- Footer -->

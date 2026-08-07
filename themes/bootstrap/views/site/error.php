@@ -1,6 +1,5 @@
 <?php
 
-
 /*
  * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
  */
@@ -14,30 +13,23 @@ use yii\web\View;
 /* @var $exception Exception */
 
 $this->title = $name;
+$this->context->layout = '@themes/bootstrap/layouts/main';
 ?>
-<?php
+<section class="container my-4 my-lg-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-4">
+                <p class="display-1 fw-bold text-secondary mb-0"><?= (int)$exception->getCode() ?></p>
+                <h1 class="h3"><?= Html::encode($name) ?></h1>
+            </div>
 
-?>
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <div class="p-3 bg-warning blue-100">
-                <div class="border-1 m-1 p-3 rounded bg-white">
-                    <div> Error name:</div>
-                    <div><?= nl2br(Html::encode($name)) ?></div>
-                </div>
-                <div class="border-1 m-1 p-3 rounded bg-white">
-                    <div>Error message:</div>
-                    <div><?= nl2br(Html::encode($message)) ?></div>
-                </div>
-                <div class="border-1 m-1 p-3 rounded bg-white">
-                    <div>Error code:</div>
-                    <div><?= $exception->getCode() ?></div>
-                </div>
-                <div class="center">
-                    <a href="<?= Yii::$app->homeUrl ?>" class="d-block p-3 m-3 rounded-2 text-white text-center bg-primary">Go home</a>
-                </div>
+            <div class="alert alert-danger" role="alert">
+                <?= nl2br(Html::encode($message)) ?>
+            </div>
+
+            <div class="text-center">
+                <a href="<?= Yii::$app->homeUrl ?>" class="btn btn-primary">На главную</a>
             </div>
         </div>
     </div>
-</div>
+</section>

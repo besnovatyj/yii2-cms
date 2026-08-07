@@ -1,12 +1,13 @@
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <div class="p-3 bg-success">
-                FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
-                FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
-                FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
-                FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER FOOTER
-            </div>
-        </div>
+<?php
+
+/*
+ * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
+ */
+
+?>
+<footer class="bg-dark text-white-50 mt-auto py-4">
+    <div class="container d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2">
+        <span>&copy; <?= date('Y') ?></span>
+        <span class="small">Powered by Bootstrap 5</span>
     </div>
-</div>
+</footer>
