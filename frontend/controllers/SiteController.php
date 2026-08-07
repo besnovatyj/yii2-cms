@@ -10,6 +10,8 @@ use yii\web\ErrorAction;
 
 class SiteController extends \yii\web\Controller
 {
+    use ThemedLayoutTrait;
+
     public function actions(): array
     {
         return [
