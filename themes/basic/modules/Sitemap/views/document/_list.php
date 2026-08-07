@@ -34,7 +34,6 @@ use yii\web\View;
 
 <?php foreach ($dataProvider->getModels() as $model): ?>
     <?php
-//    $local_url = $model->getUploadedFileUrl('original_filename');
     $local_url = \yii\helpers\Url::to(['/documents/document/download', 'id' => $model->id]);
     $external_url = $model->external_url;
     if (is_string($local_url) && !empty($local_url)) {

@@ -25,7 +25,7 @@ $this->registerMetaTag(['name' => 'author', 'content' => \Yii::$app->getModule('
 
 ?>
 
-<section class="shock-section mt-3 mb-5">
+<section class="container mt-3 mb-5">
     <ul class="">
         <?php foreach ($data as $item): ?>
             <li>

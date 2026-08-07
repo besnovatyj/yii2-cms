@@ -23,7 +23,6 @@ $this->registerMetaTag(['name' => 'keywords', 'content' => Yii::$app->getModule(
 $this->registerMetaTag(['name' => 'description', 'content' => Yii::$app->getModule('Config')->params['frontend']['app']['description']]);
 $this->registerMetaTag(['name' => 'author', 'content' => Yii::$app->getModule('Config')->params['frontend']['app']['name']]);
 
-//$local_url = $document->getUploadedFileUrl('original_filename');
 $local_url = \yii\helpers\Url::to(['/documents/document/download', 'id' => $document->id]);
 $external_url = $document->external_url;
 if (is_string($local_url) && !empty($local_url)) {
@@ -34,7 +33,7 @@ if (is_string($local_url) && !empty($local_url)) {
     $link = 'Ссылки нет';
 }
 ?>
-<section class="shock-section mt-3 mb-5">
+<section class="container mt-3 mb-5">
     <div>
         <small><?= Yii::$app->formatter->asDatetime($document->created_at) ?></small>
         <br/>

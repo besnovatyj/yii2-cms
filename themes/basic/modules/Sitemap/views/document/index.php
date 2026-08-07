@@ -30,7 +30,7 @@ $this->registerMetaTag(['name' => 'author', 'content' => Yii::$app->getModule('C
 
 ?>
 
-<section class="shock-section mt-3 mb-5">
+<section class="container mt-3 mb-5">
     <?= $this->render('_list', [
         'dataProvider' => $dataProvider
     ]) ?>
