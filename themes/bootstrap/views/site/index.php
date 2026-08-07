@@ -9,7 +9,7 @@ use yii\web\View;
 /* @var $this View */
 
 $this->title = \Yii::$app->getModule('Config')->params['frontend']['app']['name'];
-$this->context->layout = '@themes/basic/layouts/main';
+$this->context->layout = '@themes/bootstrap/layouts/main';
 
 $this->params['og:title'] = $this->title;
 $this->params['og:image'] = $this->theme->getUrl('img/logo.jpg');

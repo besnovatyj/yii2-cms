@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @var $content string
  */
 
-use themes\basic\assets\ThemeAssets;
+use themes\bootstrap\assets\ThemeAssets;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\View;

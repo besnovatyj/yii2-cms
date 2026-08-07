@@ -6,7 +6,7 @@ declare(strict_types=1);
  * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
  */
 
-namespace themes\basic\assets;
+namespace themes\bootstrap\assets;
 
 use yii\web\AssetBundle;
 
