@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace common\components\log;
 
 use Monolog\Logger;
+use Monolog\LogRecord;
 use Monolog\Processor\WebProcessor;
 use samdark\log\PsrTarget;
 
@@ -77,6 +78,17 @@ class MonologTarget extends PsrTarget
     public array $webProcessorFields = [];
 
     /**
+     * Убирать ли из каждой записи массив `context.trace`, который базовый
+     * {@see PsrTarget} добавляет при `extractExceptionTrace = true`.
+     *
+     * Нужно для «шумных» каналов (например, 404): у них имеет смысл оставить
+     * короткое сообщение исключения, но не тащить в файл десятки кадров стека.
+     * Работает в паре с `includeStacktraces => false` у файлового хендлера
+     * (тот отвечает за трейс внутри `context.exception`).
+     */
+    public bool $dropTraceContext = false;
+
+    /**
      * Собирает Monolog-логгер из спека до инициализации базового таргета.
      *
      * @throws \yii\base\InvalidConfigException
@@ -93,6 +105,18 @@ class MonologTarget extends PsrTarget
             // отдельная проверка SAPI не нужна.
             if ($this->webProcessorFields !== []) {
                 $logger->pushProcessor(new WebProcessor(null, $this->webProcessorFields));
+            }
+            // Вырезаем массив кадров стека из context (см. $dropTraceContext).
+            if ($this->dropTraceContext) {
+                $logger->pushProcessor(static function (LogRecord $record): LogRecord {
+                    if (!isset($record->context['trace'])) {
+                        return $record;
+                    }
+                    $context = $record->context;
+                    unset($context['trace']);
+
+                    return $record->with(context: $context);
+                });
             }
             $this->setLogger($logger);
         }

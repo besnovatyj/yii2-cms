@@ -32,7 +32,9 @@ use yii\base\InvalidConfigException;
  *
  * - `rotating_file` — ротируемый файл в JSON-формате (совместим с модулем
  *   просмотра `besnovatyj/yii2-cms-monolog`). Параметры: `file` (алиас/путь),
- *   `maxFiles` (по умолчанию 30), `level` (по умолчанию `debug`).
+ *   `maxFiles` (по умолчанию 30), `level` (по умолчанию `debug`),
+ *   `includeStacktraces` (по умолчанию `true` — разворачивать стектрейс
+ *   исключения внутри `context.exception`; для шумных каналов ставим `false`).
  * - `syslog` — отправка в syslog (используется для fail2ban по auth-событиям).
  *   Параметры: `ident`, `facility` (имя константы, по умолчанию `LOG_USER`),
  *   `level` (по умолчанию `debug`).
@@ -85,7 +87,8 @@ final class HandlerFactory
      * - BATCH_MODE_NEWLINES — каждая запись на отдельной строке;
      * - appendNewline = true;
      * - ignoreEmptyContextAndExtra = true — не захламлять JSON пустыми полями;
-     * - includeStacktraces = true — полный стектрейс для исключений.
+     * - includeStacktraces — полный стектрейс исключения (по умолчанию true;
+     *   `includeStacktraces => false` в спеке отключает его для канала).
      *
      * @throws InvalidConfigException
      */
@@ -104,7 +107,7 @@ final class HandlerFactory
             JsonFormatter::BATCH_MODE_NEWLINES,
             true,
             true,
-            true,
+            (bool)($spec['includeStacktraces'] ?? true),
         ));
 
         return $handler;

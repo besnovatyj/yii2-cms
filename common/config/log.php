@@ -87,7 +87,8 @@ $coreTargets = [
     'global' => [ // @see https://github.com/samdark/yii2-psr-log-target
         'class' => MonologTarget::class,
         'channel' => 'yii2-cms',
-        'except' => ['modman/*', 'auth/*'],
+        // 404 выделены в свой канал (см. 'notfound' ниже) — из общего файла исключаем.
+        'except' => ['modman/*', 'auth/*', 'yii\web\HttpException:404'],
         // Уровень-порог хендлера: встроенные хендлеры Monolog используют
         // минимальный порог уровня логирования.
         'handlers' => [
@@ -139,6 +140,39 @@ $coreTargets = [
         ],
         'addTimestampToContext' => true,
         'extractExceptionTrace' => true,
+    ],
+
+    // Канал «страница не найдена». Yii\web\ErrorHandler логирует
+    // NotFoundHttpException под категорией `yii\web\HttpException:404`
+    // уровнем ERROR. Ловим ровно эту категорию в отдельный файл, чтобы
+    // 404 (боты, битые ссылки, сканеры) не засоряли общий monolog.log.
+    // Файл: @runtime/logs/monolog-notfound-Y-m-d.log
+    // Ротация посуточная; RotatingFileHandler сам удаляет самые старые
+    // файлы, когда их накапливается больше maxFiles.
+    'notfound' => [
+        'class' => MonologTarget::class,
+        'channel' => 'notfound',
+        'categories' => ['yii\web\HttpException:404'],
+        'levels' => ['error'],
+        'handlers' => [
+            // includeStacktraces => false — не разворачивать стек в context.exception.
+            ['type' => 'rotating_file', 'file' => '@runtime/logs/monolog-notfound.log', 'maxFiles' => 14, 'level' => 'error', 'includeStacktraces' => false],
+        ],
+        // Для 404 важнее всего: какой URL, кто (IP/UA) и откуда (referrer).
+        'webProcessorFields' => [
+            'ip'           => 'REMOTE_ADDR',
+            'http_method'  => 'REQUEST_METHOD',
+            'url'          => 'REQUEST_URI',
+            'query_string' => 'QUERY_STRING',
+            'referrer'     => 'HTTP_REFERER',
+            'user_agent'   => 'HTTP_USER_AGENT',
+        ],
+        'addTimestampToContext' => true,
+        // extractExceptionTrace оставляем true, чтобы message был коротким
+        // («Страница не найдена»), а не полным __toString() со стеком;
+        // сам массив кадров стека убираем через dropTraceContext.
+        'extractExceptionTrace' => true,
+        'dropTraceContext' => true,
     ],
 
 ];
