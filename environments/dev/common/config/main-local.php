@@ -30,6 +30,12 @@ return [
         'mailer' => [
             'class' => \yii\symfonymailer\Mailer::class,
             'viewPath' => '@common/mail',
+            // Обратный адрес по умолчанию для ВСЕХ писем приложения. Symfony Mailer требует заголовок
+            // From (или Sender) — без него любое письмо падает с "An email must have a "From" or a
+            // "Sender" header." Модули-отправители (Contact и др.) свой From не задают.
+            'messageConfig' => [
+                'from' => ['noreply@example.com' => 'Example.com'],
+            ],
             // Для локальной разработки используем Mailpit (перехватывает все письма)
             'useFileTransport' => false,
             'transport' => [

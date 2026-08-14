@@ -29,6 +29,14 @@ return [
         'mailer' => [ // Если не работает, не блокирует ли фаервол порты?
             'class' => \yii\symfonymailer\Mailer::class,
             'viewPath' => '@common/mail',
+            // Обратный адрес по умолчанию для ВСЕХ писем приложения. Symfony Mailer требует заголовок
+            // From (или Sender) — без него любое письмо падает с "An email must have a "From" or a
+            // "Sender" header." Модули-отправители (Contact и др.) свой From не задают: это общая
+            // настройка common-слоя, а не свойство модуля. Адрес должен быть на домене сайта, иначе
+            // SPF/DKIM/DMARC у получателя отбракуют письмо.
+            'messageConfig' => [
+                'from' => ['noreply@example.com' => 'Example.com'],
+            ],
             // send all mails to a file by default.
             'useFileTransport' => true,
             'fileTransportCallback' => static function ($mailer, $message): string {
