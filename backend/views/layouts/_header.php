@@ -30,7 +30,7 @@ use yii\helpers\Url;
                 <i class="bi bi-caret-down-square"></i>
             </button>
         </li>
-        <!-- Кнопка для правого сайдбара (мобильная версия) -->
+        <!-- Кнопка для правого сайдбара -->
         <li class="nav-item text-nowrap">
             <button class="nav-link px-3 text-white" type="button" data-bs-toggle="offcanvas"
                     data-bs-target="#rightSidebarMenu" aria-controls="rightSidebarMenu" aria-expanded="false"

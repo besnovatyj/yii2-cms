@@ -50,22 +50,12 @@ $menuItems = static function (string $location): array {
             <!-- Вкладка Actions -->
             <div class="tab-pane fade show active" id="actions" role="tabpanel" aria-labelledby="actions-tab">
                 <div class="p-2">
-                    <?php
-                    if (isset($this->blocks['pageRight.Actions'])): ?>
-                        <?= $this->blocks['pageRight.Actions'] ?>
-                    <?php endif; ?>
+
                 </div>
             </div>
 
             <!-- Вкладка Settings -->
             <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
-
-                <div class="p-2">
-                    <?php if (isset($this->blocks['pageRight.Settings'])): ?>
-                        <?= $this->blocks['pageRight.Settings'] ?>
-                    <?php endif; ?>
-                </div>
-
                 <?php
                 $backend_items = MenuAccessFilter::filter($menuItems('right-sidebar'));
                 echo NavWidget::widget([
@@ -238,11 +228,6 @@ $menuItems = static function (string $location): array {
             <div class="tab-pane fade" id="account" role="tabpanel" aria-labelledby="account-tab">
 
                 <div class="p-2">
-                    <?php if (isset($this->blocks['pageRight.Account'])): ?>
-                        <?= $this->blocks['pageRight.Account'] ?>
-                    <?php endif; ?>
-
-                    <?php // TODO А можно сделать чтобы пункты сюда модуль закидывал, но глобально для всех страниц админки???? ?>
                     <?php // Стили сейчас лежат глобально, перенести в виджет ?>
 
                     <div class="tab-pane fade active show" id="account" role="tabpanel" aria-labelledby="account-tab">
