@@ -59,6 +59,7 @@
     "besnovatyj/ckeditor5-codemirror": "^1.0",
     "besnovatyj/ckeditor5-filemanager": "^1.0",
     "besnovatyj/yii2-cms-actors": "^1.0",
+    "besnovatyj/yii2-cms-admin-panel": "^1.0",
     "besnovatyj/yii2-cms-alert-widget": "^1.0",
     "besnovatyj/yii2-cms-altcha-widget": "^1.0",
     "besnovatyj/yii2-cms-backend-widgets": "^1.0",

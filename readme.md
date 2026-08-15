@@ -8,6 +8,7 @@
 "besnovatyj/yii2-cms-modman"          // Модуль управления другими модулями
 "besnovatyj/yii2-cms-backend-widgets" // Базовые виджеты для админки
 "besnovatyj/yii2-cms-alert-widget"    // Виджет Bootstrap 5 уведомлений
+"besnovatyj/yii2-cms-admin-panel"     // Модуль админки
 "yiisoft/config"                      // Yii3 модуль конфигурации
 ```
 

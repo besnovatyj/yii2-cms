@@ -41,6 +41,14 @@ use yii\helpers\Url;
     </ul>
 
     <div class="d-flex d-flex-inline">
+        <!-- Кнопки модулей (локация меню header-quick-links) + поиск по админке (Ctrl/Cmd+K).
+             Новые кнопки добавляются вкладом модуля в adminMenu.php, а не правкой этого файла.
+             Проверка модуля обязательна: он устанавливаемый, и без неё выключение его в modman
+             уронило бы шапку админки. -->
+        <?php if (Yii::$app->hasModule('AdminPanel')): ?>
+            <?= \Besnovatyj\AdminPanel\widgets\header\HeaderActionsWidget::widget() ?>
+        <?php endif; ?>
+
         <ul class="navbar-nav flex-row d-none d-md-flex">
             <li class="nav-item text-nowrap">
                 <?= \yii\helpers\Html::a(

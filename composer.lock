@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dc43cf6d50f9bb25eda5f89e8b0a65e8",
+    "content-hash": "2ce07c67be6de4edf1edbab7a1973ee8",
     "packages": [
         {
             "name": "altcha-org/altcha",
@@ -375,6 +375,73 @@
                 "source": "https://github.com/besnovatyj/yii2-cms-actors/tree/v1.0.8"
             },
             "time": "2026-07-13T21:44:44+00:00"
+        },
+        {
+            "name": "besnovatyj/yii2-cms-admin-panel",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/besnovatyj/yii2-cms-admin-panel.git",
+                "reference": "23f4f76ca7e2ab8559ca80d6e25cfe8b376fd0b7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-admin-panel/zipball/23f4f76ca7e2ab8559ca80d6e25cfe8b376fd0b7",
+                "reference": "23f4f76ca7e2ab8559ca80d6e25cfe8b376fd0b7",
+                "shasum": ""
+            },
+            "require": {
+                "besnovatyj/yii2-cms-contracts": "^1.0",
+                "besnovatyj/yii2-cms-kernel": "^1.0",
+                "besnovatyj/yii2-cms-modman": "^1.0",
+                "php": ">=8.4",
+                "yiisoft/yii2": "~2.0",
+                "yiisoft/yii2-bootstrap5": "~2.0"
+            },
+            "require-dev": {
+                "roave/security-advisories": "dev-latest"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "bescms": {
+                    "kind": "module"
+                },
+                "moduleId": "AdminPanel",
+                "moduleClass": "Besnovatyj\\AdminPanel\\Module",
+                "config-plugin": {
+                    "common": "src/config/common.php",
+                    "admin-menu": "src/config/adminMenu.php",
+                    "app-backend": "src/config/backend.php"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Besnovatyj\\AdminPanel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Besnovatyj",
+                    "email": "your-email@example.com"
+                }
+            ],
+            "description": "Глобальный модуль админ-панели: индекс меню всех локаций, палитра команд (Ctrl/Cmd+K), кнопки быстрых действий в шапке и страница «Настройки»",
+            "keywords": [
+                "admin",
+                "cms",
+                "command-palette",
+                "navigation",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/besnovatyj/yii2-cms-admin-panel/issues",
+                "source": "https://github.com/besnovatyj/yii2-cms-admin-panel/tree/v1.0.0"
+            },
+            "time": "2026-08-14T11:36:13+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-alert-widget",
