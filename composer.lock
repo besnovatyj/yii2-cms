@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2ce07c67be6de4edf1edbab7a1973ee8",
+    "content-hash": "a9c8fb02f212b2fca3200bccc1398835",
     "packages": [
         {
             "name": "altcha-org/altcha",
@@ -310,6 +310,68 @@
                 "source": "https://github.com/besnovatyj/ckeditor5-filemanager/tree/v1.0.0"
             },
             "time": "2026-07-07T05:24:15+00:00"
+        },
+        {
+            "name": "besnovatyj/yii2-cms-accessibility",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/besnovatyj/yii2-cms-accessibility.git",
+                "reference": "c604be6673cf544564bb8b37f6aff5c4d411197b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-accessibility/zipball/c604be6673cf544564bb8b37f6aff5c4d411197b",
+                "reference": "c604be6673cf544564bb8b37f6aff5c4d411197b",
+                "shasum": ""
+            },
+            "require": {
+                "besnovatyj/yii2-cms-contracts": "^1.0",
+                "besnovatyj/yii2-cms-kernel": "^1.0",
+                "php": ">=8.4",
+                "yiisoft/yii2": "~2.0.0"
+            },
+            "require-dev": {
+                "roave/security-advisories": "dev-latest"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "bescms": {
+                    "kind": "module"
+                },
+                "moduleId": "Accessibility",
+                "moduleClass": "Besnovatyj\\Accessibility\\Module",
+                "config-plugin": {
+                    "common": "src/config/common.php"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Besnovatyj\\Accessibility\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Besnovatyj",
+                    "email": "your-email@example.com"
+                }
+            ],
+            "description": "Панель доступности (версия для слабовидящих) для Yii2 CMS",
+            "keywords": [
+                "a11y",
+                "accessibility",
+                "cms",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/besnovatyj/yii2-cms-accessibility/issues",
+                "source": "https://github.com/besnovatyj/yii2-cms-accessibility/tree/v1.0.0"
+            },
+            "time": "2026-08-28T10:17:37+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-actors",
