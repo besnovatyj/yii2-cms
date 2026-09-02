@@ -94,7 +94,7 @@
     "besnovatyj/yii2-cms-monolog": "^1.0",
     "besnovatyj/yii2-cms-oauth2": "^1.0",
     "besnovatyj/yii2-cms-page": "^1.0",
-    "besnovatyj/yii2-cms-performance": "^1.0",
+    "besnovatyj/yii2-cms-performance": "^1.1",
     "besnovatyj/yii2-cms-person": "^1.0",
     "besnovatyj/yii2-cms-pessimistic-lock-behavior": "^1.0",
     "besnovatyj/yii2-cms-route-alias": "^1.0",
