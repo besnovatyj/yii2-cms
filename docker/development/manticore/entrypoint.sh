@@ -1,23 +1,23 @@
 #!/bin/sh
 # =============================================================================
-# Первичная настройка авторизации демона поиска.
+# Первичное создание учётных записей демона поиска.
 #
 # У Manticore есть встроенная авторизация (с версии 27.1.5), но включённая настройка `auth`
-# сама по себе учётных записей не создаёт: первого администратора заводит отдельный режим
-# запуска `searchd --auth-non-interactive`, и делается это ОДИН раз, до старта демона.
-# Пока учёток нет, подключиться нельзя вообще — поэтому создание выполняется здесь, при первом
-# запуске контейнера, как это делает официальный образ MySQL.
+# сама по себе учёток не создаёт: первого администратора заводит отдельный режим запуска
+# `searchd --auth-non-interactive`, и он обращается к УЖЕ ЗАПУЩЕННОМУ демону (без него —
+# «FATAL: pid file ... does not exist, run daemon first»). Поэтому порядок такой: сначала
+# штатный запуск демона, а создание учёток идёт параллельно и ждёт, пока демон ответит.
 #
-# Порядок:
-#   1. создаётся администратор — им пользуются `make manticore-*` и сопровождение;
-#   2. демон поднимается на время, чтобы создать учётную запись приложения с правами только на
-#      работу с индексом (без прав администрирования и репликации), и останавливается;
-#   3. ставится отметка, чтобы при следующих запусках ничего этого не повторялось: повторный
-#      запуск создания администратора завершается ошибкой, а не «ничего не делает».
+# Всё это выполняется один раз на том с данными и отмечается маркером: повторный запуск
+# создания администратора завершается ошибкой, а не «ничего не делает».
+#
+# Ошибки настройки контейнер не роняют. Демон должен работать в любом случае: с ним можно
+# разобраться руками (`make manticore-cli`), а падение контейнера в цикле перезапуска не
+# оставляет даже такой возможности.
 #
 # Пароли читаются из Docker Secrets. Кавычек и обратных слэшей в них быть не должно: пароль
 # подставляется в SQL-команду создания пользователя. `make secrets-init-prod` генерирует
-# base64 — такие пароли безопасны.
+# base64url — такие пароли безопасны.
 # =============================================================================
 set -eu
 
@@ -25,6 +25,10 @@ CONF="/etc/manticoresearch/manticore.conf.sh"
 DATA_DIR="/var/lib/manticore"
 MARKER="$DATA_DIR/.bescms-auth-initialized"
 GOSU="$(command -v gosu || true)"
+
+# Сколько ждём готовности демона: попыток и пауза между ними в секундах.
+ATTEMPTS=60
+DELAY=2
 
 # Штатный запуск демона в образе выполняется от пользователя manticore; всё, что создаёт файлы
 # в каталоге данных, должно работать от него же, иначе демон потом не сможет их перезаписать.
@@ -45,58 +49,93 @@ secret() {
     fi
 }
 
-admin_sql() {
-    sql_password="$1"
-    sql_user="$2"
+sql_as() {
+    sql_user="$1"
+    sql_password="$2"
     shift 2
 
     MYSQL_PWD="$sql_password" mysql -h 127.0.0.1 -P 9306 -u "$sql_user" "$@"
 }
 
-if [ "${searchd_auth:-0}" = "1" ] && [ ! -f "$MARKER" ]; then
-    admin_user="${MANTICORE_ROOT_USER:-admin}"
-    admin_password="$(secret MANTICORE_ROOT_PASSWORD)"
-    app_user="${MANTICORE_USER:-}"
-    app_password="$(secret MANTICORE_PASSWORD)"
+# Создать администратора, дождавшись готовности демона.
+create_admin() {
+    attempt=0
 
-    if [ -z "$admin_password" ]; then
-        echo "manticore-init: нет секрета MANTICORE_ROOT_PASSWORD — включать авторизацию нечем." >&2
-        exit 1
+    while :; do
+        # Уже заведён (например, маркер потерян вместе с контейнером, а том остался) —
+        # заводить второй раз не нужно и нельзя.
+        if sql_as "$admin_user" "$admin_password" -e 'SHOW TABLES' >/dev/null 2>&1; then
+            echo "manticore-init: администратор «${admin_user}» уже существует."
+            return 0
+        fi
+
+        if printf '%s\n%s\n%s\n' "$admin_user" "$admin_password" "$admin_password" \
+            | as_manticore searchd --config "$CONF" --auth-non-interactive >/dev/null 2>&1
+        then
+            echo "manticore-init: администратор «${admin_user}» создан."
+            return 0
+        fi
+
+        attempt=$((attempt + 1))
+        if [ "$attempt" -ge "$ATTEMPTS" ]; then
+            echo "manticore-init: демон не принял создание администратора «${admin_user}»." >&2
+            return 1
+        fi
+
+        sleep "$DELAY"
+    done
+}
+
+# Создать учётную запись приложения: права только на работу с индексом, без администрирования
+# и репликации.
+create_app_user() {
+    if sql_as "$app_user" "$app_password" -e 'SHOW TABLES' >/dev/null 2>&1; then
+        echo "manticore-init: учётная запись приложения «${app_user}» уже существует."
+        return 0
     fi
 
-    echo "manticore-init: первый запуск, создаётся администратор «${admin_user}»."
-    printf '%s\n%s\n%s\n' "$admin_user" "$admin_password" "$admin_password" \
-        | as_manticore searchd --config "$CONF" --auth-non-interactive
-
-    if [ -n "$app_user" ] && [ -n "$app_password" ]; then
-        echo "manticore-init: создаётся учётная запись приложения «${app_user}»."
-        as_manticore searchd --config "$CONF"
-
-        attempt=0
-        until admin_sql "$admin_password" "$admin_user" -e 'SHOW TABLES' >/dev/null 2>&1; do
-            attempt=$((attempt + 1))
-            if [ "$attempt" -ge 30 ]; then
-                echo "manticore-init: демон не ответил за 30 секунд, настройка прервана." >&2
-                exit 1
-            fi
-            sleep 1
-        done
-
-        # Права: читать, писать и управлять таблицами индекса. Администрирование и репликация
-        # приложению не нужны — их у этой учётной записи нет.
-        admin_sql "$admin_password" "$admin_user" <<SQL
+    sql_as "$admin_user" "$admin_password" <<SQL
 CREATE USER '${app_user}' IDENTIFIED BY '${app_password}';
 GRANT read ON * TO '${app_user}';
 GRANT write ON * TO '${app_user}';
 GRANT schema ON * TO '${app_user}';
 SQL
 
-        as_manticore searchd --config "$CONF" --stopwait
-    else
-        echo "manticore-init: MANTICORE_USER или секрет MANTICORE_PASSWORD не заданы — учётная запись приложения не создана." >&2
+    if ! sql_as "$app_user" "$app_password" -e 'SHOW TABLES' >/dev/null 2>&1; then
+        echo "manticore-init: учётная запись «${app_user}» создана, но подключиться под ней не удалось." >&2
+        return 1
     fi
 
+    echo "manticore-init: учётная запись приложения «${app_user}» создана."
+}
+
+init_auth() {
+    admin_user="${MANTICORE_ROOT_USER:-admin}"
+    admin_password="$(secret MANTICORE_ROOT_PASSWORD)"
+    app_user="$(secret MANTICORE_USER)"
+    app_password="$(secret MANTICORE_PASSWORD)"
+
+    if [ -z "$admin_password" ]; then
+        echo "manticore-init: нет секрета MANTICORE_ROOT_PASSWORD — учётные записи не созданы." >&2
+        return 1
+    fi
+
+    create_admin || return 1
+
+    if [ -z "$app_user" ] || [ -z "$app_password" ]; then
+        echo "manticore-init: MANTICORE_USER или MANTICORE_PASSWORD не заданы — учётная запись приложения не создана." >&2
+        return 1
+    fi
+
+    create_app_user || return 1
+
     as_manticore touch "$MARKER"
+}
+
+if [ "${searchd_auth:-0}" = "1" ] && [ ! -f "$MARKER" ]; then
+    echo "manticore-init: первый запуск с авторизацией, учётные записи будут созданы после старта демона."
+    # Фоном: демон запускается ниже и должен получить управление немедленно.
+    { init_auth || true; } &
 fi
 
 exec docker-entrypoint.sh "$@"

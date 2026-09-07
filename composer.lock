@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fc522021efa623c274c0ad42e064a4a7",
+    "content-hash": "a0eb14c171d7d923de214e71d8755a33",
     "packages": [
         {
             "name": "altcha-org/altcha",
@@ -2970,16 +2970,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-search",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/besnovatyj-yii2-cms-search.git",
-                "reference": "dc9f603d1016719539b58e2971c1fbfd37ab1e27"
+                "reference": "357703a262c8557b4d320868bfb4fad63148dba5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/besnovatyj-yii2-cms-search/zipball/dc9f603d1016719539b58e2971c1fbfd37ab1e27",
-                "reference": "dc9f603d1016719539b58e2971c1fbfd37ab1e27",
+                "url": "https://api.github.com/repos/besnovatyj/besnovatyj-yii2-cms-search/zipball/357703a262c8557b4d320868bfb4fad63148dba5",
+                "reference": "357703a262c8557b4d320868bfb4fad63148dba5",
                 "shasum": ""
             },
             "require": {
@@ -3031,22 +3031,92 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/besnovatyj-yii2-cms-search/issues",
-                "source": "https://github.com/besnovatyj/besnovatyj-yii2-cms-search/tree/v1.0.1"
+                "source": "https://github.com/besnovatyj/besnovatyj-yii2-cms-search/tree/v1.0.2"
             },
-            "time": "2026-09-06T19:36:51+00:00"
+            "time": "2026-09-06T20:06:03+00:00"
         },
         {
-            "name": "besnovatyj/yii2-cms-search-tnt",
+            "name": "besnovatyj/yii2-cms-search-manticore",
             "version": "v1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/besnovatyj/yii2-cms-search-tnt.git",
-                "reference": "0f80cf8fb83d011f478e98fad4c920da056a3d4e"
+                "url": "https://github.com/besnovatyj/yii2-cms-search-manticore.git",
+                "reference": "e3dc90f2a6b9663de902d3700b295e87075bee6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-search-tnt/zipball/0f80cf8fb83d011f478e98fad4c920da056a3d4e",
-                "reference": "0f80cf8fb83d011f478e98fad4c920da056a3d4e",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-search-manticore/zipball/e3dc90f2a6b9663de902d3700b295e87075bee6f",
+                "reference": "e3dc90f2a6b9663de902d3700b295e87075bee6f",
+                "shasum": ""
+            },
+            "require": {
+                "besnovatyj/yii2-cms-contracts": "^1.0",
+                "besnovatyj/yii2-cms-helpers": "^1.0",
+                "besnovatyj/yii2-cms-kernel": "^1.0",
+                "besnovatyj/yii2-cms-search": "^1.0",
+                "ext-mbstring": "*",
+                "ext-pdo": "*",
+                "ext-pdo_mysql": "*",
+                "php": ">=8.4",
+                "yiisoft/yii2": "~2.0.0"
+            },
+            "require-dev": {
+                "roave/security-advisories": "dev-latest"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "bescms": {
+                    "kind": "module"
+                },
+                "moduleId": "SearchManticore",
+                "moduleClass": "Besnovatyj\\SearchManticore\\Module",
+                "config-plugin": {
+                    "common": "src/config/common.php"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Besnovatyj\\SearchManticore\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Besnovatyj",
+                    "email": "your-email@example.com"
+                }
+            ],
+            "description": "Ядро сквозного поиска на Manticore Search для Yii2 CMS: настоящая лемматизация русского, поиск с опечатками и с ошибочной раскладкой клавиатуры, подсказки «возможно, вы имели в виду». Подключается к фасаду besnovatyj/yii2-cms-search, требует запущенный демон searchd.",
+            "keywords": [
+                "cms",
+                "fulltext",
+                "lemmatization",
+                "manticore",
+                "search",
+                "sphinx",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/besnovatyj/yii2-cms-search-manticore/issues",
+                "source": "https://github.com/besnovatyj/yii2-cms-search-manticore/tree/v1.0.0"
+            },
+            "time": "2026-09-07T09:21:31+00:00"
+        },
+        {
+            "name": "besnovatyj/yii2-cms-search-tnt",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/besnovatyj/yii2-cms-search-tnt.git",
+                "reference": "25e7a923358dc17f7b825e14b4b8b7170f51e644"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-search-tnt/zipball/25e7a923358dc17f7b825e14b4b8b7170f51e644",
+                "reference": "25e7a923358dc17f7b825e14b4b8b7170f51e644",
                 "shasum": ""
             },
             "require": {
@@ -3091,9 +3161,9 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-search-tnt/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-search-tnt/tree/v1.0.0"
+                "source": "https://github.com/besnovatyj/yii2-cms-search-tnt/tree/v1.0.1"
             },
-            "time": "2026-09-06T19:20:48+00:00"
+            "time": "2026-09-06T20:04:38+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-select2-widget",
