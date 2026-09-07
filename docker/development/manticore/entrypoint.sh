@@ -57,22 +57,40 @@ sql_as() {
     MYSQL_PWD="$sql_password" mysql -h 127.0.0.1 -P 9306 -u "$sql_user" "$@"
 }
 
+# Проверка «под этой учётной записью можно работать». Выполняется только после неудачной
+# попытки создания: неудачное подключение демон пишет в свой журнал предупреждением, и делать
+# такую проверку заранее — значит на каждом чистом запуске пугать журнал несуществующей проблемой.
+can_connect() {
+    sql_as "$1" "$2" -e 'SHOW TABLES' >/dev/null 2>&1
+}
+
+# Вывод гасится намеренно: команда создания пользователя печатает выданный ему токен доступа,
+# а журнал контейнера — не место для действующих учётных данных.
+grant_app_user() {
+    sql_as "$admin_user" "$admin_password" >/dev/null 2>&1 <<SQL
+CREATE USER '${app_user}' IDENTIFIED BY '${app_password}';
+GRANT read ON * TO '${app_user}';
+GRANT write ON * TO '${app_user}';
+GRANT schema ON * TO '${app_user}';
+SQL
+}
+
 # Создать администратора, дождавшись готовности демона.
 create_admin() {
     attempt=0
 
     while :; do
-        # Уже заведён (например, маркер потерян вместе с контейнером, а том остался) —
-        # заводить второй раз не нужно и нельзя.
-        if sql_as "$admin_user" "$admin_password" -e 'SHOW TABLES' >/dev/null 2>&1; then
-            echo "manticore-init: администратор «${admin_user}» уже существует."
-            return 0
-        fi
-
         if printf '%s\n%s\n%s\n' "$admin_user" "$admin_password" "$admin_password" \
             | as_manticore searchd --config "$CONF" --auth-non-interactive >/dev/null 2>&1
         then
             echo "manticore-init: администратор «${admin_user}» создан."
+            return 0
+        fi
+
+        # Не вышло — либо демон ещё не отвечает, либо администратор уже заведён: так бывает,
+        # когда том пережил контейнер, а маркер потерян. Второй раз заводить нельзя.
+        if can_connect "$admin_user" "$admin_password"; then
+            echo "manticore-init: администратор «${admin_user}» уже существует."
             return 0
         fi
 
@@ -89,24 +107,20 @@ create_admin() {
 # Создать учётную запись приложения: права только на работу с индексом, без администрирования
 # и репликации.
 create_app_user() {
-    if sql_as "$app_user" "$app_password" -e 'SHOW TABLES' >/dev/null 2>&1; then
+    if grant_app_user; then
+        echo "manticore-init: учётная запись приложения «${app_user}» создана."
+    elif can_connect "$app_user" "$app_password"; then
         echo "manticore-init: учётная запись приложения «${app_user}» уже существует."
         return 0
-    fi
-
-    sql_as "$admin_user" "$admin_password" <<SQL
-CREATE USER '${app_user}' IDENTIFIED BY '${app_password}';
-GRANT read ON * TO '${app_user}';
-GRANT write ON * TO '${app_user}';
-GRANT schema ON * TO '${app_user}';
-SQL
-
-    if ! sql_as "$app_user" "$app_password" -e 'SHOW TABLES' >/dev/null 2>&1; then
-        echo "manticore-init: учётная запись «${app_user}» создана, но подключиться под ней не удалось." >&2
+    else
+        echo "manticore-init: не удалось создать учётную запись приложения «${app_user}»." >&2
         return 1
     fi
 
-    echo "manticore-init: учётная запись приложения «${app_user}» создана."
+    if ! can_connect "$app_user" "$app_password"; then
+        echo "manticore-init: учётная запись «${app_user}» создана, но подключиться под ней не удалось." >&2
+        return 1
+    fi
 }
 
 init_auth() {
