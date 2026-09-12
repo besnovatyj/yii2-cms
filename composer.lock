@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cb2a526641966af9ef766ea5ff93f92e",
+    "content-hash": "f63e3d1076894dd2b18ce205b0432225",
     "packages": [
         {
             "name": "altcha-org/altcha",
@@ -3601,6 +3601,75 @@
                 "source": "https://github.com/besnovatyj/yii2-cms-switcher-column/tree/v1.0.0"
             },
             "time": "2026-07-06T18:58:22+00:00"
+        },
+        {
+            "name": "besnovatyj/yii2-cms-tags",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/besnovatyj/yii2-cms-tags.git",
+                "reference": "50e75fa1c48e503390841c9a712076b4ad5cd8f1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-tags/zipball/50e75fa1c48e503390841c9a712076b4ad5cd8f1",
+                "reference": "50e75fa1c48e503390841c9a712076b4ad5cd8f1",
+                "shasum": ""
+            },
+            "require": {
+                "besnovatyj/yii2-cms-backend-widgets": "^1.0",
+                "besnovatyj/yii2-cms-contracts": "^1.0",
+                "besnovatyj/yii2-cms-forms": "^1.0",
+                "besnovatyj/yii2-cms-helpers": "^1.0",
+                "besnovatyj/yii2-cms-kernel": "^1.0",
+                "besnovatyj/yii2-cms-validators": "^1.0",
+                "ext-mbstring": "*",
+                "php": ">=8.4",
+                "yiisoft/yii2": "~2.0.0",
+                "yiisoft/yii2-bootstrap5": "~2.0.0"
+            },
+            "require-dev": {
+                "roave/security-advisories": "dev-latest"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "bescms": {
+                    "kind": "module"
+                },
+                "moduleId": "Tags",
+                "moduleClass": "Besnovatyj\\Tags\\Module",
+                "config-plugin": {
+                    "common": "src/config/common.php",
+                    "admin-menu": "src/config/adminMenu.php"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Besnovatyj\\Tags\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Besnovatyj",
+                    "email": "your-email@example.com"
+                }
+            ],
+            "description": "Общие теги для Yii2 CMS: один словарь и одна таблица связей на все контентные модули, форма назначения тегов, админка, страница тега и облако на фронте. Модули подключаются через контракт TaggableProvider.",
+            "keywords": [
+                "cms",
+                "tags",
+                "taxonomy",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/besnovatyj/yii2-cms-tags/issues",
+                "source": "https://github.com/besnovatyj/yii2-cms-tags/tree/v1.0.0"
+            },
+            "time": "2026-09-12T18:36:29+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-themes",
