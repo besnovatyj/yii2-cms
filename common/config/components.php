@@ -30,8 +30,7 @@ return [
         'enablePrettyUrl' => true,
         //'enableStrictParsing' => true,
         'showScriptName' => false,
-        // Кэш правил ВЫКЛЮЧЕН намеренно: модули вкладывают DI-конструируемые класс-правила
-        // (UrlRuleInterface, напр. CategoryUrlRule/TaxonomyUrlRule) — объект-правило с сервисами
+        // Кэш правил ВЫКЛЮЧЕН намеренно: модуль RouteAliasUrlRule вкладывает DI-конструируемые класс-правила
         // не сериализуется в кэш правил UrlManager. Без этого — фатал при сборке кэша правил.
         'cache' => false,
     ],
