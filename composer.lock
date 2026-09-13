@@ -375,16 +375,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-actors",
-            "version": "v1.2.0",
+            "version": "v1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-actors.git",
-                "reference": "1e5b50ade76fdee856f24d308b43eb96c52b5a5a"
+                "reference": "8ab2992aaad18060f2f337aa8cdb52cfeab3fe36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-actors/zipball/1e5b50ade76fdee856f24d308b43eb96c52b5a5a",
-                "reference": "1e5b50ade76fdee856f24d308b43eb96c52b5a5a",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-actors/zipball/8ab2992aaad18060f2f337aa8cdb52cfeab3fe36",
+                "reference": "8ab2992aaad18060f2f337aa8cdb52cfeab3fe36",
                 "shasum": ""
             },
             "require": {
@@ -395,6 +395,7 @@
                 "besnovatyj/yii2-cms-meta": "^1.0",
                 "besnovatyj/yii2-cms-pessimistic-lock-behavior": "^1.0",
                 "besnovatyj/yii2-cms-tags": "^1.0",
+                "besnovatyj/yii2-cms-validators": "^1.0",
                 "php": ">=8.4",
                 "yiisoft/yii2": "~2.0.0",
                 "yiisoft/yii2-bootstrap5": "~2.0.0"
@@ -437,9 +438,9 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-actors/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-actors/tree/v1.2.0"
+                "source": "https://github.com/besnovatyj/yii2-cms-actors/tree/v1.2.1"
             },
-            "time": "2026-09-12T20:11:55+00:00"
+            "time": "2026-09-13T14:44:34+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-admin-panel",
@@ -691,16 +692,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-blog",
-            "version": "v1.3.0",
+            "version": "v1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-blog.git",
-                "reference": "3d6b1f1d6617af9f6a63ebeca4c4fdb348857472"
+                "reference": "6e7c7e29e2e60d05c052ae28133bffb9a6bb5142"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-blog/zipball/3d6b1f1d6617af9f6a63ebeca4c4fdb348857472",
-                "reference": "3d6b1f1d6617af9f6a63ebeca4c4fdb348857472",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-blog/zipball/6e7c7e29e2e60d05c052ae28133bffb9a6bb5142",
+                "reference": "6e7c7e29e2e60d05c052ae28133bffb9a6bb5142",
                 "shasum": ""
             },
             "require": {
@@ -712,6 +713,7 @@
                 "besnovatyj/yii2-cms-tags": "^1.0",
                 "besnovatyj/yii2-cms-tree-manager": "^1.0",
                 "besnovatyj/yii2-cms-user": "^1.0",
+                "besnovatyj/yii2-cms-validators": "^1.0",
                 "ext-dom": "*",
                 "ext-libxml": "*",
                 "ext-mbstring": "*",
@@ -757,9 +759,9 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-blog/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-blog/tree/v1.3.0"
+                "source": "https://github.com/besnovatyj/yii2-cms-blog/tree/v1.3.1"
             },
-            "time": "2026-09-12T19:47:28+00:00"
+            "time": "2026-09-13T14:38:44+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-blog-new",
@@ -826,16 +828,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-catalog",
-            "version": "v1.2.0",
+            "version": "v1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-catalog.git",
-                "reference": "a0161b74873c4a28886d4709846c0db27fd40682"
+                "reference": "863e5e123aab1e44a9ee448fa8624a98708140d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-catalog/zipball/a0161b74873c4a28886d4709846c0db27fd40682",
-                "reference": "a0161b74873c4a28886d4709846c0db27fd40682",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-catalog/zipball/863e5e123aab1e44a9ee448fa8624a98708140d3",
+                "reference": "863e5e123aab1e44a9ee448fa8624a98708140d3",
                 "shasum": ""
             },
             "require": {
@@ -847,6 +849,7 @@
                 "besnovatyj/yii2-cms-pessimistic-lock-behavior": "^1.0",
                 "besnovatyj/yii2-cms-tags": "^1.0",
                 "besnovatyj/yii2-cms-tree-manager": "^1.0",
+                "besnovatyj/yii2-cms-validators": "^1.0",
                 "php": ">=8.4",
                 "yiisoft/yii2": "~2.0.0",
                 "yiisoft/yii2-bootstrap5": "~2.0.0"
@@ -889,9 +892,9 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-catalog/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-catalog/tree/v1.2.0"
+                "source": "https://github.com/besnovatyj/yii2-cms-catalog/tree/v1.2.1"
             },
-            "time": "2026-09-12T20:11:53+00:00"
+            "time": "2026-09-13T15:00:31+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-ckeditor5",
@@ -1381,16 +1384,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-documents",
-            "version": "v1.3.1",
+            "version": "v1.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-documents.git",
-                "reference": "d26a1107de68e6c34b052a60fe7bc05b0fea3129"
+                "reference": "04810f9e3bd1c4eb70cede88e45c5dba3011b9fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-documents/zipball/d26a1107de68e6c34b052a60fe7bc05b0fea3129",
-                "reference": "d26a1107de68e6c34b052a60fe7bc05b0fea3129",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-documents/zipball/04810f9e3bd1c4eb70cede88e45c5dba3011b9fe",
+                "reference": "04810f9e3bd1c4eb70cede88e45c5dba3011b9fe",
                 "shasum": ""
             },
             "require": {
@@ -1447,9 +1450,9 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-documents/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-documents/tree/v1.3.1"
+                "source": "https://github.com/besnovatyj/yii2-cms-documents/tree/v1.3.2"
             },
-            "time": "2026-09-12T16:20:11+00:00"
+            "time": "2026-09-13T14:45:23+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-editor",
@@ -1699,16 +1702,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-gallery",
-            "version": "v1.3.0",
+            "version": "v1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-gallery.git",
-                "reference": "289a2d88ce9d9074b4c4a692f3afab705755ffb5"
+                "reference": "cd9b74410510b4552a3ac31c989a3e9d53000156"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-gallery/zipball/289a2d88ce9d9074b4c4a692f3afab705755ffb5",
-                "reference": "289a2d88ce9d9074b4c4a692f3afab705755ffb5",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-gallery/zipball/cd9b74410510b4552a3ac31c989a3e9d53000156",
+                "reference": "cd9b74410510b4552a3ac31c989a3e9d53000156",
                 "shasum": ""
             },
             "require": {
@@ -1719,6 +1722,7 @@
                 "besnovatyj/yii2-cms-meta": "^1.0",
                 "besnovatyj/yii2-cms-pessimistic-lock-behavior": "^1.0",
                 "besnovatyj/yii2-cms-tags": "^1.0",
+                "besnovatyj/yii2-cms-validators": "^1.0",
                 "php": ">=8.4",
                 "yiisoft/yii2": "~2.0.0",
                 "yiisoft/yii2-bootstrap5": "~2.0.0"
@@ -1761,9 +1765,9 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-gallery/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-gallery/tree/v1.3.0"
+                "source": "https://github.com/besnovatyj/yii2-cms-gallery/tree/v1.3.1"
             },
-            "time": "2026-09-12T20:11:50+00:00"
+            "time": "2026-09-13T14:45:53+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-helpers",
@@ -2245,16 +2249,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-menu",
-            "version": "v1.0.11",
+            "version": "v1.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-menu.git",
-                "reference": "2a42453175bc92e3fc5ae9ab4c0242c2b9b3b116"
+                "reference": "cc2dbd38cbfbbe5ea68a1c493a032c88f7cbe437"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-menu/zipball/2a42453175bc92e3fc5ae9ab4c0242c2b9b3b116",
-                "reference": "2a42453175bc92e3fc5ae9ab4c0242c2b9b3b116",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-menu/zipball/cc2dbd38cbfbbe5ea68a1c493a032c88f7cbe437",
+                "reference": "cc2dbd38cbfbbe5ea68a1c493a032c88f7cbe437",
                 "shasum": ""
             },
             "require": {
@@ -2304,9 +2308,9 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-menu/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-menu/tree/v1.0.11"
+                "source": "https://github.com/besnovatyj/yii2-cms-menu/tree/v1.0.12"
             },
-            "time": "2026-09-06T14:09:34+00:00"
+            "time": "2026-09-13T11:32:44+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-meta",
@@ -2564,16 +2568,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-page",
-            "version": "v1.3.1",
+            "version": "v1.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-page.git",
-                "reference": "534d011653dbe35f78ab6719da75c5d8db9a2d26"
+                "reference": "3fc48d97b59da9b9416156e3f653db620f211ab8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-page/zipball/534d011653dbe35f78ab6719da75c5d8db9a2d26",
-                "reference": "534d011653dbe35f78ab6719da75c5d8db9a2d26",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-page/zipball/3fc48d97b59da9b9416156e3f653db620f211ab8",
+                "reference": "3fc48d97b59da9b9416156e3f653db620f211ab8",
                 "shasum": ""
             },
             "require": {
@@ -2581,6 +2585,7 @@
                 "besnovatyj/yii2-cms-editor": "^1.0",
                 "besnovatyj/yii2-cms-kernel": "^1.0",
                 "besnovatyj/yii2-cms-meta": "^1.0",
+                "besnovatyj/yii2-cms-validators": "^1.0",
                 "ext-mbstring": "*",
                 "php": ">=8.4",
                 "yiisoft/yii2": "~2.0.0",
@@ -2624,22 +2629,22 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-page/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-page/tree/v1.3.1"
+                "source": "https://github.com/besnovatyj/yii2-cms-page/tree/v1.3.2"
             },
-            "time": "2026-09-10T15:09:47+00:00"
+            "time": "2026-09-13T14:46:08+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-performance",
-            "version": "v1.4.0",
+            "version": "v1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-performance.git",
-                "reference": "e5b93c725ea4b483e6a7b788a803e15434f9d187"
+                "reference": "7f66436b1bcb75cdc8047719edce617a00782315"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-performance/zipball/e5b93c725ea4b483e6a7b788a803e15434f9d187",
-                "reference": "e5b93c725ea4b483e6a7b788a803e15434f9d187",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-performance/zipball/7f66436b1bcb75cdc8047719edce617a00782315",
+                "reference": "7f66436b1bcb75cdc8047719edce617a00782315",
                 "shasum": ""
             },
             "require": {
@@ -2657,6 +2662,7 @@
                 "besnovatyj/yii2-cms-smart-domain-events": "^1.0",
                 "besnovatyj/yii2-cms-tags": "^1.0",
                 "besnovatyj/yii2-cms-tree-manager": "^1.0",
+                "besnovatyj/yii2-cms-validators": "^1.0",
                 "php": ">=8.4",
                 "yiisoft/yii2": "~2.0.0",
                 "yiisoft/yii2-bootstrap5": "~2.0.0"
@@ -2699,22 +2705,22 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-performance/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-performance/tree/v1.4.0"
+                "source": "https://github.com/besnovatyj/yii2-cms-performance/tree/v1.4.1"
             },
-            "time": "2026-09-12T20:11:48+00:00"
+            "time": "2026-09-13T14:46:34+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-person",
-            "version": "v1.1.0",
+            "version": "v1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-person.git",
-                "reference": "371a8ac1536fbaf0da119a4a2685a67b1199d222"
+                "reference": "4534982f314ed55674673cd50bec8715ec4fb37b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-person/zipball/371a8ac1536fbaf0da119a4a2685a67b1199d222",
-                "reference": "371a8ac1536fbaf0da119a4a2685a67b1199d222",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-person/zipball/4534982f314ed55674673cd50bec8715ec4fb37b",
+                "reference": "4534982f314ed55674673cd50bec8715ec4fb37b",
                 "shasum": ""
             },
             "require": {
@@ -2724,6 +2730,7 @@
                 "besnovatyj/yii2-cms-kernel": "^1.2",
                 "besnovatyj/yii2-cms-meta": "^1.0",
                 "besnovatyj/yii2-cms-pessimistic-lock-behavior": "^1.0",
+                "besnovatyj/yii2-cms-validators": "^1.0",
                 "besnovatyj/yii2-nested-sets": "^1.1",
                 "ext-curl": "*",
                 "ext-dom": "*",
@@ -2771,9 +2778,9 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-person/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-person/tree/v1.1.0"
+                "source": "https://github.com/besnovatyj/yii2-cms-person/tree/v1.1.1"
             },
-            "time": "2026-09-10T12:49:53+00:00"
+            "time": "2026-09-13T14:47:02+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-pessimistic-lock-behavior",
@@ -2899,16 +2906,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-run-shop",
-            "version": "v1.0.9",
+            "version": "v1.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-run-shop.git",
-                "reference": "550e8a4bdc7f73bbb4dfd999cca409d5573a7516"
+                "reference": "3fc3f54a2611afcd3d9e57c9583dc7a1cc9d6bd2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-run-shop/zipball/550e8a4bdc7f73bbb4dfd999cca409d5573a7516",
-                "reference": "550e8a4bdc7f73bbb4dfd999cca409d5573a7516",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-run-shop/zipball/3fc3f54a2611afcd3d9e57c9583dc7a1cc9d6bd2",
+                "reference": "3fc3f54a2611afcd3d9e57c9583dc7a1cc9d6bd2",
                 "shasum": ""
             },
             "require": {
@@ -2969,9 +2976,9 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-run-shop/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-run-shop/tree/v1.0.9"
+                "source": "https://github.com/besnovatyj/yii2-cms-run-shop/tree/v1.0.10"
             },
-            "time": "2026-08-04T20:35:15+00:00"
+            "time": "2026-09-13T11:32:39+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-search",
@@ -3609,16 +3616,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-tags",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-tags.git",
-                "reference": "b3eea527210b9a634dc6e816e5706b39917a8736"
+                "reference": "af6628a8317d65a07157a646fb1f90fd22fb6388"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-tags/zipball/b3eea527210b9a634dc6e816e5706b39917a8736",
-                "reference": "b3eea527210b9a634dc6e816e5706b39917a8736",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-tags/zipball/af6628a8317d65a07157a646fb1f90fd22fb6388",
+                "reference": "af6628a8317d65a07157a646fb1f90fd22fb6388",
                 "shasum": ""
             },
             "require": {
@@ -3672,9 +3679,9 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-tags/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-tags/tree/v1.0.1"
+                "source": "https://github.com/besnovatyj/yii2-cms-tags/tree/v1.0.2"
             },
-            "time": "2026-09-12T19:34:13+00:00"
+            "time": "2026-09-13T14:47:17+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-themes",
@@ -3936,16 +3943,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-validators",
-            "version": "v1.0.1",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-validators.git",
-                "reference": "9d4ea0c05edb275336ee24bcf200de40e37be744"
+                "reference": "933192bfbbfc19fe3dd5b13f684aeba43f01490f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-validators/zipball/9d4ea0c05edb275336ee24bcf200de40e37be744",
-                "reference": "9d4ea0c05edb275336ee24bcf200de40e37be744",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-validators/zipball/933192bfbbfc19fe3dd5b13f684aeba43f01490f",
+                "reference": "933192bfbbfc19fe3dd5b13f684aeba43f01490f",
                 "shasum": ""
             },
             "require": {
@@ -3984,9 +3991,9 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-validators/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-validators/tree/v1.0.1"
+                "source": "https://github.com/besnovatyj/yii2-cms-validators/tree/v1.1.0"
             },
-            "time": "2026-09-12T16:20:09+00:00"
+            "time": "2026-09-13T14:26:02+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-videojs-10-widget",
