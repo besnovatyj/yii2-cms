@@ -32,10 +32,10 @@ if (!YII_ENV_TEST) {
         'traceLine' => '<a href="phpstorm://open?url={file}&line={line}">{file}:{line}</a>'
     ];
 
-    $config['bootstrap'][] = 'gii';
-    $config['modules']['gii'] = [
-        'class' => \yii\gii\Module::class,
-    ];
+//    $config['bootstrap'][] = 'gii';
+//    $config['modules']['gii'] = [
+//        'class' => \yii\gii\Module::class,
+//    ];
 }
 
 return $config;
