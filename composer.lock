@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f63e3d1076894dd2b18ce205b0432225",
+    "content-hash": "d8f2e03b664b711956b6143ed93eed73",
     "packages": [
         {
             "name": "altcha-org/altcha",
@@ -631,6 +631,73 @@
                 "source": "https://github.com/besnovatyj/yii2-cms-altcha-widget/tree/v1.1.8"
             },
             "time": "2026-07-27T17:43:07+00:00"
+        },
+        {
+            "name": "besnovatyj/yii2-cms-apcu",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/besnovatyj/yii2-cms-apcu.git",
+                "reference": "ca2c740c783a9e257e799894cd325fc2b4c6fe28"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-apcu/zipball/ca2c740c783a9e257e799894cd325fc2b4c6fe28",
+                "reference": "ca2c740c783a9e257e799894cd325fc2b4c6fe28",
+                "shasum": ""
+            },
+            "require": {
+                "besnovatyj/yii2-cms-backend-widgets": "^1.0",
+                "besnovatyj/yii2-cms-contracts": "^1.0",
+                "besnovatyj/yii2-cms-forms": "^1.0",
+                "besnovatyj/yii2-cms-kernel": "^1.0",
+                "ext-apcu": "*",
+                "php": ">=8.4",
+                "yiisoft/yii2": "~2.0.0",
+                "yiisoft/yii2-bootstrap5": "~2.0.0"
+            },
+            "require-dev": {
+                "roave/security-advisories": "dev-latest"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "bescms": {
+                    "kind": "module"
+                },
+                "moduleId": "Apcu",
+                "moduleClass": "Besnovatyj\\Apcu\\Module",
+                "config-plugin": {
+                    "common": "src/config/common.php",
+                    "admin-menu": "src/config/adminMenu.php"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Besnovatyj\\Apcu\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Besnovatyj",
+                    "email": "your-email@example.com"
+                }
+            ],
+            "description": "Модуль просмотра и управления пользовательским кэшем APCu (порт apc.php) для Yii2 CMS",
+            "keywords": [
+                "apcu",
+                "cache",
+                "cms",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/besnovatyj/yii2-cms-apcu/issues",
+                "source": "https://github.com/besnovatyj/yii2-cms-apcu/tree/v1.0.0"
+            },
+            "time": "2026-09-13T17:32:15+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-backend-widgets",

@@ -63,6 +63,7 @@
     "besnovatyj/yii2-cms-admin-panel": "^1.0",
     "besnovatyj/yii2-cms-alert-widget": "^1.0",
     "besnovatyj/yii2-cms-altcha-widget": "^1.0",
+    "besnovatyj/yii2-cms-apcu": "^1.0",
     "besnovatyj/yii2-cms-backend-widgets": "^1.0",
     "besnovatyj/yii2-cms-blog": "^1.0",
     "besnovatyj/yii2-cms-blog-new": "^1.0",
