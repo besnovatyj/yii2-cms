@@ -6,9 +6,9 @@
 
 .table {
     thead th {
-        background-color: #f8fafc;
-        border-bottom: 2px solid #e2e8f0;
-        color: #475569;
+        background-color: var(--adm-table-head-bg);
+        border-bottom: var(--adm-table-head-border-width) solid var(--adm-table-head-border);
+        color: var(--adm-table-head-color);
         font-weight: 600;
         font-size: 0.75rem;
         text-transform: uppercase;
@@ -20,15 +20,15 @@
     td {
         vertical-align: middle;
         padding: 0.55rem 0.75rem;
-        color: #334155;
+        color: var(--adm-table-cell-color);
     }
 
     // Hover — нейтральный, без цвета бренда
     tbody tr {
-        transition: background-color 100ms ease;
+        transition: background-color var(--adm-duration-fast) ease;
 
         &:hover > * {
-            background-color: #f8fafc;
+            background-color: var(--adm-table-row-hover-bg);
         }
     }
 }

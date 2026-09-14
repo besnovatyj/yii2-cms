@@ -12,7 +12,7 @@
     .sidebar-buttons .btn {
         background-color: var(--adm-sidebar-btn-bg);
         color: var(--adm-sidebar-btn-color);
-        border: 1px solid rgba(0, 0, 0, .08);
+        border: var(--adm-sidebar-btn-border);
         border-radius: var(--adm-sidebar-btn-radius);
         padding: 12px 8px;
         flex: 1 1 90px;
@@ -21,13 +21,13 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        transition: background-color 0.15s ease, box-shadow 0.15s ease;
+        transition: background-color var(--adm-duration) ease, box-shadow var(--adm-duration) ease;
         font-size: .8rem;
         line-height: 1.3;
 
         &:hover {
             background-color: var(--adm-sidebar-btn-hover-bg);
-            box-shadow: 0 1px 4px rgba(0, 0, 0, .12);
+            box-shadow: var(--adm-sidebar-btn-hover-shadow);
         }
 
         .bi {

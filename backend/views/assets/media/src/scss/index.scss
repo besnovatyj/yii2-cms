@@ -9,6 +9,8 @@
 @use "bootstrap-icons/font/bootstrap-icons" with ($bootstrap-icons-font-dir: "../fonts");
 
 // Custom styles — переменные первыми, остальные стили могут их использовать
+// palette — сырые цвета (слой 1), variables — токены темы и компонентов (слои 2-3)
+@use "imports/palette";
 @use "imports/variables";
 @use "imports/global";
 

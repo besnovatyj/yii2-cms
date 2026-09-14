@@ -12,9 +12,9 @@
 .grid-filter-preloader {
   position: fixed;
   inset: 0;
-  z-index: 1055; /* Выше offcanvas (1050), но ниже модальных окон (1060) */
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(2px);
+  z-index: var(--adm-z-overlay); /* Выше offcanvas (1050), но ниже модальных окон (1060) */
+  background: var(--adm-grid-preloader-bg);
+  backdrop-filter: blur(var(--adm-grid-preloader-blur));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,10 +37,10 @@
   .table-mobile-cards tbody tr {
     display: block;
     margin-bottom: 15px;
-    border: 1px solid #dee2e6;
-    border-radius: 0.375rem;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--adm-grid-card-border);
+    border-radius: var(--adm-radius);
+    background-color: var(--adm-grid-card-bg);
+    box-shadow: var(--adm-grid-card-shadow);
     padding: 10px;
   }
 
@@ -50,7 +50,7 @@
     justify-content: space-between;
     align-items: center;
     border: none;
-    border-bottom: 1px solid #f1f1f1;
+    border-bottom: 1px solid var(--adm-grid-cell-border);
     padding: 8px 12px;
     text-align: right; /* Текст данных прижимаем вправо */
   }
@@ -66,7 +66,7 @@
     font-weight: bold;
     text-align: left;
     margin-right: 15px;
-    color: #495057;
+    color: var(--adm-grid-label-color);
     flex-shrink: 0; /* Не дает названию сжиматься */
   }
 
@@ -77,7 +77,7 @@
 
   /* Корректируем ширину изображений на мобилке, чтобы не ломали флекс */
   .table-mobile-cards tbody td img {
-    max-width: 80px;
+    max-width: var(--adm-grid-thumb-max-width);
     height: auto;
   }
 

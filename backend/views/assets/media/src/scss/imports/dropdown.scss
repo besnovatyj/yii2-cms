@@ -7,7 +7,7 @@
 
     .btn-toggle { // Кнопка раздела
         transition-property: background-color, color, border-radius;
-        transition-duration: 0.15s;
+        transition-duration: var(--adm-duration);
         font-size: .88rem;
         font-weight: 500;
         width: 100%;
@@ -60,7 +60,7 @@
             display: inline-block;
             width: 100%;
             background-color: var(--adm-menu-sub-bg);
-            border-left: 3px solid transparent; // резервируем место, нет прыжка при active
+            border-left: var(--adm-menu-active-border-width) solid transparent; // резервируем место, нет прыжка при active
 
             &:hover, &:focus {
                 background-color: var(--adm-menu-sub-hover-bg);

@@ -2,48 +2,273 @@
  * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
  */
 
+// Палитра (слой 1) — единственное место с литеральными цветами.
+@use "palette";
+
 // CSS custom properties для admin-панели
 // Именование: --adm-[компонент]-[свойство]-[состояние]
+//
+// Слой 2 — общие токены (поверхности, текст, границы, радиусы, тени, скорости, z-index).
+// Слой 3 — токены компонентов: ссылаются на слой 2 или напрямую на палитру.
+// Правило: в файлах компонентов только var(--adm-*), ни одного литерального цвета.
 
 :root {
+    // =========================================================
+    //  Слой 2 — общие токены
+    // =========================================================
+
+    // --- Поверхности ---
+    --adm-surface:                var(--adm-white);                 // основной фон блоков
+    --adm-surface-muted:          var(--adm-gray-50);               // шапки/подвалы карточек, hover строк
+    --adm-surface-sunken:         var(--adm-gray-100);              // фон «утопленных» элементов
+
+    // --- Границы ---
+    --adm-border:                 var(--adm-gray-200);
+    --adm-border-strong:          var(--adm-gray-300);
+    --adm-border-subtle:          var(--adm-gray-100);
+
+    // --- Текст ---
+    --adm-text:                   var(--adm-gray-800);              // основной текст страницы
+    --adm-text-heading:           var(--adm-gray-900);              // заголовки h1…h6
+    --adm-text-body:              var(--adm-gray-700);              // текст в таблицах
+    --adm-text-muted:             var(--adm-gray-600);              // подписи, шапки таблиц
+    --adm-text-disabled:          var(--adm-gray-300);
+    --adm-text-on-accent:         var(--adm-white);                 // текст на заливке акцентом
+
+    // --- Скругления ---
+    --adm-radius-xs:              0.25rem;
+    --adm-radius-sm:              0.3rem;
+    --adm-radius:                 0.375rem;
+    --adm-radius-lg:              0.5rem;
+
+    // --- Анимация ---
+    --adm-ease:                   cubic-bezier(0.4, 0, 0.2, 1);
+    --adm-duration:               150ms;
+    --adm-duration-fast:          100ms;
+    --adm-transition:             var(--adm-duration) var(--adm-ease);
+
+    // --- Тени ---
+    --adm-shadow-xs:              0 1px 2px rgba(var(--adm-black-rgb), 0.04);
+    --adm-shadow-sm:              0 1px 3px rgba(var(--adm-black-rgb), 0.06);
+    --adm-shadow-md:              0 2px 4px rgba(var(--adm-black-rgb), 0.05);
+
+    // --- Фокус ---
+    --adm-focus-ring-width:       2px;
+    --adm-focus-ring-offset:      2px;
+    --adm-focus-ring-alpha:       0.4;
+
+    // --- Слои (z-index). Порядок: backdrop < offcanvas < прелоадер < модалка ---
+    --adm-z-modal-backdrop:       1045;
+    --adm-z-offcanvas:            1050;
+    --adm-z-overlay:              1055;
+    --adm-z-modal:                1060;
+
+    // =========================================================
+    //  Слой 3 — токены компонентов
+    // =========================================================
+
     // --- Основные цвета бренда ---
-    --adm-brand-primary:          #094c6e;
-    --adm-brand-primary-dark:     #073249;
-    --adm-brand-primary-light:    #c6e8f3;
-    --adm-brand-primary-muted:    #d2e5ed;
-    --adm-brand-primary-border:   #9abbcf;
+    --adm-brand-primary:          var(--adm-brand-800);
+    --adm-brand-primary-rgb:      var(--adm-brand-800-rgb);
+    --adm-brand-primary-dark:     var(--adm-brand-900);
+    --adm-brand-primary-light:    var(--adm-brand-300);
+    --adm-brand-primary-muted:    var(--adm-brand-200);
+    --adm-brand-primary-border:   var(--adm-brand-400);
 
     // --- Меню ---
-    --adm-menu-item-color:        #555;
+    --adm-menu-item-color:        var(--adm-neutral-600);
     --adm-menu-item-bg:           var(--adm-brand-primary-light);
-    --adm-menu-item-hover-color:  #111;
-    --adm-menu-item-hover-bg:     #e8f4f9;
+    --adm-menu-item-hover-color:  var(--adm-neutral-900);
+    --adm-menu-item-hover-bg:     var(--adm-brand-100);
     --adm-menu-item-active-bg:    var(--adm-brand-primary);
-    --adm-menu-item-active-color: #fff;
-    --adm-menu-sub-bg:            #f0f4f6;
-    --adm-menu-sub-hover-bg:      #fff;
+    --adm-menu-item-active-color: var(--adm-white);
+    --adm-menu-sub-bg:            var(--adm-brand-50);
+    --adm-menu-sub-hover-bg:      var(--adm-white);
     --adm-menu-sub-active-bg:     var(--adm-brand-primary-muted);
-    --adm-menu-sub-active-color:  #111;
+    --adm-menu-sub-active-color:  var(--adm-neutral-900);
     --adm-menu-sub-active-border: var(--adm-brand-primary-border);
-    --adm-menu-border-radius:     0.375rem;
+    --adm-menu-border-radius:     var(--adm-radius);
+    --adm-menu-active-border-width: 3px;
 
     // --- Правый сайдбар ---
-    --adm-sidebar-btn-bg:         #e9ecef;
-    --adm-sidebar-btn-color:      #343a40;
-    --adm-sidebar-btn-hover-bg:   #ced4da;
-    --adm-sidebar-btn-radius:     0.5rem;
+    --adm-sidebar-btn-bg:         var(--adm-bs-gray-200);
+    --adm-sidebar-btn-color:      var(--adm-bs-gray-800);
+    --adm-sidebar-btn-hover-bg:   var(--adm-bs-gray-400);
+    --adm-sidebar-btn-border:     1px solid rgba(var(--adm-black-rgb), 0.08);
+    --adm-sidebar-btn-hover-shadow: 0 1px 4px rgba(var(--adm-black-rgb), 0.12);
+    --adm-sidebar-btn-radius:     var(--adm-radius-lg);
 
     // --- Тень сайдбара ---
-    --adm-sidebar-shadow:         6px 0 8px 0 rgba(34, 60, 80, 0.1);
+    --adm-sidebar-shadow:         6px 0 8px 0 rgba(var(--adm-slate-shadow-rgb), 0.1);
+    --adm-sidebar-min-height:     96vh;
 
     // --- Свайп-подсказка (ручка сайдбара, следует за пальцем) ---
     --adm-swipe-peek-width:       56px;
     --adm-swipe-peek-height:      64px;
     --adm-swipe-peek-bg:          var(--adm-brand-primary);
-    --adm-swipe-peek-color:       #fff;
-    --adm-swipe-peek-shadow:      0 4px 16px rgba(9, 76, 110, 0.45);
+    --adm-swipe-peek-color:       var(--adm-white);
+    --adm-swipe-peek-shadow:      0 4px 16px rgba(var(--adm-brand-primary-rgb), 0.45);
 
     // --- Формы ---
-    --adm-required-color:         #dc3545;
+    --adm-required-color:         var(--adm-bs-red-500);
     --adm-required-symbol:        " *";
+    --adm-input-focus-border:     var(--adm-brand-primary-border);
+    --adm-input-focus-ring:       var(--adm-focus-ring-width) solid rgba(var(--adm-brand-primary-rgb), 0.15);
+
+    // --- Кнопки: общие ---
+    // Тени собраны на локальной --adm-btn-shadow-rgb, которую задаёт миксин
+    // btn-solid() для конкретного варианта — одна ручка на все solid-кнопки.
+    // Значения ниже — нейтральный запасной вариант для кнопок вне миксинов.
+    --adm-btn-shadow-rgb:         var(--adm-gray-800-rgb);
+    --adm-btn-accent:             var(--adm-gray-500);
+    --adm-btn-accent-rgb:         var(--adm-gray-500-rgb);
+
+    --adm-btn-gloss:              linear-gradient(to bottom, rgba(var(--adm-white-rgb), 0.12), transparent 50%);
+    --adm-btn-inset-highlight:    inset 0 1px 0 rgba(var(--adm-white-rgb), 0.1);
+    --adm-btn-shadow:             var(--adm-btn-inset-highlight),
+                                  0 1px 2px 0 rgba(var(--adm-btn-shadow-rgb), 0.15);
+    --adm-btn-shadow-hover:       var(--adm-btn-inset-highlight),
+                                  0 4px 6px -1px rgba(var(--adm-btn-shadow-rgb), 0.2),
+                                  0 2px 4px -2px rgba(var(--adm-btn-shadow-rgb), 0.15);
+    --adm-btn-shadow-active:      inset 0 2px 4px rgba(var(--adm-black-rgb), 0.15);
+    --adm-btn-focus-ring:         var(--adm-focus-ring-width) solid rgba(var(--adm-btn-shadow-rgb), var(--adm-focus-ring-alpha));
+    --adm-btn-press-shift:        0.5px;
+    --adm-btn-disabled-opacity:   0.5;
+
+    // --- Кнопки: solid-варианты ---
+    --adm-btn-primary-bg:         var(--adm-blue-500);
+    --adm-btn-primary-bg-hover:   var(--adm-blue-600);
+    --adm-btn-primary-bg-active:  var(--adm-blue-700);
+    --adm-btn-primary-border:     var(--adm-blue-600);
+    --adm-btn-primary-color:      var(--adm-text-on-accent);
+    --adm-btn-primary-shadow-rgb: var(--adm-blue-800-rgb);
+
+    --adm-btn-success-bg:         var(--adm-green-500);
+    --adm-btn-success-bg-hover:   var(--adm-green-600);
+    --adm-btn-success-bg-active:  var(--adm-green-700);
+    --adm-btn-success-border:     var(--adm-green-600);
+    --adm-btn-success-color:      var(--adm-text-on-accent);
+    --adm-btn-success-shadow-rgb: var(--adm-green-800-rgb);
+
+    --adm-btn-danger-bg:          var(--adm-red-500);
+    --adm-btn-danger-bg-hover:    var(--adm-red-600);
+    --adm-btn-danger-bg-active:   var(--adm-red-700);
+    --adm-btn-danger-border:      var(--adm-red-600);
+    --adm-btn-danger-color:       var(--adm-text-on-accent);
+    --adm-btn-danger-shadow-rgb:  var(--adm-red-800-rgb);
+
+    --adm-btn-warning-bg:         var(--adm-amber-500);
+    --adm-btn-warning-bg-hover:   var(--adm-amber-600);
+    --adm-btn-warning-bg-active:  var(--adm-amber-700);
+    --adm-btn-warning-border:     var(--adm-amber-600);
+    --adm-btn-warning-color:      var(--adm-stone-900);   // тёмный текст: жёлтый фон светлый
+    --adm-btn-warning-shadow-rgb: var(--adm-amber-800-rgb);
+
+    --adm-btn-info-bg:            var(--adm-cyan-500);
+    --adm-btn-info-bg-hover:      var(--adm-cyan-600);
+    --adm-btn-info-bg-active:     var(--adm-cyan-700);
+    --adm-btn-info-border:        var(--adm-cyan-600);
+    --adm-btn-info-color:         var(--adm-text-on-accent);
+    --adm-btn-info-shadow-rgb:    var(--adm-cyan-800-rgb);
+
+    --adm-btn-secondary-bg:        var(--adm-gray-500);
+    --adm-btn-secondary-bg-hover:  var(--adm-gray-600);
+    --adm-btn-secondary-bg-active: var(--adm-gray-700);
+    --adm-btn-secondary-border:    var(--adm-gray-600);
+    --adm-btn-secondary-color:     var(--adm-text-on-accent);
+    --adm-btn-secondary-shadow-rgb: var(--adm-gray-800-rgb);
+
+    // --- Кнопки: outline-варианты ---
+    // Заливка и кольцо фокуса считаются от --adm-btn-accent-rgb, её задаёт
+    // миксин btn-outline() для конкретного варианта.
+    --adm-btn-outline-width:       1.5px;
+    --adm-btn-outline-hover-bg:    rgba(var(--adm-btn-accent-rgb), 0.06);
+    --adm-btn-outline-hover-shadow: var(--adm-shadow-sm);
+    --adm-btn-outline-active-color: var(--adm-text-on-accent);
+    --adm-btn-outline-active-shadow: inset 0 2px 4px rgba(var(--adm-black-rgb), 0.12);
+    --adm-btn-outline-focus-ring:  var(--adm-focus-ring-width) solid rgba(var(--adm-btn-accent-rgb), var(--adm-focus-ring-alpha));
+
+    --adm-btn-outline-primary-color:   var(--adm-blue-500);
+    --adm-btn-outline-primary-rgb:     var(--adm-blue-500-rgb);
+    --adm-btn-outline-success-color:   var(--adm-green-500);
+    --adm-btn-outline-success-rgb:     var(--adm-green-500-rgb);
+    --adm-btn-outline-danger-color:    var(--adm-red-500);
+    --adm-btn-outline-danger-rgb:      var(--adm-red-500-rgb);
+    --adm-btn-outline-warning-color:   var(--adm-amber-500);
+    --adm-btn-outline-warning-rgb:     var(--adm-amber-500-rgb);
+    --adm-btn-outline-info-color:      var(--adm-cyan-500);
+    --adm-btn-outline-info-rgb:        var(--adm-cyan-500-rgb);
+    --adm-btn-outline-secondary-color: var(--adm-gray-500);
+    --adm-btn-outline-secondary-rgb:   var(--adm-gray-500-rgb);
+    // Серая outline-кнопка приглушена сильнее остальных
+    --adm-btn-outline-secondary-border:       var(--adm-gray-300);
+    --adm-btn-outline-secondary-text:         var(--adm-gray-600);
+    --adm-btn-outline-secondary-hover-border: var(--adm-gray-400);
+    --adm-btn-outline-secondary-hover-text:   var(--adm-gray-700);
+    --adm-btn-outline-secondary-hover-bg:     var(--adm-surface-muted);
+
+    // --- Алерты ---
+    --adm-alert-accent-width:     3px;
+
+    --adm-alert-success-bg:       var(--adm-green-50);
+    --adm-alert-success-border:   var(--adm-green-200);
+    --adm-alert-success-accent:   var(--adm-green-500);
+    --adm-alert-success-color:    var(--adm-green-800);
+
+    --adm-alert-danger-bg:        var(--adm-red-50);
+    --adm-alert-danger-border:    var(--adm-red-200);
+    --adm-alert-danger-accent:    var(--adm-red-500);
+    --adm-alert-danger-color:     var(--adm-red-800);
+
+    --adm-alert-warning-bg:       var(--adm-amber-50);
+    --adm-alert-warning-border:   var(--adm-amber-200);
+    --adm-alert-warning-accent:   var(--adm-amber-500);
+    --adm-alert-warning-color:    var(--adm-amber-800);
+
+    --adm-alert-info-bg:          var(--adm-cyan-50);
+    --adm-alert-info-border:      var(--adm-cyan-200);
+    --adm-alert-info-accent:      var(--adm-cyan-500);
+    --adm-alert-info-color:       var(--adm-cyan-800);
+
+    // --- Карточки ---
+    --adm-card-bg:                var(--adm-surface);
+    --adm-card-border:            var(--adm-border);
+    --adm-card-radius:            var(--adm-radius-lg);
+    --adm-card-shadow:            var(--adm-shadow-xs);
+    --adm-card-cap-bg:            var(--adm-surface-muted);
+    --adm-card-cap-color:         var(--adm-text-muted);
+
+    // --- Таблицы ---
+    --adm-table-head-bg:          var(--adm-surface-muted);
+    --adm-table-head-color:       var(--adm-text-muted);
+    --adm-table-head-border:      var(--adm-border);
+    --adm-table-head-border-width: 2px;
+    --adm-table-cell-color:       var(--adm-text-body);
+    --adm-table-row-hover-bg:     var(--adm-surface-muted);
+
+    // --- Пагинация ---
+    --adm-page-bg:                var(--adm-surface);
+    --adm-page-border:            var(--adm-border);
+    --adm-page-color:             var(--adm-text-muted);
+    --adm-page-hover-bg:          var(--adm-surface-sunken);
+    --adm-page-hover-border:      var(--adm-border-strong);
+    --adm-page-hover-color:       var(--adm-text);
+    --adm-page-active-bg:         var(--adm-brand-primary);
+    --adm-page-active-border:     var(--adm-brand-primary);
+    --adm-page-active-color:      var(--adm-white);
+    --adm-page-disabled-bg:       var(--adm-surface-muted);
+    --adm-page-disabled-border:   var(--adm-border-subtle);
+    --adm-page-disabled-color:    var(--adm-text-disabled);
+
+    // --- GridView: карточки строк на мобильном ---
+    --adm-grid-card-bg:           var(--adm-surface);
+    --adm-grid-card-border:       var(--adm-bs-gray-300);
+    --adm-grid-card-shadow:       var(--adm-shadow-md);
+    --adm-grid-cell-border:       var(--adm-border-subtle);
+    --adm-grid-label-color:       var(--adm-bs-gray-700);
+    --adm-grid-thumb-max-width:   80px;
+
+    // --- GridView: прелоадер применения фильтров ---
+    --adm-grid-preloader-bg:      rgba(var(--adm-white-rgb), 0.75);
+    --adm-grid-preloader-blur:    2px;
 }
