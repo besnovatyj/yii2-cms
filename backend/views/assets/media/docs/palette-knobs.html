@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--
+  Песочница ручек палитры админки. Статичная страница: открывается двойным
+  кликом, сервер не нужен. Формулы те же, что в src/scss/imports/_palette.scss.
+  Реальные значения _theme.scss подтягиваются из theme-defaults.js (npm run theme).
+  Внешняя зависимость одна — шрифты Google Fonts; без сети откроется на системных.
+-->
+<title>Ручки палитры админки</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #f4f5f7;
+    --panel: #ffffff;
+    --ink: #1c2230;
+    --ink-2: #5a6272;
+    --ink-3: #8b93a3;
+    --line: #dde1e8;
+    --line-2: #eceef2;
+    --accent: #094c6e;
+    --ok: #2e7d4f;
+    --bad: #b03a2e;
+    --code-bg: #f0f2f5;
+    --font: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #141820; --panel: #1c2230; --ink: #e6e9ef; --ink-2: #a9b1c0; --ink-3: #737b8b;
+      --line: #2e3646; --line-2: #262d3a; --accent: #7fb6d4; --ok: #6cc08b; --bad: #e07a6e; --code-bg: #12161e;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #141820; --panel: #1c2230; --ink: #e6e9ef; --ink-2: #a9b1c0; --ink-3: #737b8b;
+    --line: #2e3646; --line-2: #262d3a; --accent: #7fb6d4; --ok: #6cc08b; --bad: #e07a6e; --code-bg: #12161e;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 14px; line-height: 1.5; }
+  .wrap { max-width: 1280px; margin: 0 auto; padding: 0 20px; padding-block: 28px 64px; }
+
+  header.top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 24px; margin-bottom: 20px; }
+  header.top h1 { font-size: 22px; font-weight: 600; margin: 0; letter-spacing: -0.01em; }
+  header.top .path { font-family: var(--mono); font-size: 12px; color: var(--ink-3); }
+
+  .layout { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 24px; align-items: start; }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .knobs { position: static !important; } }
+
+  .knobs { position: sticky; top: 16px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; display: grid; gap: 18px; max-height: calc(100vh - 32px); overflow-y: auto; }
+  .knobs h2, .out h2 { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 8px; }
+  .knobs p.note { margin: 0 0 8px; color: var(--ink-2); font-size: 12.5px; }
+
+  .row { display: grid; grid-template-columns: 1fr 64px; gap: 8px; align-items: center; }
+  .row label { font-size: 13px; }
+  .row label small { display: block; color: var(--ink-3); font-size: 11.5px; }
+  .row input[type=range] { width: 100%; grid-column: 1 / -1; accent-color: var(--accent); }
+  .row input[type=number], .row select { width: 100%; font: 12.5px var(--mono); padding: 4px 6px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); color: var(--ink); }
+  .row + .row { margin-top: 10px; }
+
+  .fam { display: grid; grid-template-columns: 34px 1fr auto; gap: 8px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line-2); }
+  .fam:first-of-type { border-top: 0; }
+  .fam input[type=color] { width: 34px; height: 26px; padding: 0; border: 1px solid var(--line); border-radius: 4px; background: none; cursor: pointer; }
+  .fam .name { font-family: var(--mono); font-size: 12.5px; }
+  .fam .name small { display: block; font-family: var(--font); color: var(--ink-3); font-size: 11px; }
+  .fam .fixed { font-size: 11.5px; color: var(--ink-2); display: flex; gap: 4px; align-items: center; white-space: nowrap; }
+  .fam .tweak { grid-column: 1 / -1; display: grid; grid-template-columns: auto 70px auto 70px; gap: 6px; align-items: center; font-size: 11.5px; color: var(--ink-2); }
+  .fam .tweak input { font: 12px var(--mono); padding: 3px 5px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); color: var(--ink); width: 100%; }
+  .fam .tweak[hidden] { display: none; }
+
+  .roles { display: grid; grid-template-columns: 1fr 72px; gap: 6px 8px; align-items: center; font-size: 12.5px; }
+  .roles .g { grid-column: 1 / -1; color: var(--ink-3); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 6px; }
+  .roles select { font: 12.5px var(--mono); padding: 3px 4px; border: 1px solid var(--line); border-radius: 4px; background: var(--panel); color: var(--ink); }
+  .roles code { font-family: var(--mono); font-size: 12px; }
+
+  .btnrow { display: flex; gap: 8px; flex-wrap: wrap; }
+  button.ui { font: 500 12.5px var(--font); padding: 6px 12px; border-radius: 5px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); cursor: pointer; }
+  button.ui:hover { border-color: var(--ink-3); }
+  button.ui:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  button.ui.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .out { display: grid; gap: 22px; min-width: 0; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; min-width: 0; }
+  .card p { margin: 0 0 8px; max-width: 68ch; color: var(--ink-2); }
+  .card p b { color: var(--ink); font-weight: 600; }
+  .card code { font-family: var(--mono); font-size: 12.5px; background: var(--code-bg); padding: 1px 5px; border-radius: 3px; }
+
+  .how { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
+  .how div { border-left: 2px solid var(--line); padding-left: 12px; }
+  .how b { display: block; font-weight: 600; margin-bottom: 4px; }
+  .how span { color: var(--ink-2); font-size: 13px; }
+
+  .scroll { overflow-x: auto; }
+  table.pal { border-collapse: collapse; width: 100%; font-family: var(--mono); font-size: 11.5px; }
+  table.pal th { text-align: left; font-weight: 500; color: var(--ink-3); padding: 0 4px 6px; font-family: var(--font); }
+  table.pal th.st { text-align: center; }
+  table.pal td.n { padding: 0 8px 0 0; white-space: nowrap; }
+  table.pal td.n small { color: var(--ink-3); }
+  table.pal td.sw { padding: 2px; }
+  .chip { height: 44px; border-radius: 4px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 3px; font-size: 10.5px; letter-spacing: 0.02em; min-width: 62px; }
+  .chip.role::after { content: attr(data-role); position: absolute; }
+  td.sw { position: relative; }
+  .mark { position: absolute; top: 4px; left: 6px; font: 500 9.5px var(--font); letter-spacing: 0.04em; text-transform: uppercase; padding: 1px 4px; border-radius: 3px; background: rgba(255,255,255,.85); color: #1c2230; }
+
+  /* Превью админки: всегда светлое, потому что админка светлая. */
+  .preview { background: #fff; color: #1e293b; border: 1px solid var(--line); border-radius: 8px; padding: 18px; display: grid; gap: 18px; }
+  .preview h3 { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: #8b93a3; margin: 0 0 8px; font-weight: 600; }
+  .pv-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pv-btn { font: 500 13px var(--font); padding: 6px 14px; border-radius: 6px; border: 1px solid; position: relative; overflow: hidden; }
+  .pv-btn::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(255,255,255,.12), transparent 50%); pointer-events: none; }
+  .pv-btn.o::before { display: none; }
+  .pv-states { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; align-items: center; font-size: 12px; color: #5a6272; }
+  .pv-states .st { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pv-alert { border: 1px solid; border-left: 3px solid; border-radius: 6px; padding: 8px 12px; font-size: 13px; }
+  .pv-alerts { display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .pv-menu { width: 260px; max-width: 100%; display: grid; gap: 2px; font-size: 13.5px; }
+  .pv-menu .it { padding: 4px 8px; border-radius: 6px; font-weight: 500; border: 2px solid transparent; }
+  .pv-menu .sub { padding: 4px 8px 4px 14px; border-left: 3px solid transparent; }
+  .pv-menu .it.open { border-radius: 6px 6px 0 0; font-weight: 600; }
+  .pv-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+  .pv-table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  .pv-table th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; padding: 7px 10px; text-align: left; border-bottom: 2px solid; }
+  .pv-table td { padding: 7px 10px; }
+  .pv-pages { display: flex; gap: 2px; }
+  .pv-pages span { font-size: 12.5px; font-weight: 500; padding: 4px 10px; border: 1px solid; border-radius: 5px; }
+
+  table.cr { border-collapse: collapse; width: 100%; font-size: 13px; }
+  table.cr td { padding: 5px 8px; border-top: 1px solid var(--line-2); vertical-align: middle; }
+  table.cr td:first-child { padding-left: 0; }
+  table.cr .v { font-family: var(--mono); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+  table.cr .pill { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 10px; letter-spacing: 0.02em; }
+  table.cr .pill.ok { background: color-mix(in srgb, var(--ok) 15%, transparent); color: var(--ok); }
+  table.cr .pill.bad { background: color-mix(in srgb, var(--bad) 15%, transparent); color: var(--bad); }
+  .sample { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12.5px; margin-right: 8px; }
+
+  pre.scss { font: 12.5px/1.55 var(--mono); background: var(--code-bg); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; overflow-x: auto; margin: 0; color: var(--ink); }
+  .cardhead { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+  .cardhead h2 { margin: 0; }
+  .toast { font-size: 12px; color: var(--ok); }
+  @media (prefers-reduced-motion: no-preference) { .chip { transition: background-color .15s; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <h1>Ручки палитры админки</h1>
+    <span class="path">app/backend/views/assets/media/src/scss/imports/_theme.scss</span>
+    <span class="path" id="src"></span>
+  </header>
+
+  <div class="layout">
+    <aside class="knobs" aria-label="Ручки">
+      <section>
+        <h2>Тон · опорная ступень 500</h2>
+        <p class="note">Две главные ручки. Действуют на все семейства, кроме закреплённых.</p>
+        <div class="row">
+          <label for="k-l">Светлота<small>$tone-lightness · ниже — глубже</small></label>
+          <input type="number" id="k-l-n" min="0.2" max="0.85" step="0.01">
+          <input type="range" id="k-l" min="0.2" max="0.85" step="0.01">
+        </div>
+        <div class="row">
+          <label for="k-c">Насыщенность<small>$tone-chroma · ниже — приглушённее</small></label>
+          <input type="number" id="k-c-n" min="0" max="0.32" step="0.005">
+          <input type="range" id="k-c" min="0" max="0.32" step="0.005">
+        </div>
+      </section>
+
+      <section>
+        <h2>Форма линейки</h2>
+        <div class="row">
+          <label for="k-tk">Цвет на светлых ступенях<small>$tint-chroma-falloff · 1 = чистая пастель</small></label>
+          <input type="number" id="k-tk-n" min="0" max="1" step="0.05">
+          <input type="range" id="k-tk" min="0" max="1" step="0.05">
+        </div>
+        <div class="row">
+          <label for="k-sk">Спад цвета на тёмных<small>$shade-chroma-falloff · 0 = залипает в sRGB</small></label>
+          <input type="number" id="k-sk-n" min="0" max="1" step="0.05">
+          <input type="range" id="k-sk" min="0" max="1" step="0.05">
+        </div>
+      </section>
+
+      <section>
+        <h2>Семейства</h2>
+        <p class="note">От цвета берётся только оттенок. Галочка «закреплено» — берётся целиком, тон не действует.</p>
+        <div id="fams"></div>
+      </section>
+
+      <section>
+        <h2>Роли · какая ступень за что</h2>
+        <div class="roles" id="roles"></div>
+      </section>
+
+      <section class="btnrow">
+        <button class="ui" id="reset" type="button">Сбросить к _theme.scss</button>
+      </section>
+    </aside>
+
+    <main class="out">
+      <section class="card">
+        <h2>Как это устроено</h2>
+        <div class="how">
+          <div><b>1 · Оттенок</b><span>Из каждого базового цвета берётся только hue в OKLCH. Его светлота и насыщенность выбрасываются.</span></div>
+          <div><b>2 · Тон</b><span>Ступень 500 у всех получает одну светлоту и одну насыщенность — поэтому ряд кнопок ровный. Поправки — для жёлтого и голубого.</span></div>
+          <div><b>3 · Ступени</b><span>Светлее 500 — примесь белого (tint), темнее — срез светлоты при удержании цвета (shade). Итог загоняется в sRGB.</span></div>
+          <div><b>4 · Роли</b><span>Компонент не знает hex. Он знает «кнопка в покое — ступень 500». Сдвинул роль — сдвинулись все кнопки разом.</span></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="cardhead"><h2>Линейки</h2><span class="path" id="pal-src"></span></div>
+        <div class="scroll"><table class="pal" id="pal"></table></div>
+      </section>
+
+      <section class="card">
+        <h2>Превью на белом, как в админке</h2>
+        <div class="preview" id="pv"></div>
+      </section>
+
+      <section class="card">
+        <h2>Контраст</h2>
+        <p>Норма для текста — 4.5 : 1, для крупных элементов — 3 : 1. Ниже нормы — сольётся.</p>
+        <table class="cr" id="cr"></table>
+      </section>
+
+      <section class="card">
+        <div class="cardhead">
+          <h2>Вставить в _theme.scss</h2>
+          <div class="btnrow"><span class="toast" id="toast"></span><button class="ui primary" id="copy" type="button">Скопировать</button></div>
+        </div>
+        <p>Только те переменные, что здесь крутятся. Остальное в файле остаётся как есть. После вставки — <code>npm run build</code>.</p>
+        <pre class="scss" id="scss"></pre>
+      </section>
+    </main>
+  </div>
+</div>
+
+<!-- Реальные значения из _theme.scss и посчитанные Sass ступени. Генерируется `npm run theme`;
+     если файла нет (например, на claude.ai), песочница работает на встроенных умолчаниях. -->
+<script src="theme-defaults.js"></script>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+
+  // ───────────── OKLab / OKLCH (Björn Ottosson), sRGB ─────────────
+  const lin = c => { c /= 255; return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+  const unlin = c => { c = Math.min(1, Math.max(0, c)); return c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055; };
+  const hex2rgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  const rgb2hex = ([r, g, b]) => '#' + [r, g, b].map(v => Math.round(v).toString(16).padStart(2, '0')).join('');
+  function hex2oklab(h) {
+    const [r, g, b] = hex2rgb(h).map(lin);
+    const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+    const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+    const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+    return [0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s,
+            1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s,
+            0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s];
+  }
+  function oklab2lin(L, a, b) {
+    const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
+    const m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3;
+    const s = (L - 0.0894841775 * a - 1.2914855480 * b) ** 3;
+    return [4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+           -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+           -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s];
+  }
+  const inGamut = v => v.every(c => c >= -1e-4 && c <= 1 + 1e-4);
+  function hex2oklch(h) { const [L, a, b] = hex2oklab(h); return { L, C: Math.hypot(a, b), H: (Math.atan2(b, a) * 180 / Math.PI + 360) % 360 }; }
+  // Как color.to-gamut(local-minde): снижаем chroma, пока цвет не влезет в sRGB.
+  function oklch2hex(L, C, H) {
+    const ab = c => [c * Math.cos(H * Math.PI / 180), c * Math.sin(H * Math.PI / 180)];
+    let [a, b] = ab(C);
+    if (!inGamut(oklab2lin(L, a, b))) {
+      let lo = 0, hi = C;
+      for (let i = 0; i < 24; i++) { const mid = (lo + hi) / 2; const [ma, mb] = ab(mid); inGamut(oklab2lin(L, ma, mb)) ? lo = mid : hi = mid; }
+      [a, b] = ab(lo);
+    }
+    return rgb2hex(oklab2lin(L, a, b).map(c => unlin(c) * 255));
+  }
+  const lum = h => { const [r, g, b] = hex2rgb(h).map(lin); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };
+  const contrast = (x, y) => { const [h, l] = [lum(x), lum(y)].sort((p, q) => q - p); return (h + 0.05) / (l + 0.05); };
+
+  // ───────────── Умолчания ─────────────
+  // Рабочие берутся из theme-defaults.js (npm run theme) — это реальные значения
+  // _theme.scss. Встроенные ниже — запасной вариант, когда файла нет.
+  const STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
+  const FAM_META = { brand: 'шапка, меню', primary: '.btn-primary', success: '.btn-success', danger: '.btn-danger', warning: '.btn-warning', info: '.btn-info', neutral: 'фон, текст, .btn-secondary' };
+  const ROLE_GROUPS = [
+    ['Кнопки', [['btnRest', '$btn-rest', 'покой'], ['btnHover', '$btn-hover', 'наведение'], ['btnActive', '$btn-active', 'нажатие'], ['btnBorder', '$btn-border', 'рамка'], ['btnShadow', '$btn-shadow', 'тень'], ['btnOutline', '$btn-outline', 'outline-текст']]],
+    ['Алерты', [['alertBg', '$alert-bg', 'фон'], ['alertBorder', '$alert-border', 'рамка'], ['alertAccent', '$alert-accent', 'полоска'], ['alertText', '$alert-text', 'текст']]],
+    ['Меню (brand)', [['menuItemBg', '$menu-item-bg', 'раздел'], ['menuItemHoverBg', '$menu-item-hover-bg', 'наведение'], ['menuSubBg', '$menu-sub-bg', 'подпункт'], ['menuSubActiveBg', '$menu-sub-active-bg', 'активный подпункт'], ['menuSubActiveLine', '$menu-sub-active-line', 'полоска']]],
+    ['Серая шкала (neutral)', [['textBody', '$text-body', 'текст таблиц, меню'], ['textMuted', '$text-muted', 'подписи'], ['textHeading', '$text-heading', 'заголовки'], ['border', '$border', 'границы'], ['surfaceMuted', '$surface-muted', 'шапки карточек']]],
+  ];
+  const EMBEDDED = {
+    toneL: 0.60, toneC: 0.19, tk: 0.8, sk: 0.5,
+    hues: { brand: '#094c6e', primary: '#3b82f6', success: '#198754', danger: '#dc3545', warning: '#f59e0b', info: '#06b6d4', neutral: '#64748b' },
+    fixed: { brand: true, neutral: true },
+    tweaks: { warning: { l: 0.22, c: 0.02 }, info: { l: 0.12, c: 0 } },
+    onThreshold: 0.68,
+    steps: { 50: { tint: 0.92 }, 100: { tint: 0.84 }, 200: { tint: 0.70 }, 300: { tint: 0.52 }, 400: { tint: 0.28 }, 500: {}, 600: { shade: 0.13 }, 700: { shade: 0.26 }, 800: { shade: 0.39 }, 900: { shade: 0.52 } },
+    roles: { btnRest: 500, btnHover: 600, btnActive: 700, btnBorder: 600, btnShadow: 800, btnOutline: 500,
+             alertBg: 50, alertBorder: 200, alertAccent: 500, alertText: 800,
+             menuItemBg: 200, menuItemHoverBg: 100, menuSubBg: 50, menuSubActiveBg: 200, menuSubActiveLine: 400,
+             textBody: 700, textMuted: 600, textHeading: 900, border: 200, surfaceMuted: 50 },
+  };
+  // Экспорт _theme.scss → формат ручек. Имена Sass-переменных приходят без «$».
+  function fromSass(T) {
+    if (!T || !T.theme || !T.theme.hues) return null;
+    const t = T.theme;
+    const roleKey = {}; for (const [, items] of ROLE_GROUPS) for (const [k, scss] of items) roleKey[scss.slice(1)] = k;
+    const roles = { ...EMBEDDED.roles }; for (const n in roleKey) if (t[n] != null) roles[roleKey[n]] = +t[n];
+    const steps = {}; for (const [s, spec] of Object.entries(t.steps || EMBEDDED.steps)) steps[s] = Array.isArray(spec) ? {} : spec;
+    const tweaks = {}; for (const [f, tw] of Object.entries(t['tone-tweaks'] || {})) tweaks[f] = { l: +tw.lightness || 0, c: +tw.chroma || 0 };
+    const fixed = {}; for (const f of t.fixed || []) fixed[f] = true;
+    return {
+      toneL: +t['tone-lightness'], toneC: +t['tone-chroma'], tk: +t['tint-chroma-falloff'], sk: +t['shade-chroma-falloff'],
+      hues: { ...t.hues }, fixed, tweaks, onThreshold: +t['on-color-threshold'] || EMBEDDED.onThreshold, steps, roles,
+    };
+  }
+  const SASS = window.ADM_THEME || null;
+  const DEFAULTS = fromSass(SASS) || EMBEDDED;
+  const STEP_SPEC = DEFAULTS.steps;
+  $('src').textContent = DEFAULTS === EMBEDDED
+    ? 'встроенные умолчания · theme-defaults.js не найден, запусти npm run theme'
+    : 'значения из _theme.scss · экспорт ' + new Date(SASS.builtAt).toLocaleString('ru-RU');
+
+  // Пока ручки не тронуты, показываем hex из сборки Sass, а не свой расчёт
+  const untouched = () => JSON.stringify(S) === JSON.stringify(DEFAULTS);
+
+  let S = load();
+  function load() {
+    try { const raw = localStorage.getItem('adm-palette-knobs'); if (raw) return merge(structuredClone(DEFAULTS), JSON.parse(raw)); } catch (e) {}
+    return structuredClone(DEFAULTS);
+  }
+  function merge(base, over) { for (const k in over) { if (over[k] && typeof over[k] === 'object' && !Array.isArray(over[k])) base[k] = merge(base[k] || {}, over[k]); else base[k] = over[k]; } return base; }
+  function save() { try { localStorage.setItem('adm-palette-knobs', JSON.stringify(S)); } catch (e) {} }
+
+  // ───────────── Движок — те же формулы, что в _palette.scss ─────────────
+  function tone(name) {
+    const base = hex2oklch(S.hues[name]);
+    if (S.fixed[name]) return { L: base.L, C: base.C, H: base.H };
+    const tw = S.tweaks[name] || { l: 0, c: 0 };
+    return { L: Math.max(0, S.toneL + (+tw.l || 0)), C: Math.max(0, S.toneC + (+tw.c || 0)), H: base.H };
+  }
+  function stepColor(name, step) {
+    let { L, C, H } = tone(name);
+    const sp = STEP_SPEC[step];
+    if (sp.tint != null) { L = L * (1 - sp.tint) + sp.tint; C = C * (1 - sp.tint * S.tk); }
+    else if (sp.shade != null) { L = L * (1 - sp.shade); C = C * (1 - sp.shade * S.sk); }
+    return oklch2hex(L, C, H);
+  }
+  const onColor = (name, step) => hex2oklch(stepColor(name, step)).L > S.onThreshold ? stepColor('neutral', 900) : '#ffffff';
+  // Палитра: в покое — ступени из Sass (точные), после кручения — свой расчёт
+  const P = () => {
+    const exact = untouched() && SASS && SASS.palette;
+    const o = {};
+    for (const f in S.hues) { o[f] = {}; for (const s of STEPS) o[f][s] = (exact && SASS.palette[f] && SASS.palette[f][s]) || stepColor(f, s); }
+    return o;
+  };
+
+  // ───────────── Ручки ─────────────
+  function bindPair(id, key) {
+    const r = $(id), n = $(id + '-n');
+    const set = v => { S[key] = +v; r.value = n.value = S[key]; save(); render(); };
+    r.addEventListener('input', () => set(r.value));
+    n.addEventListener('change', () => set(Math.min(+n.max, Math.max(+n.min, +n.value))));
+    r.value = n.value = S[key];
+  }
+  function buildFams() {
+    const box = $('fams'); box.innerHTML = '';
+    for (const f in S.hues) {
+      const row = document.createElement('div'); row.className = 'fam';
+      const tw = S.tweaks[f] || { l: 0, c: 0 };
+      row.innerHTML = `
+        <input type="color" id="hue-${f}" value="${S.hues[f]}" aria-label="Базовый цвет ${f}">
+        <div class="name">${f}<small>${FAM_META[f]}</small></div>
+        <label class="fixed"><input type="checkbox" id="fix-${f}" ${S.fixed[f] ? 'checked' : ''}> закреплено</label>
+        <div class="tweak" id="tw-${f}" ${S.fixed[f] ? 'hidden' : ''}>
+          <span>+светлота</span><input type="number" id="twl-${f}" step="0.01" min="-0.5" max="0.5" value="${tw.l || 0}">
+          <span>+насыщ.</span><input type="number" id="twc-${f}" step="0.005" min="-0.3" max="0.3" value="${tw.c || 0}">
+        </div>`;
+      box.appendChild(row);
+      $(`hue-${f}`).addEventListener('input', e => { S.hues[f] = e.target.value; save(); render(); });
+      $(`fix-${f}`).addEventListener('change', e => { S.fixed[f] = e.target.checked; $(`tw-${f}`).hidden = e.target.checked; save(); render(); });
+      const twSet = () => { S.tweaks[f] = { l: +$(`twl-${f}`).value || 0, c: +$(`twc-${f}`).value || 0 }; save(); render(); };
+      $(`twl-${f}`).addEventListener('change', twSet); $(`twc-${f}`).addEventListener('change', twSet);
+    }
+  }
+  function buildRoles() {
+    const box = $('roles'); box.innerHTML = '';
+    for (const [g, items] of ROLE_GROUPS) {
+      const h = document.createElement('div'); h.className = 'g'; h.textContent = g; box.appendChild(h);
+      for (const [key, scss, hint] of items) {
+        const l = document.createElement('label'); l.htmlFor = 'role-' + key; l.innerHTML = `<code>${scss}</code> <span style="color:var(--ink-3)">· ${hint}</span>`;
+        const s = document.createElement('select'); s.id = 'role-' + key;
+        for (const st of STEPS) { const o = document.createElement('option'); o.value = st; o.textContent = st; if (S.roles[key] === st) o.selected = true; s.appendChild(o); }
+        s.addEventListener('change', () => { S.roles[key] = +s.value; save(); render(); });
+        box.append(l, s);
+      }
+    }
+  }
+
+  // ───────────── Вывод ─────────────
+  function renderPalette(p) {
+    const roleMarks = {};
+    const mark = (f, st, t) => { (roleMarks[f + st] ||= []).push(t); };
+    for (const f of ['primary', 'success', 'danger', 'warning', 'info']) { mark(f, S.roles.btnRest, 'покой'); }
+    mark('neutral', S.roles.btnRest, 'покой'); mark('brand', 500, 'бренд');
+    let h = '<thead><tr><th>семейство</th>' + STEPS.map(s => `<th class="st">${s}</th>`).join('') + '</tr></thead><tbody>';
+    for (const f in p) {
+      h += `<tr><td class="n">${f}${S.fixed[f] ? '<small> · закр.</small>' : ''}</td>`;
+      for (const s of STEPS) {
+        const c = p[f][s]; const ink = hex2oklch(c).L > 0.62 ? '#1c2230' : '#fff';
+        const m = roleMarks[f + s] ? `<span class="mark">${roleMarks[f + s][0]}</span>` : '';
+        h += `<td class="sw">${m}<div class="chip" style="background:${c};color:${ink}">${c}</div></td>`;
+      }
+      h += '</tr>';
+    }
+    $('pal').innerHTML = h + '</tbody>';
+  }
+  function renderPreview(p) {
+    const R = S.roles;
+    const solid = (f, st, label, extra = '') => `<span class="pv-btn" style="background:${p[f][st]};border-color:${p[f][R.btnBorder]};color:${onColor(f, R.btnRest)};${extra}">${label}</span>`;
+    const outline = (f, label) => `<span class="pv-btn o" style="background:#fff;border-color:${p[f][R.btnOutline]};color:${p[f][R.btnOutline]};border-width:1.5px">${label}</span>`;
+    const fams = [['primary', 'Сохранить'], ['success', 'Опубликовать'], ['danger', 'Удалить'], ['warning', 'Черновик'], ['info', 'Подробнее'], ['neutral', 'Отмена']];
+    const shadow = f => `box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 1px 2px 0 rgba(${hex2rgb(p[f][R.btnShadow]).join(',')},.15)`;
+    let h = `<div><h3>Кнопки · покой</h3><div class="pv-btns">${fams.map(([f, l]) => solid(f, R.btnRest, l, shadow(f))).join('')}</div></div>`;
+    h += `<div><h3>Outline</h3><div class="pv-btns">${fams.map(([f, l]) => outline(f, l)).join('')}</div></div>`;
+    h += `<div><h3>Состояния одной кнопки</h3><div class="pv-states">`;
+    for (const [f, l] of [['success', 'Опубликовать'], ['danger', 'Удалить']]) {
+      h += `<span>${f}</span><span class="st">${solid(f, R.btnRest, 'покой ' + R.btnRest, shadow(f))}${solid(f, R.btnHover, 'наведение ' + R.btnHover)}${solid(f, R.btnActive, 'нажатие ' + R.btnActive, 'box-shadow: inset 0 2px 4px rgba(0,0,0,.15)')}</span>`;
+    }
+    h += `</div></div>`;
+    h += `<div><h3>Алерты</h3><div class="pv-alerts">`;
+    for (const [f, t] of [['success', 'Запись сохранена'], ['danger', 'Не удалось удалить: есть дочерние разделы'], ['warning', 'Черновик не опубликован'], ['info', 'Кэш будет обновлён в очереди']]) {
+      h += `<div class="pv-alert" style="background:${p[f][R.alertBg]};border-color:${p[f][R.alertBorder]};border-left-color:${p[f][R.alertAccent]};color:${p[f][R.alertText]}">${t}</div>`;
+    }
+    h += `</div></div>`;
+    const tb = p.neutral[R.textBody], th = p.neutral[R.textHeading], b = p.brand;
+    h += `<div class="pv-two"><div><h3>Левое меню</h3><div class="pv-menu">
+      <div class="it" style="background:${b[R.menuItemBg]};color:${tb}">▸ Страницы</div>
+      <div class="it" style="background:${b[R.menuItemHoverBg]};color:${th}">▸ Блог <span style="font-weight:400;font-size:11px;opacity:.7">(наведение)</span></div>
+      <div class="it open" style="background:${b[500]};color:${onColor('brand', 500)}">▾ Настройки</div>
+      <div class="sub" style="background:${b[R.menuSubBg]};color:${tb}">Общие</div>
+      <div class="sub" style="background:${b[R.menuSubActiveBg]};color:${th};font-weight:600;border-left-color:${b[R.menuSubActiveLine]}">Модули</div>
+      <div class="sub" style="background:${b[R.menuSubBg]};color:${tb}">Темы</div>
+    </div></div>`;
+    h += `<div><h3>Таблица и пагинация</h3><table class="pv-table"><thead><tr><th style="background:${p.neutral[R.surfaceMuted]};color:${p.neutral[R.textMuted]};border-color:${p.neutral[R.border]}">Название</th><th style="background:${p.neutral[R.surfaceMuted]};color:${p.neutral[R.textMuted]};border-color:${p.neutral[R.border]}">Статус</th></tr></thead>
+      <tbody><tr><td style="color:${tb}">О компании</td><td style="color:${tb}">опубликовано</td></tr><tr style="background:${p.neutral[R.surfaceMuted]}"><td style="color:${tb}">Контакты</td><td style="color:${tb}">черновик</td></tr></tbody></table>
+      <div class="pv-pages" style="margin-top:10px"><span style="border-color:${p.neutral[R.border]};color:${p.neutral[R.textMuted]}">‹</span><span style="background:${b[500]};border-color:${b[500]};color:${onColor('brand', 500)};font-weight:600">1</span><span style="border-color:${p.neutral[R.border]};color:${p.neutral[R.textMuted]}">2</span><span style="border-color:${p.neutral[R.border]};color:${p.neutral[R.textMuted]}">›</span></div></div></div>`;
+    $('pv').innerHTML = h;
+  }
+  function renderContrast(p) {
+    const R = S.roles;
+    const rows = [];
+    for (const f of ['primary', 'success', 'danger', 'warning', 'info', 'neutral']) rows.push([`текст на .btn-${f === 'neutral' ? 'secondary' : f}`, onColor(f, R.btnRest), p[f][R.btnRest], 4.5]);
+    for (const f of ['primary', 'success', 'danger', 'warning', 'info']) rows.push([`outline .btn-${f} на белом`, p[f][R.btnOutline], '#ffffff', 4.5]);
+    rows.push(['пункт меню', p.neutral[R.textBody], p.brand[R.menuItemBg], 4.5]);
+    rows.push(['подпункт меню', p.neutral[R.textBody], p.brand[R.menuSubBg], 4.5]);
+    rows.push(['активный раздел', onColor('brand', 500), p.brand[500], 4.5]);
+    for (const f of ['success', 'danger', 'warning', 'info']) rows.push([`текст .alert-${f}`, p[f][R.alertText], p[f][R.alertBg], 4.5]);
+    rows.push(['шапка таблицы', p.neutral[R.textMuted], p.neutral[R.surfaceMuted], 4.5]);
+    rows.push(['граница на белом', p.neutral[R.border], '#ffffff', 1.3]);
+    $('cr').innerHTML = rows.map(([n, fg, bg, min]) => {
+      const v = contrast(fg, bg); const ok = v >= min;
+      return `<tr><td><span class="sample" style="background:${bg};color:${fg};border:1px solid ${bg === '#ffffff' ? fg : bg}">Aa</span>${n}</td><td class="v">${v.toFixed(2)} : 1</td><td><span class="pill ${ok ? 'ok' : 'bad'}">${ok ? 'ок' : 'сольётся'}</span></td></tr>`;
+    }).join('');
+  }
+  function renderScss() {
+    const R = S.roles;
+    const pad = (k, v, w = 26) => `${k.padEnd(w)}${v}`;
+    const fixed = Object.keys(S.fixed).filter(k => S.fixed[k]).map(k => `"${k}"`).join(', ');
+    const tweaks = Object.entries(S.tweaks).filter(([k]) => !S.fixed[k] && ((+S.tweaks[k].l || 0) !== 0 || (+S.tweaks[k].c || 0) !== 0))
+      .map(([k, t]) => { const parts = []; if (+t.l) parts.push(`lightness: ${(+t.l).toFixed(3).replace(/0+$/, '').replace(/\.$/, '')}`); if (+t.c) parts.push(`chroma: ${(+t.c).toFixed(3).replace(/0+$/, '').replace(/\.$/, '')}`); return `    "${k}": (${parts.join(', ')}),`; }).join('\n');
+    $('scss').textContent =
+`$hues: (
+${Object.entries(S.hues).map(([k, v]) => `    "${k}":`.padEnd(15) + `${v},`).join('\n')}
+);
+
+$fixed: (${fixed});
+
+$tone-lightness: ${S.toneL};
+$tone-chroma:    ${S.toneC};
+
+$tone-tweaks: (
+${tweaks || '    // без поправок'}
+);
+
+$tint-chroma-falloff:  ${S.tk};
+$shade-chroma-falloff: ${S.sk};
+
+${pad('$btn-rest:', R.btnRest, 14)}
+${pad('$btn-hover:', R.btnHover, 14)}
+${pad('$btn-active:', R.btnActive, 14)}
+${pad('$btn-border:', R.btnBorder, 14)}
+${pad('$btn-shadow:', R.btnShadow, 14)}
+${pad('$btn-outline:', R.btnOutline, 14)}
+
+${pad('$alert-bg:', R.alertBg, 15)}
+${pad('$alert-border:', R.alertBorder, 15)}
+${pad('$alert-accent:', R.alertAccent, 15)}
+${pad('$alert-text:', R.alertText, 15)}
+
+${pad('$surface-muted:', R.surfaceMuted, 16)}
+${pad('$border:', R.border, 16)}
+${pad('$text-heading:', R.textHeading, 16)}
+${pad('$text-body:', R.textBody, 16)}
+${pad('$text-muted:', R.textMuted, 16)}
+
+${pad('$menu-item-bg:', R.menuItemBg, 23)}
+${pad('$menu-item-hover-bg:', R.menuItemHoverBg, 23)}
+${pad('$menu-sub-bg:', R.menuSubBg, 23)}
+${pad('$menu-sub-active-bg:', R.menuSubActiveBg, 23)}
+${pad('$menu-sub-active-line:', R.menuSubActiveLine, 23)}`;
+  }
+  function render() {
+    const p = P();
+    $('pal-src').textContent = (untouched() && SASS && SASS.palette) ? 'hex как посчитал Sass' : 'hex по формулам песочницы · Sass может разойтись на 1–2 единицы';
+    renderPalette(p); renderPreview(p); renderContrast(p); renderScss();
+  }
+
+  // ───────────── Запуск ─────────────
+  bindPair('k-l', 'toneL'); bindPair('k-c', 'toneC'); bindPair('k-tk', 'tk'); bindPair('k-sk', 'sk');
+  buildFams(); buildRoles(); render();
+  $('reset').addEventListener('click', () => { S = structuredClone(DEFAULTS); save(); ['k-l', 'k-c', 'k-tk', 'k-sk'].forEach((id, i) => { const k = ['toneL', 'toneC', 'tk', 'sk'][i]; $(id).value = $(id + '-n').value = S[k]; }); buildFams(); buildRoles(); render(); });
+  $('copy').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText($('scss').textContent); $('toast').textContent = 'Скопировано'; }
+    catch (e) { $('toast').textContent = 'Буфер недоступен — выдели и скопируй вручную'; }
+    setTimeout(() => $('toast').textContent = '', 2500);
+  });
+})();
+</script>
+</body>
+</html>

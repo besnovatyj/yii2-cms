@@ -2,110 +2,141 @@
  * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
  */
 
-// Слой 1 — сырая палитра админки.
-// Литеральные цвета допустимы ТОЛЬКО здесь: остальные файлы обязаны ссылаться
-// на эти переменные напрямую или через токены из _variables.scss.
+// ═══════════════════════════════════════════════════════════════════════════
+//  Движок палитры: из ручек _theme.scss собирает линейки и выпускает их
+//  CSS-переменными --adm-<семейство>-<ступень> (и -rgb для полупрозрачных
+//  производных). Руками здесь править нечего — все настройки в _theme.scss.
 //
-// Именование: --adm-<оттенок>-<вес>, вес по шкале 50…900 (чем больше — тем темнее/насыщеннее).
-// Суффикс -rgb — триплет компонент для полупрозрачных производных:
-//   rgba(var(--adm-blue-500-rgb), 0.4)
-// Триплеты заведены только для тех оттенков, от которых реально берётся альфа.
+//  Считается в OKLCH: в нём светлота перцептивна, поэтому равная ступень у
+//  разных оттенков читается как равная по «плотности». В HSL это не так —
+//  hsl(60, 90%, 50%) слепит, а hsl(240, 90%, 50%) выглядит почти чёрным.
+// ═══════════════════════════════════════════════════════════════════════════
+
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "theme" as th;
+
+// Sass отдаёт светлоту OKLCH то долей (0…1), то процентами — зависит от версии.
+// Замеряем на известном цвете и дальше приводим свои доли к тем же единицам.
+$-probe: color.channel(#808080, "lightness", $space: oklch);
+$-l-unit: 100%;
+@if math.is-unitless($-probe) {
+    $-l-unit: 1;
+}
+
+// Светлота цвета как доля 0…1, в каких бы единицах её ни вернул Sass.
+@function -lightness-of($color) {
+    $l: color.channel($color, "lightness", $space: oklch);
+    @if math.is-unitless($l) {
+        @return $l;
+    }
+    @return math.div($l, 100%);
+}
+
+// Тон семейства: общий тон из _theme.scss плюс персональная поправка.
+// Семейства из $fixed берут тон из собственного цвета и общему тону не подчиняются.
+@function tone($name) {
+    $base: map.get(th.$hues, $name);
+
+    @if list.index(th.$fixed, $name) {
+        @return (-lightness-of($base), color.channel($base, "chroma", $space: oklch));
+    }
+
+    $tweak: map.get(th.$tone-tweaks, $name);
+    $l: th.$tone-lightness;
+    $c: th.$tone-chroma;
+
+    @if $tweak {
+        $dl: map.get($tweak, lightness);
+        $dc: map.get($tweak, chroma);
+        @if $dl {
+            $l: $l + $dl;
+        }
+        @if $dc {
+            $c: $c + $dc;
+        }
+    }
+
+    @return (math.max($l, 0), math.max($c, 0));
+}
+
+// Цвет одной ступени семейства.
+//   tint  — тянем к белому: светлота растёт, насыщенность падает (пастель).
+//   shade — срезаем светлоту, насыщенность придерживаем: заливка остаётся
+//           цветной, а не уходит в графит.
+@function step-color($name, $step) {
+    $base: map.get(th.$hues, $name);
+    @if not $base {
+        @error "Нет базового цвета «#{$name}» в $hues (imports/_theme.scss).";
+    }
+    $tone: tone($name);
+    $l: list.nth($tone, 1);
+    $c: list.nth($tone, 2);
+
+    $spec: map.get(th.$steps, $step);
+    $tint: null;
+    $shade: null;
+    @if $spec {
+        $tint: map.get($spec, tint);
+        $shade: map.get($spec, shade);
+    }
+
+    @if $tint {
+        $l: $l * (1 - $tint) + $tint;
+        $c: $c * (1 - $tint * th.$tint-chroma-falloff);
+    } @else if $shade {
+        $l: $l * (1 - $shade);
+        $c: $c * (1 - $shade * th.$shade-chroma-falloff);
+    }
+
+    // Оттенок берём из базового цвета — он и есть всё, что от него нужно.
+    $result: color.change($base, $lightness: $l * $-l-unit, $chroma: $c, $space: oklch);
+    // Загоняем в sRGB: иначе тёмные насыщенные тона обрезаются по каналу.
+    // to-space(rgb) — чтобы в CSS вышел привычный hex, а не color(srgb …).
+    @return color.to-space(color.to-gamut($result, $space: srgb, $method: local-minde), rgb);
+}
+
+// Ссылка на ступень. В _variables.scss пишется как step("primary", th.$btn-hover),
+// поэтому роль («что чем является») меняется в одном месте — в _theme.scss.
+@function step($name, $step) {
+    @return var(--adm-#{$name}-#{$step});
+}
+
+@function step-rgb($name, $step) {
+    @return var(--adm-#{$name}-#{$step}-rgb);
+}
+
+// Полупрозрачная производная ступени. Возвращает готовую строку: если написать
+// rgba(#{...}, $a) в самом значении, Sass попробует вычислить rgba() от строки
+// и упадёт — вычислять там нечего, триплет подставляет уже браузер.
+@function step-rgba($name, $step, $alpha) {
+    @return #{"rgba(var(--adm-#{$name}-#{$step}-rgb), #{$alpha})"};
+}
+
+// Читаемый текст на заливке: белый, пока заливка достаточно тёмная, и тёмный
+// на светлых. Решается на сборке, поэтому возвращается конкретный цвет.
+@function on-color($name, $step) {
+    @if -lightness-of(step-color($name, $step)) > th.$on-color-threshold {
+        @return step-color("neutral", 900);
+    }
+    @return #fff;
+}
 
 :root {
-    // --- Ахроматические ---
-    --adm-white:              #fff;
-    --adm-white-rgb:          255, 255, 255;
-    --adm-black:              #000;
-    --adm-black-rgb:          0, 0, 0;
+    @each $name, $base in th.$hues {
+        /* #{$name} */
+        @each $step, $spec in th.$steps {
+            $value: step-color($name, $step);
+            --adm-#{$name}-#{$step}: #{$value};
+            --adm-#{$name}-#{$step}-rgb: #{color.channel($value, "red", $space: rgb)}, #{color.channel($value, "green", $space: rgb)}, #{color.channel($value, "blue", $space: rgb)};
+        }
+    }
 
-    // Чистые нейтрали без синевы (текст меню)
-    --adm-neutral-600:        #555;
-    --adm-neutral-900:        #111;
-
-    // Сине-серый только для тени сайдбара (#223c50)
-    --adm-slate-shadow-rgb:   34, 60, 80;
-
-    // --- Холодные серые: основная шкала интерфейса ---
-    --adm-gray-50:            #f8fafc;
-    --adm-gray-100:           #f1f5f9;
-    --adm-gray-200:           #e2e8f0;
-    --adm-gray-300:           #cbd5e1;
-    --adm-gray-400:           #94a3b8;
-    --adm-gray-500:           #64748b;
-    --adm-gray-500-rgb:       100, 116, 139;
-    --adm-gray-600:           #475569;
-    --adm-gray-700:           #334155;
-    --adm-gray-800:           #1e293b;
-    --adm-gray-800-rgb:       30, 41, 59;
-    --adm-gray-900:           #0f172a;
-
-    // --- Серые Bootstrap: там, где нужен «родной» вид фреймворка ---
-    --adm-bs-gray-200:        #e9ecef;
-    --adm-bs-gray-300:        #dee2e6;
-    --adm-bs-gray-400:        #ced4da;
-    --adm-bs-gray-700:        #495057;
-    --adm-bs-gray-800:        #343a40;
-
-    // --- Бренд (тёмная бирюза) ---
-    --adm-brand-50:           #f0f4f6;
-    --adm-brand-100:          #e8f4f9;
-    --adm-brand-200:          #d2e5ed;
-    --adm-brand-300:          #c6e8f3;
-    --adm-brand-400:          #9abbcf;
-    --adm-brand-800:          #094c6e;
-    --adm-brand-800-rgb:      9, 76, 110;
-    --adm-brand-900:          #073249;
-
-    // --- Синий (primary) ---
-    --adm-blue-500:           #3b82f6;
-    --adm-blue-500-rgb:       59, 130, 246;
-    --adm-blue-600:           #2563eb;
-    --adm-blue-700:           #1d4ed8;
-    --adm-blue-800:           #1e40af;
-    --adm-blue-800-rgb:       30, 64, 175;
-
-    // --- Зелёный (success) ---
-    --adm-green-50:           #f0fdf4;
-    --adm-green-200:          #bbf7d0;
-    --adm-green-500:          #22c55e;
-    --adm-green-500-rgb:      34, 197, 94;
-    --adm-green-600:          #16a34a;
-    --adm-green-700:          #15803d;
-    --adm-green-800:          #166534;
-    --adm-green-800-rgb:      22, 101, 52;
-
-    // --- Красный (danger) ---
-    --adm-red-50:             #fef2f2;
-    --adm-red-200:            #fecaca;
-    --adm-red-500:            #ef4444;
-    --adm-red-500-rgb:        239, 68, 68;
-    --adm-red-600:            #dc2626;
-    --adm-red-700:            #b91c1c;
-    --adm-red-800:            #991b1b;
-    --adm-red-800-rgb:        153, 27, 27;
-    // Красный Bootstrap — звёздочка обязательного поля
-    --adm-bs-red-500:         #dc3545;
-
-    // --- Янтарный (warning) ---
-    --adm-amber-50:           #fffbeb;
-    --adm-amber-200:          #fed7aa;
-    --adm-amber-500:          #f59e0b;
-    --adm-amber-500-rgb:      245, 158, 11;
-    --adm-amber-600:          #d97706;
-    --adm-amber-700:          #b45309;
-    --adm-amber-800:          #92400e;
-    --adm-amber-800-rgb:      146, 64, 14;
-
-    // --- Бирюзовый (info) ---
-    --adm-cyan-50:            #ecfeff;
-    --adm-cyan-200:           #a5f3fc;
-    --adm-cyan-500:           #06b6d4;
-    --adm-cyan-500-rgb:       6, 182, 212;
-    --adm-cyan-600:           #0891b2;
-    --adm-cyan-700:           #0e7490;
-    --adm-cyan-800:           #155e75;
-    --adm-cyan-800-rgb:       21, 94, 117;
-
-    // --- Тёплый тёмный: текст на янтарной кнопке ---
-    --adm-stone-900:          #1c1917;
+    // Крайние точки шкалы: в линейках их нет, а блики и вуали считаются от них.
+    --adm-white:     #fff;
+    --adm-white-rgb: 255, 255, 255;
+    --adm-black:     #000;
+    --adm-black-rgb: 0, 0, 0;
 }
