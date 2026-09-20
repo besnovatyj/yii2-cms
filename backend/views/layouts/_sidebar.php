@@ -16,9 +16,25 @@ use common\config\ConfigFactory;
  */
 $menuItems = static function (string $location): array {
     $factory = new ConfigFactory();
-    return $factory->has('admin-menu')
+    $items = $factory->has('admin-menu')
         ? Yii::$container->get(MenuProvider::class)->forLocation($location, $factory->get('admin-menu'))
         : [];
+
+    // Витрина элементов интерфейса ({@see \app\controllers\StyleguideController}) — инструмент
+    // разработчика: живёт в самом приложении, а не в модуле, поэтому вклада в группу `admin-menu`
+    // у неё нет и пункт добавляется здесь. Вне dev контроллер отдаёт 404 — пункт тоже не показываем.
+    if (YII_ENV_DEV && $location === 'left-sidebar') {
+        $items[] = [
+            'label' => 'Элементы интерфейса',
+            'iconClass' => 'bi bi-palette me-1',
+            'url' => ['/styleguide/index'],
+            'active' => static function (): bool {
+                return str_contains(Yii::$app->request->url, '/styleguide');
+            },
+        ];
+    }
+
+    return $items;
 };
 
 ?>

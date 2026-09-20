@@ -30,10 +30,3 @@ echo 'Версия фреймворка: ' . Yii::getVersion();
 
 echo $this->render('check_components.php');
 echo $this->render('HeidiSQL_password_decoder.php');
-echo $this->render('../demo_chunks/buttons.php');
-echo $this->render('../demo_chunks/card.php');
-echo $this->render('../demo_chunks/alerts.php');
-echo $this->render('../demo_chunks/forms.php');
-echo $this->render('../demo_chunks/progress.php');
-echo $this->render('../demo_chunks/pagination.php');
-echo $this->render('../demo_chunks/table.php');
