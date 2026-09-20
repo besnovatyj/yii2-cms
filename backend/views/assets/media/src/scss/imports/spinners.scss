@@ -1,0 +1,14 @@
+/*!
+ * Copyright (c) 2026 Besnovatyj. Licensed under the MIT License.
+ */
+
+// Spinners — темп вращения и пульсации
+
+// Скорость у Bootstrap 5.3 — CSS-переменная на самом элементе (см. `--bs-spinner-animation-speed`
+// в bootstrap/scss/_spinners.scss): и `.spinner-border`, и `.spinner-grow` подставляют её в
+// `animation`. Перебиваем её своим токеном, а не пересобираем `$spinner-animation-speed`, чтобы
+// темп жил рядом с остальными длительностями темы и менялся в одном месте.
+.spinner-border,
+.spinner-grow {
+    --bs-spinner-animation-speed: var(--adm-spinner-speed);
+}

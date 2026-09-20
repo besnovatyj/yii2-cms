@@ -5,6 +5,16 @@
 // Tables — чистый современный стиль
 
 .table {
+    // Полоску берём под палитру: у Bootstrap она полупрозрачная и по светлоте почти совпадала
+    // с наведением. Своя ступень (_theme.scss) держит перепад «белая → полоска → наведение».
+    --bs-table-striped-bg: var(--adm-table-row-striped-bg);
+
+    // Цвет строки Bootstrap 5.3 рисует не фоном, а `box-shadow: inset 0 0 0 9999px` поверх него
+    // (см. `> :not(caption) > * > *` в bootstrap/scss/_tables.scss), поэтому переход нужен по тени.
+    > :not(caption) > * > * {
+        transition: box-shadow var(--adm-duration-fast) ease;
+    }
+
     thead th {
         background-color: var(--adm-table-head-bg);
         border-bottom: var(--adm-table-head-border-width) solid var(--adm-table-head-border);
@@ -23,12 +33,17 @@
         color: var(--adm-table-cell-color);
     }
 
-    // Hover — нейтральный, без цвета бренда
-    tbody tr {
-        transition: background-color var(--adm-duration-fast) ease;
-
-        &:hover > * {
-            background-color: var(--adm-table-row-hover-bg);
-        }
+    // Hover — нейтральный, без цвета бренда.
+    //
+    // Красим через `--bs-table-bg-state`, а не `background-color`: у Bootstrap заливка строки
+    // идёт inset-тенью, и прежний фон ею перекрывался. Из-за этого на полосатой строке наведение
+    // не было видно вовсе, а на светлой давало ровно цвет соседних полосок — три строки сливались.
+    // Слой состояния (`-bg-state`) перекрывает слой полоски (`-bg-type`), так что теперь наведение
+    // одинаково видно на любой строке.
+    //
+    // Без класса `.table-hover` — намеренно: GridView рисует таблицы как `table table-striped
+    // table-bordered`, и наведение должно работать на них тоже.
+    tbody tr:hover > * {
+        --bs-table-bg-state: var(--adm-table-row-hover-bg);
     }
 }

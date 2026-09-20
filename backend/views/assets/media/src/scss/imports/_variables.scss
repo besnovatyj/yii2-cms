@@ -47,6 +47,10 @@
     --adm-duration-fast:          100ms;
     --adm-transition:             var(--adm-duration) var(--adm-ease);
 
+    // Полный оборот (или цикл пульсации) спиннера. Bootstrap даёт 0.75s — суетливо
+    // для фоновых ожиданий, поэтому держим свой темп.
+    --adm-spinner-speed:          1s;
+
     // --- Тени ---
     --adm-shadow-xs:              0 1px 2px rgba(var(--adm-black-rgb), 0.04);
     --adm-shadow-sm:              0 1px 3px rgba(var(--adm-black-rgb), 0.06);
@@ -201,12 +205,13 @@
     // =========================================================
     //  Таблицы
     // =========================================================
-    --adm-table-head-bg:           var(--adm-surface-muted);
+    --adm-table-head-bg:           var(--adm-surface-sunken);
     --adm-table-head-color:        var(--adm-text-muted);
     --adm-table-head-border:       var(--adm-border);
     --adm-table-head-border-width: 2px;
     --adm-table-cell-color:        var(--adm-text-body);
-    --adm-table-row-hover-bg:      var(--adm-surface-muted);
+    --adm-table-row-striped-bg:    #{p.step("neutral", th.$table-row-striped-bg)};
+    --adm-table-row-hover-bg:      #{p.step("neutral", th.$table-row-hover-bg)};
 
     // =========================================================
     //  Пагинация
