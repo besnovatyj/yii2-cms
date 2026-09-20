@@ -6,6 +6,8 @@
 // Плоские цвета, тонкий inset-блик, layered тени, snap-переходы
 // Все цвета — в _variables.scss (--adm-btn-*), здесь только геометрия и состояния.
 
+@use "theme" as th;
+
 // --- Общие стили для всех .btn ---
 .btn {
     font-weight: 500;
@@ -67,13 +69,12 @@
 }
 
 // --- Solid-кнопки ---
+// Список классов не ведём руками: варианты берутся из той же карты $btn-variants,
+// по которой _variables.scss раздал им токены. Новый цвет в карте — и кнопка есть.
 
-.btn-primary   { @include btn-solid(primary); }
-.btn-success   { @include btn-solid(success); }
-.btn-danger    { @include btn-solid(danger); }
-.btn-warning   { @include btn-solid(warning); }
-.btn-info      { @include btn-solid(info); }
-.btn-secondary { @include btn-solid(secondary); }
+@each $variant, $family in th.$btn-variants {
+    .btn-#{$variant} { @include btn-solid($variant); }
+}
 
 // --- Outline-кнопки ---
 // Локальная --adm-btn-accent-rgb питает заливку на hover и кольцо фокуса.
@@ -108,14 +109,12 @@
     }
 }
 
-.btn-outline-primary { @include btn-outline(primary); }
-.btn-outline-success { @include btn-outline(success); }
-.btn-outline-danger  { @include btn-outline(danger); }
-.btn-outline-warning { @include btn-outline(warning); }
-.btn-outline-info    { @include btn-outline(info); }
+@each $variant, $family in th.$btn-variants {
+    .btn-outline-#{$variant} { @include btn-outline($variant); }
+}
 
+// Серая outline-кнопка приглушена сильнее остальных — уточняем то, что цикл уже выдал.
 .btn-outline-secondary {
-    @include btn-outline(secondary);
     border-color: var(--adm-btn-outline-secondary-border);
     color: var(--adm-btn-outline-secondary-text);
 
