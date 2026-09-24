@@ -92,51 +92,6 @@
 }
 ```
 
----
-
-## CKEditor 5: доставка раздельных пакетов (решение)
-
-Редактор разнесён на пакеты (см. их readme):
-
-- `besnovatyj/yii2-cms-ckeditor5` — ядро + базовый редактор + виджет (composer, dist коммитится).
-- `besnovatyj/ckeditor5-filemanager` — файловый менеджер (composer, dist коммитится). Один пакет,
-  две точки входа: `dist/index.js` (CKEditor-плагин) и `dist/standalone.js` (standalone-приложение,
-  доступно как npm-export `./standalone`). FSD-ядро лежит внутри этого же пакета.
-  TODO: ядро файлового менеджера вынесено в отдельный npm пакет
-- `besnovatyj/ckeditor5-codemirror` — плагин CodeMirror (composer, dist коммитится).
-
-**Принцип:** TS собирается там, где есть Node/Docker; `dist/` коммитится в git и тегается.
-Потребляющий проект тянет пакеты через Composer (GitHub VCS) — **Node на проекте не нужен**.
-
-**Важно про контекст сборки:** контейнер Node смонтирован на директорию пакета и не видит файлы
-выше/в стороне. Поэтому каждый пакет собирается самодостаточно: зависимости берутся из npm-реестра
-в свой `node_modules` (в контексте), межпакетных файловых путей (`file:`, alias на соседа) нет.
-TODO: тоже неправда, уже обошли это ограничение
-
-### dev (эта машина)
-Уже работает через существующий path-репозиторий `./packages/besnovatyj/*` (symlink). Все три пакета
-лежат там → подхватываются автоматически. Каждый собирается по кнопке build в своей папке.
-
-### prod / другая машина (GitHub VCS + теги)
-После создания GitHub-репозиториев и простановки тегов добавить в `repositories` проекта
-(НЕ раньше — иначе composer будет стучаться в несуществующие репо):
-
-```json
-{
-  "repositories": {
-    "ckeditor5":            {"type": "vcs", "url": "https://github.com/besnovatyj/yii2-cms-ckeditor5"},
-    "ckeditor5-filemanager":{"type": "vcs", "url": "https://github.com/besnovatyj/ckeditor5-filemanager"},
-    "ckeditor5-codemirror": {"type": "vcs", "url": "https://github.com/besnovatyj/ckeditor5-codemirror"}
-  }
-}
-```
-
-Composer тянет zipball тега с уже собранным `dist/`. Опционально `.gitattributes` `export-ignore`
-на `src/`, `assets/`, `*.map` — чтобы composer-архив был лёгким (dist + PHP).
-
-### Обновление одного плагина
-Пересобрать его dist в его репо → `git commit` dist → `git tag vX.Y.Z` → push →
-в проекте `composer update besnovatyj/ckeditor5-filemanager`. Редактор не трогается, Node не нужен.
 
 
 
