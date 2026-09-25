@@ -1,0 +1,15 @@
+{
+    "http-basic": {
+      "registry.gitflic.ru": {
+        "username": "metr31@yandex.ru",
+        "password": "TOKEN"
+      },
+      "gitflic.ru": {
+        "username": "metr31@yandex.ru",
+        "password": "PASSWORD"
+      }
+    },
+    "github-oauth": {
+        "github.com": "github_TOKEN"
+    }
+}
