@@ -1,0 +1,4 @@
+registry=https://registry.npmjs.org/
+//registry.npmjs.org/:_authToken=npm_000000000000
+@besnovatyj:registry=https://registry.gitflic.ru/company/bes-company/package/-/npm/
+//registry.gitflic.ru/company/bes-company/package/-/npm/:_authToken=000000000000
