@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a631fdeb13a1e1820afe9ea98800ba29",
+    "content-hash": "4b6c8429cdf634d6cc55824043d80a58",
     "packages": [
         {
             "name": "altcha-org/altcha",
@@ -650,6 +650,75 @@
             "time": "2026-09-04T17:15:24+00:00"
         },
         {
+            "name": "besnovatyj/yii2-cms-blocks",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/besnovatyj/yii2-cms-blocks.git",
+                "reference": "fd6d2253c5cd6841aefa05a63baf764a6431ee80"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-blocks/zipball/fd6d2253c5cd6841aefa05a63baf764a6431ee80",
+                "reference": "fd6d2253c5cd6841aefa05a63baf764a6431ee80",
+                "shasum": ""
+            },
+            "require": {
+                "besnovatyj/yii2-cms-backend-widgets": "^1.0",
+                "besnovatyj/yii2-cms-contracts": "^1.2",
+                "besnovatyj/yii2-cms-datetime-widgets": "^1.0",
+                "besnovatyj/yii2-cms-editor": "^1.0",
+                "besnovatyj/yii2-cms-forms": "^1.0",
+                "besnovatyj/yii2-cms-kernel": "^1.2",
+                "php": ">=8.4",
+                "yiisoft/yii2": "~2.0.0",
+                "yiisoft/yii2-bootstrap5": "~2.0.0"
+            },
+            "require-dev": {
+                "roave/security-advisories": "dev-latest"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "bescms": {
+                    "kind": "module"
+                },
+                "moduleId": "Blocks",
+                "moduleClass": "Besnovatyj\\Blocks\\Module",
+                "config-plugin": {
+                    "common": "src/config/common.php",
+                    "admin-menu": "src/config/adminMenu.php"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Besnovatyj\\Blocks\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Besnovatyj",
+                    "email": "your-email@example.com"
+                }
+            ],
+            "description": "Модуль блоков Yii2 CMS: управляемое из админки содержимое мест, объявленных темой",
+            "keywords": [
+                "blocks",
+                "cms",
+                "theme",
+                "widget-areas",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/besnovatyj/yii2-cms-blocks/issues",
+                "source": "https://github.com/besnovatyj/yii2-cms-blocks/tree/v1.0.0"
+            },
+            "time": "2026-10-02T10:06:16+00:00"
+        },
+        {
             "name": "besnovatyj/yii2-cms-blog",
             "version": "v1.3.4",
             "source": {
@@ -1049,16 +1118,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-contracts",
-            "version": "v1.1.12",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-contracts.git",
-                "reference": "815a5158a881f48e5abb52c104fedbb59cc3a0f3"
+                "reference": "34349b56cc6d9430a4fff5fb4534610244b7cf2f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-contracts/zipball/815a5158a881f48e5abb52c104fedbb59cc3a0f3",
-                "reference": "815a5158a881f48e5abb52c104fedbb59cc3a0f3",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-contracts/zipball/34349b56cc6d9430a4fff5fb4534610244b7cf2f",
+                "reference": "34349b56cc6d9430a4fff5fb4534610244b7cf2f",
                 "shasum": ""
             },
             "require": {
@@ -1091,9 +1160,9 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-contracts/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-contracts/tree/v1.1.12"
+                "source": "https://github.com/besnovatyj/yii2-cms-contracts/tree/v1.2.0"
             },
-            "time": "2026-09-12T19:34:11+00:00"
+            "time": "2026-10-02T10:06:44+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-dashboard",
@@ -4231,7 +4300,7 @@
             "version": "3.7.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "fde1f76e2799dd877c176abde0ec836553246991"
             },
             "dist": {
