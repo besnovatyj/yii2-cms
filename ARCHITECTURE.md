@@ -83,7 +83,7 @@ src/messages/{ru,en}/         # переводы (если модуль пере
 
 ```php
 class Module extends CmsModule implements
-    DeclaresModule, ProvidesAdminMenu, ProvidesMigrations, ProvidesOptions, ProvidesDependencies
+    DeclaresModule, ProvidesMigrations, ProvidesOptions, ProvidesDependencies
 {
     public const bool   EDITABLE  = true;
     public const string VERSION   = '1.0.0';
@@ -93,7 +93,6 @@ class Module extends CmsModule implements
     public static function moduleVersion(): string       { return self::VERSION; }
     public static function isEditable(): bool            { return self::EDITABLE; }
     public static function moduleConfig(): array         { return require __DIR__ . '/config/config.php'; }
-    public static function adminMenu(): array            { return require __DIR__ . '/config/adminMenu.php'; }
     public static function options(): array              { return require __DIR__ . '/config/options.php'; }
     public static function dependencies(): array         { return require __DIR__ . '/config/dependencies.php'; }
     public static function migrationPath(): string       { return __DIR__ . '/migrations'; }
@@ -124,7 +123,6 @@ class Module extends CmsModule implements
 | `ProvidesDependencies` | `dependencies()` | Модули, php-расширения, версии |
 | `ProvidesMigrations` | `migrationPath/migrationNamespace` | БД-схема модуля |
 | `ProvidesDirectories` | `directories()` | Каталоги на домене статики |
-| `ProvidesAdminMenu` | `adminMenu()` | Пункты меню админки |
 | `ProvidesOptions` | `options()` | Настройки, редактируемые из админки |
 | `ProvidesComponents` | `components()` | Компоненты приложения (глобально) |
 | `ProvidesAppConfig` | `appConfig()` | Пер-аппликационный вклад (`app-backend` и т.п.) |
@@ -186,7 +184,8 @@ app/var/config/merge-plan.php        ← план: группа → пакет �
 ```
 
 **Группы = приложения** + общий слой: `common`, `app-backend`, `app-frontend`, `app-rest`, `app-console`,
-плюс служебная `admin-menu`. Для всех включён `RecursiveMerge`.
+плюс служебная `admin-menu`. Для групп приложений и `common` включён `RecursiveMerge`; `admin-menu` —
+список пунктов, списки модулей просто склеиваются.
 
 Правила, которые нельзя нарушать:
 
@@ -213,7 +212,7 @@ app/var/config/merge-plan.php        ← план: группа → пакет �
 | DI, нужный только внутри модуля | `config/container.php` (ленивый, при `init()` модуля) |
 | DI, нужный снаружи модуля (виджет темы, консоль, другой модуль) | `config/common.php` → `container.singletons` |
 | URL-правила фронта | `config/common.php` → `components.frontendUrlManager.rules` |
-| Меню админки | `config/adminMenu.php` (группа `admin-menu`) |
+| Меню админки | `config/adminMenu.php` (группа `admin-menu`), размещения — `AdminMenuPlacement` + `AdminMenuLocation` |
 
 ---
 
@@ -396,7 +395,7 @@ $this->repo->save($contact);           // внутри: $dispatcher->dispatchAll
 
 | Точка | Контракт / механизм | Как подключиться |
 |---|---|---|
-| Меню админки | группа `admin-menu` + `MenuCompiler` | `adminMenu.php` с `_meta.placements` (location, group, priority) |
+| Меню админки | группа `admin-menu` + `MenuCompiler` | `adminMenu.php`: пункт `NavWidget` с `_meta.placements` из `Besnovatyj\Contracts\adminMenu\AdminMenuPlacement` (локация — `AdminMenuLocation`) |
 | Меню фронта | `MenuTargetProvider` | `menuTargets()` + `menuCandidates($route)` |
 | Короткие URL | `AliasTargetProvider` | `aliasTargets()` + `aliasSlugs($route)` |
 | Сквозной поиск | `SearchableProvider` | `searchSources()` + `searchDocuments($type)` (генератор, `each(100)`, сырые поля) |

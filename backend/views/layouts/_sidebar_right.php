@@ -5,15 +5,16 @@
  */
 
 use Besnovatyj\Backend\Widgets\nav\NavWidget;
+use Besnovatyj\Contracts\adminMenu\AdminMenuLocation;
 use Besnovatyj\Kernel\security\MenuAccessFilter;
 use Besnovatyj\Modman\menu\MenuProvider;
 use common\config\ConfigFactory;
 
 /**
- * Меню собирается в рантайме из группы `admin-menu` (yiisoft/config) с живыми `active`-замыканиями
- * ({@see MenuProvider}). Артефакты `menu-*.php` больше не пишутся — источник только группа admin-menu.
+ * Меню локации — группа `admin-menu` (yiisoft/config), разложенная {@see MenuProvider} и отфильтрованная
+ * правами текущего пользователя.
  */
-$menuItems = static function (string $location): array {
+$menuItems = static function (AdminMenuLocation $location): array {
     $factory = new ConfigFactory();
     return $factory->has('admin-menu')
         ? Yii::$container->get(MenuProvider::class)->forLocation($location, $factory->get('admin-menu'))
@@ -32,10 +33,6 @@ $menuItems = static function (string $location): array {
         <!-- Навигация вкладок -->
         <ul class="nav nav-tabs px-2" id="sidebarTabs" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" id="actions-tab" data-bs-toggle="tab" href="#actions" role="tab"
-                   aria-controls="actions" aria-selected="true">Actions</a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" id="settings-tab" data-bs-toggle="tab" href="#settings" role="tab"
                    aria-controls="settings" aria-selected="false">Settings</a>
             </li>
@@ -47,17 +44,10 @@ $menuItems = static function (string $location): array {
 
         <!-- Контент вкладок -->
         <div class="tab-content p-2" id="sidebarTabContent">
-            <!-- Вкладка Actions -->
-            <div class="tab-pane fade show active" id="actions" role="tabpanel" aria-labelledby="actions-tab">
-                <div class="p-2">
-
-                </div>
-            </div>
-
             <!-- Вкладка Settings -->
             <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
                 <?php
-                $backend_items = MenuAccessFilter::filter($menuItems('right-sidebar'));
+                $backend_items = MenuAccessFilter::filter($menuItems(AdminMenuLocation::RightSidebar));
                 echo NavWidget::widget([
                     'items' => $backend_items,
                     'options' => ['class' => 'list-unstyled ps-0'],

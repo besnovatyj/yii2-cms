@@ -41,7 +41,7 @@ use yii\helpers\Url;
     </ul>
 
     <div class="d-flex d-flex-inline">
-        <!-- Кнопки модулей (локация меню header-quick-links) + поиск по админке (Ctrl/Cmd+K).
+        <!-- Кнопки модулей (локация меню AdminMenuLocation::HeaderQuickLinks) + поиск по админке (Ctrl/Cmd+K).
              Новые кнопки добавляются вкладом модуля в adminMenu.php, а не правкой этого файла.
              Проверка модуля обязательна: он устанавливаемый, и без неё выключение его в modman
              уронило бы шапку админки. -->
