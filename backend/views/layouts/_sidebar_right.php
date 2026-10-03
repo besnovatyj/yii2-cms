@@ -33,8 +33,8 @@ $menuItems = static function (AdminMenuLocation $location): array {
         <!-- Навигация вкладок -->
         <ul class="nav nav-tabs px-2" id="sidebarTabs" role="tablist">
             <li class="nav-item">
-                <a class="nav-link" id="settings-tab" data-bs-toggle="tab" href="#settings" role="tab"
-                   aria-controls="settings" aria-selected="false">Settings</a>
+                <a class="nav-link active" id="settings-tab" data-bs-toggle="tab" href="#settings" role="tab"
+                   aria-controls="settings" aria-selected="true">Settings</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="account-tab" data-bs-toggle="tab" href="#account" role="tab"
@@ -45,7 +45,7 @@ $menuItems = static function (AdminMenuLocation $location): array {
         <!-- Контент вкладок -->
         <div class="tab-content p-2" id="sidebarTabContent">
             <!-- Вкладка Settings -->
-            <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+            <div class="tab-pane fade show active" id="settings" role="tabpanel" aria-labelledby="settings-tab">
                 <?php
                 $backend_items = MenuAccessFilter::filter($menuItems(AdminMenuLocation::RightSidebar));
                 echo NavWidget::widget([
