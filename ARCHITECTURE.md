@@ -86,11 +86,9 @@ class Module extends CmsModule implements
     DeclaresModule, ProvidesMigrations, ProvidesOptions, ProvidesDependencies
 {
     public const bool   EDITABLE  = true;
-    public const string VERSION   = '1.0.0';
     public const string MODULE_ID = 'MyModule';
 
     public static function moduleId(): string            { return self::MODULE_ID; }
-    public static function moduleVersion(): string       { return self::VERSION; }
     public static function isEditable(): bool            { return self::EDITABLE; }
     public static function moduleConfig(): array         { return require __DIR__ . '/config/config.php'; }
     public static function options(): array              { return require __DIR__ . '/config/options.php'; }
@@ -119,7 +117,7 @@ class Module extends CmsModule implements
 
 | Контракт | Метод | Смысл |
 |---|---|---|
-| `DeclaresModule` | `moduleId/moduleVersion/moduleConfig/isEditable` | Обязателен всем |
+| `DeclaresModule` | `moduleId/moduleConfig/isEditable` | Обязателен всем (версии нет — она из git через composer) |
 | `ProvidesDependencies` | `dependencies()` | Модули, php-расширения, версии |
 | `ProvidesMigrations` | `migrationPath/migrationNamespace` | БД-схема модуля |
 | `ProvidesDirectories` | `directories()` | Каталоги на домене статики |
@@ -451,7 +449,7 @@ $this->repo->save($contact);           // внутри: $dispatcher->dispatchAll
    не оставлять, пакеты разъедутся по репозиториям.
 3. `src/Module.php`: `extends CmsModule` + нужные capability-контракты; метаданные — статические,
    тела — `require config/*.php`.
-4. `src/config/common.php`: регистрация модуля через `Module::moduleConfig()/moduleVersion()`,
+4. `src/config/common.php`: регистрация модуля через `Module::moduleConfig()`,
    при необходимости `components`, `container.singletons`, URL-правила.
 5. Слои: `entities` (+`queries`) → `repositories` / `readModels` → `services` → `forms` → `controllers` → `views`.
 6. Миграции namespaced на `BaseMigration`; таблицы с префиксом модуля.
@@ -555,8 +553,8 @@ $this->repo->save($contact);           // внутри: $dispatcher->dispatchAll
    `ClearEndpointInterface` в clear-manager, `ImageOwnerInterface` в images). Правило нужно одно:
    либо «все межмодульные контракты — в contracts», либо «контракт плагина принадлежит хосту, а
    contracts — только то, что знает ядро». Сейчас разработчик каждый раз гадает.
-4. **Версия модуля.** `Module::VERSION` дублирует версию из `installed.json` (источник истины —
-   composer). Константу имеет смысл оставить только как fallback (уже сделано) и не обновлять руками.
+4. ~~**Версия модуля.**~~ Решено: констант версии в модулях нет, `DeclaresModule::moduleVersion()`
+   снят; modman берёт версию только из `installed.json` (git-тег или коммит).
 5. **Тестов нет вообще** (`phpunit` не сконфигурирован ни в одном пакете). При такой контрактной
    архитектуре наибольшую отдачу дают три вида тестов, и они дешёвые:
    контракт-тесты (каждый `Provides*` возвращает валидную структуру),

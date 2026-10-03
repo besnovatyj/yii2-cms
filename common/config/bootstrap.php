@@ -17,7 +17,6 @@ Yii::setAlias('@backend', dirname(__DIR__, 2) . '/backend');
 Yii::setAlias('@console', dirname(__DIR__, 2) . '/console');
 Yii::setAlias('@static', dirname(__DIR__, 2) . '/static');
 Yii::setAlias('@rest', dirname(__DIR__, 2) . '/rest');
-Yii::setAlias('@modules', dirname(__DIR__, 2) . '/modules');
 Yii::setAlias('@themes', dirname(__DIR__, 2) . '/themes');
 
 // Пути с зависимостями
