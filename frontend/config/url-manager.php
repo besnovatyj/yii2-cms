@@ -13,7 +13,7 @@ return [
 
         /** Куда перенаправлять с главной */
         // '' => 'shop/catalog/main',
-        // ['pattern' => '', 'route' => 'page/page/view', 'defaults' => ['id' => '31']],
+        // ['pattern' => '', 'route' => 'Page/page/view', 'defaults' => ['slug' => 'main']],
 
         /** Глобальные правила, если ничего выше не сработало */
         '<_c:[\w\-]+>' => '<_c>/index',

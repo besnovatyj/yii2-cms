@@ -33,6 +33,10 @@ return [
         // Кэш правил ВЫКЛЮЧЕН намеренно: модуль RouteAliasUrlRule вкладывает DI-конструируемые класс-правила
         // не сериализуется в кэш правил UrlManager. Без этого — фатал при сборке кэша правил.
         'cache' => false,
+        // Правила фронта проекта: здесь, а не в frontend/config/main.php, чтобы бэкенд и консоль (sitemap,
+        // ссылки из админки) строили адреса фронта по тем же правилам. Корневой слой мёржится после модулей —
+        // catch-all из файла остаётся последним.
+        'rules' => (require dirname(__DIR__, 2) . '/frontend/config/url-manager.php')['rules'],
     ],
     'backendUrlManager' => [
         'class' => \yii\web\UrlManager::class,
