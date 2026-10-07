@@ -5,6 +5,7 @@
 import initMobileGridView from './grid-view';
 import initSidebarRightTabs from './sidebar-right';
 import initSwipeNavigation from './swipe-navigation';
+import initHtmxErrors from './htmx-errors';
 import 'htmx.org';
 
 
@@ -21,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
       evt.detail.headers['X-CSRF-Token'] = meta.getAttribute('content') || '';
     }
   });
+
+  // Ошибки htmx-запросов — тостом, а не молча (см. htmx-errors.ts).
+  initHtmxErrors();
 
   // --- Инициализация Tooltips ---
   // bootstrap загружен глобально через bootstrap.ts → window.bootstrap
