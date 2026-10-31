@@ -21,10 +21,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     openssh-client \
     ripgrep \
+    python3 \
+    jq \
+    patch \
+    rsync \
+    file \
+    zip \
+    unzip \
+    xxd \
+    shellcheck \
+    libxml2-utils \
     less \
     make \
     tini \
     bubblewrap \
+    procps \
  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /workspace
