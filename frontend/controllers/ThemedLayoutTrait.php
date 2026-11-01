@@ -12,6 +12,8 @@ use Besnovatyj\Contracts\theme\LayoutPathProvider;
 use Yii;
 
 /**
+ * ЦЕЛЬ: включение темизации для контроллёров рядом с этим трейтом
+ *
  * Отдаёт layout из АКТИВНОЙ ТЕМЫ обычным (не-{@see \Besnovatyj\Kernel\module\CmsModule})
  * контроллёрам приложения app-frontend.
  *
