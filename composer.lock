@@ -1927,16 +1927,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-jodit",
-            "version": "v1.2.3",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-jodit.git",
-                "reference": "3322ba961f4d66a7f61e6d05eae048f6696804d9"
+                "reference": "4a507735dc752e0d2de5ce673426814449d7d71a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-jodit/zipball/3322ba961f4d66a7f61e6d05eae048f6696804d9",
-                "reference": "3322ba961f4d66a7f61e6d05eae048f6696804d9",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-jodit/zipball/4a507735dc752e0d2de5ce673426814449d7d71a",
+                "reference": "4a507735dc752e0d2de5ce673426814449d7d71a",
                 "shasum": ""
             },
             "require": {
@@ -1980,9 +1980,10 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-jodit/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-jodit/tree/v1.2.3"
+                "source": "https://github.com/besnovatyj/yii2-cms-jodit/tree/v1.3.0"
             },
-            "time": "2026-09-25T14:06:01+00:00"
+            "time": "2026-11-15T12:39:02+00:00",
+            "published-time": "2026-11-15T12:40:41+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-kernel",
@@ -3370,16 +3371,16 @@
         },
         {
             "name": "besnovatyj/yii2-cms-shortcode",
-            "version": "v1.2.0",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/besnovatyj/yii2-cms-shortcode.git",
-                "reference": "07475610e19a2ea6f68197dd27913e1ddc825259"
+                "reference": "368a1e79441ba15363104992ff272dc7a7456376"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-shortcode/zipball/07475610e19a2ea6f68197dd27913e1ddc825259",
-                "reference": "07475610e19a2ea6f68197dd27913e1ddc825259",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-shortcode/zipball/368a1e79441ba15363104992ff272dc7a7456376",
+                "reference": "368a1e79441ba15363104992ff272dc7a7456376",
                 "shasum": ""
             },
             "require": {
@@ -3427,9 +3428,10 @@
             ],
             "support": {
                 "issues": "https://github.com/besnovatyj/yii2-cms-shortcode/issues",
-                "source": "https://github.com/besnovatyj/yii2-cms-shortcode/tree/v1.2.0"
+                "source": "https://github.com/besnovatyj/yii2-cms-shortcode/tree/v1.3.0"
             },
-            "time": "2026-10-03T14:10:09+00:00"
+            "time": "2026-11-15T12:39:37+00:00",
+            "published-time": "2026-11-15T12:40:15+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-sitemap",
@@ -14027,5 +14029,5 @@
         "ext-mbstring": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.11.0"
 }
