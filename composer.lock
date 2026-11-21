@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0817bd745db8c4ab42c6979734487afd",
+    "content-hash": "2c0ed257f9fc63d2f96350ec3cf2a53f",
     "packages": [
         {
             "name": "altcha-org/altcha",
@@ -3620,6 +3620,79 @@
                 "source": "https://github.com/besnovatyj/yii2-cms-snippets/tree/v1.2.0"
             },
             "time": "2026-10-03T14:10:11+00:00"
+        },
+        {
+            "name": "besnovatyj/yii2-cms-sr-projects",
+            "version": "v1.1.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/besnovatyj/yii2-cms-sr-projects.git",
+                "reference": "710e4f9530889183a574e876e8610ad42c7b794c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/besnovatyj/yii2-cms-sr-projects/zipball/710e4f9530889183a574e876e8610ad42c7b794c",
+                "reference": "710e4f9530889183a574e876e8610ad42c7b794c",
+                "shasum": ""
+            },
+            "require": {
+                "besnovatyj/yii2-cms-contracts": "^3.2",
+                "besnovatyj/yii2-cms-editor": "^1.0",
+                "besnovatyj/yii2-cms-images": "^1.0",
+                "besnovatyj/yii2-cms-kernel": "^1.2",
+                "besnovatyj/yii2-cms-meta": "^1.0",
+                "besnovatyj/yii2-cms-pessimistic-lock-behavior": "^1.0",
+                "besnovatyj/yii2-cms-tags": "^1.0",
+                "besnovatyj/yii2-cms-validators": "^1.0",
+                "php": ">=8.4",
+                "yiisoft/yii2": "~2.0.0",
+                "yiisoft/yii2-bootstrap5": "~2.0.0"
+            },
+            "conflict": {
+                "besnovatyj/yii2-cms-blocks": "<2.1"
+            },
+            "require-dev": {
+                "roave/security-advisories": "dev-latest"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "bescms": {
+                    "kind": "module"
+                },
+                "moduleId": "SRProjects",
+                "moduleClass": "Besnovatyj\\SRProjects\\Module",
+                "config-plugin": {
+                    "common": "src/config/common.php",
+                    "admin-menu": "src/config/adminMenu.php"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Besnovatyj\\SRProjects\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Besnovatyj",
+                    "email": "your-email@example.com"
+                }
+            ],
+            "description": "Модуль проектов",
+            "keywords": [
+                "cms",
+                "sr-projects",
+                "yii2"
+            ],
+            "support": {
+                "issues": "https://github.com/besnovatyj/yii2-cms-sr-projects/issues",
+                "source": "https://github.com/besnovatyj/yii2-cms-sr-projects/tree/v1.1.9"
+            },
+            "time": "2026-11-21T17:15:51+00:00",
+            "published-time": "2026-11-21T17:16:07+00:00"
         },
         {
             "name": "besnovatyj/yii2-cms-switcher-column",
